@@ -1,0 +1,40 @@
+# Titlul Proiectului
+Extinderea framework-ului wxWidgets prin adaugarea de stiluri vizuale.
+
+# Autor: Pana Alexandru
+
+# Profesor Indrumator: Prof. Dr. Ing. Dorian Gorgan
+
+# Introducere – Obiectivele si scopul proiectului: 
+
+## Scop:
+	Implementarea unei librarii C++ ca parte din familia de librarii wxWidgets cu scopul de a introduce posibilitatea stilizarii componentelor UI in vederea uniformizarii aspectului vizual al aplicatiilor astfel dezvoltate pe toate platformele suportate.
+
+## Obiective:
+	
+* Proiectarea unui limbaj descriptiv pentru descrierea modului de prezentare al componentelor UI in functie de starea acestora similar cu limbajul CSS utilizat in stilizarea paginilor web.
+* Proiectarea si implementarea unei structuri de date capabile sa reprezinte informatia descrisa in fisierul de stil.
+* Implementarea unei componente capabile sa parseze fisiere de stil in vederea constructiei unei structuri de date descriptive.
+* Implementarea unui renderer care sa deseneze componentele UI in functie de starea lor si de stilul asociat.
+* Implementarea unei componente ce realizeaza integrarea librariei cu aplicatiile wxWidgets deja existente. Aceasta componenta are rolul de a identifica toate componentele UI prezente in aplicatie si de a suprascrie modul de prezentare al acestora folosind renderer-ul construit anterior.
+
+# Descrierea continutului proiectului
+
+De la aparitia interfetelor vizuale si pana astazi s-a depus constant
+efort in imbunatatirea si descoperirea de noi moduri prin care oamenii
+interactioneaza cu tehnologia. De la calculatoare, telefoane si tablete
+personale, pana la bancomate si automate folosite zilnic de milioane de
+oameni, interactiunea dintre om si masina se face prin intermediul unui
+ecran care afiseaza informatie si controale de interactiune.
+
+# Studiu bibliografic
+
+# Resurse necesare
+
+# Rezultate asteptate
+
+# Planificare
+
+# Cuprins preliminar
+
+# Bibliografie

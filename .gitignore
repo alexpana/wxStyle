@@ -1,0 +1,8 @@
+binaries/
+build/vc2012
+*.pdf
+*.doc
+lib/
+doc/diagrams/
+doc/templates/
+doc/vision/

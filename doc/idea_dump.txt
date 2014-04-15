@@ -1,0 +1,23 @@
+# Stylesheets
+
+## Possible choices
+
+* CSS subset
+  - could make use of selectors (select ALL, select by ID)
+
+* XML
+  - very flexible
+  - more than 50% overhead when there is a lot of nesting
+
+* JSON
+  - 
+
+
+# Layout
+
+Explain the default layout used by StyledFrame and FrameHeader.
+
+
+# Transparency
+
+Explain the limitations of wxWidgets (wxBufferedDC) and the lack of virtualness for GetBackgroundColor, and the platform-dependent meaning of SetTransparent. Argument the need for Set/Get Opaque, and the addition of GetInheritedBackgroundColour.
