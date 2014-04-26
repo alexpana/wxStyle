@@ -1,0 +1,6 @@
+# Imbunatatiri pentru librarie
+	* Imbunatatirea transparentei: transparenta adevarata, nu doar culoarea de fundal, factor de transparenta, functii de transparenta.
+	* Animatii: interpolare automata intre 2 proceduri de desenare.
+
+# Aplicatii ale librariei
+	* Schimbarea dinamica a contrastului pe baza intensitatii luminii (tehnica patentata de Apple)

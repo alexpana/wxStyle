@@ -1,0 +1,27 @@
+# wxWidgets
+
+wxWidgets este un framework stabil, puternic si open-source pentru dezvoltarea de aplicatii cu interfete vizuale native portabile in C++.
+
+In comparatie cu alte librarii simiare, wxWidgets este laudata ca fiind:
+* Singura librarie GUI pentru C++ care encapsuleaza componente UI native, ceea ce rezulta in cea mai buna experienta utilizator pe fiecare platforma.
+* Scrisa folosind doar standardul C++, fara a depinde de extensii specifice de compilator.
+* Open source si free pentru proiecte atat open source cat si comerciale
+
+Implementarile oficiale majore ale librariei wxWidgets sunt:
+* wxMSW: implementarea nativa pentru sistemul de operare Microsoft Windows de la Windows 95 pana la Windows 8.1 atat pe 32 cat si 64 de biti. Compilatoarele suportate de librarie sunt Visual Studio 6 pana la Visual Studio 2013 si GNU g++.
+* wxGTK: wxGTK2 si wxGTK3 sunt implementarile ce folosesc versiunile 2.x si 3.x ale librariei GTK+. Aceste implementari functioneaza pe aproape toate sistemele de operare UNIX.
+* wxOSX: wxOSX/Cocoa este implementarea primara pentru sistemele Apple.
+
+Alte implementari (cum ar fi iOS, wxX11, wxGTK1, wxOSX/Carbon, wxUniversal etc.) exista, dar sunt incomplete si neintretinute.
+
+# wxUniversal
+
+# wxStyle
+
+Libraria wxStyle este o extensie a familiei de librarii wxWidgets.
+
+## Obiective
+
+## Propunere Implementare
+
+## Specificatie Stylesheets

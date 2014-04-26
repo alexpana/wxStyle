@@ -20,9 +20,6 @@ public:
     StyledButton(wxWindow* parent, wxString text);
     virtual ~StyledButton();
 
-    wxString getText() const;
-    void setText(const wxString& text);
-
 protected:
     void OnMouseDown(wxMouseEvent& mouseEvent) override;
     void OnMouseDoubleClick(wxMouseEvent& mouseEvent) override;
@@ -32,15 +29,12 @@ protected:
     void OnMouseLeaveWindow(wxMouseEvent& mouseEvent) override;
     void OnMouseEnterWindow(wxMouseEvent& mouseEvent) override;
 
-    void OnPaint(wxPaintEvent& paint) override;
-
 private:
     void ClearBackground(wxGraphicsContext *g);
     void SendClickEvent();
 
 private:
     State m_state;
-    wxString m_text;
 };
 
 } // namespace wxstyle

@@ -1,8 +1,3 @@
-* wxWidgets Documentation: http://docs.wxwidgets.org/3.0/
-* Java Swing documentation: http://docs.oracle.com/javase/7/docs/api/javax/swing/plaf/package-summary.html
-* CSS Specifications: http://www.w3.org/Style/CSS/current-work.en.html
-
-
 [1] Julian Smart. Cross-Platform GUI Programming with wxWidgets. Prentice Hall (August 5, 2005).
 [2] Raymond Chen. The Old New Thing: Practical Development Throughout the Evolution of Windows. Addison-Wesley Professional, 1st edition (January 6, 2007).
 [3] James D. Foley. Computer Graphics: Principles and Practice in C.

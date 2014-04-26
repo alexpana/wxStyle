@@ -1,0 +1,14 @@
+# Includes
+
+* All the includes are found at the top of the file, following the license and the pragma directive.
+
+* The order in which the headers are included are:
+	1. Standard library headers.
+	2. Library headers.
+	3. Project Headers.
+
+* Standard library and third-party library headers must be enclosed in angle brackets, with paths separated by the "/" separator.
+
+# Comments and public documentation
+
+# Names

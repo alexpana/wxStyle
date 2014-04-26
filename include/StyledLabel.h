@@ -19,9 +19,6 @@ public:
         return m_textAlignment;
     }
 
-protected:
-    void OnPaint(wxPaintEvent& paintEvent) override;
-
 private:
     void Init();
 

@@ -39,6 +39,7 @@ void StyledFrame::Init() {
     m_headerPanel = new FrameHeader(m_frameInnerPanel, this);
     m_headerPanel->SetTitle("Demo Board");
     m_headerPanel->SetMinSize(wxSize(0, 26));
+    m_headerPanel->SetBackgroundColour("#3e3e42");
 
     m_contentPanel = new wxPanel(m_frameInnerPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE);
     m_contentPanel->SetBackgroundColour("#3e3e42");
