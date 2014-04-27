@@ -1,4 +1,0 @@
-[1] Julian Smart. Cross-Platform GUI Programming with wxWidgets. Prentice Hall (August 5, 2005).
-[2] Raymond Chen. The Old New Thing: Practical Development Throughout the Evolution of Windows. Addison-Wesley Professional, 1st edition (January 6, 2007).
-[3] James D. Foley. Computer Graphics: Principles and Practice in C.
-Addison-Wesley Professional, 2nd edition (August 14, 1995).

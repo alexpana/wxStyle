@@ -1,0 +1,12 @@
+* ability to customize the window header, border, grip area, maximize, minimize and close buttons
+* ability to make any component act as a resizer or mover (grip panel)
+* easy resource management. access to images and styles based on IDs and loaded in a uniform, controllable fasion
+* style description language
+* programmable renderer
+* default renderer based on style sheets
+
+* render complex components based on their child components
+
+* implementation for: frame, panel, label, button, checkbox, lineedit.
+
+* perhaps integrate with xrc for generating custom styled components

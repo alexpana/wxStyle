@@ -1,0 +1,23 @@
+# Includes
+
+* All the includes are found at the top of the file, following the license and the pragma directive.
+
+* The order in which the headers are included are:
+	1. Library headers.
+	2. Standard library headers.
+	3. Project Headers.
+
+* Standard library and third-party library headers must be enclosed in angle brackets, with paths separated by the "/" separator.
+
+# Comments and public documentation
+
+
+
+# Names
+
+# RTTI
+
+* RTTI will not be used because:
+	1. It implies code that manipulates code, which is not what this library does.
+	2. Its use is restricted from the wxWidgets codebase, and this library must be compatible with the wxWidgets codebase.
+	3. The uses of typeid and dynamic_cast usually indicate (when not used from point 1) a bad design choice.

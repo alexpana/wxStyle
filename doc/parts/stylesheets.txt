@@ -1,0 +1,71 @@
+text:
+	- alignment
+	- insets
+	- size
+	- font
+	- attributes: italic, bold, underlined, stroke
+	- color (foreground)
+	- additional styles (?)
+	- shadow definition
+		- color
+		- offset
+
+dimensions:
+	- absolute
+	- relative
+
+painter:
+	- shape[]
+		- insets
+		- background
+			- image
+				- source
+			- color
+				- RGBA
+			- gradient
+				- colors / stops
+		- corner radius
+		- shape[]
+
+	- image[]
+		- source
+		- subimage
+		- wrap (?)
+
+min-size:
+	- absolute x
+	- absolute y
+
+# Minimum size
+
+Minimum size calculation starts by checking the min-size property of the
+style. If no min-size property is specified, the style is queried for text
+definitions and the maximum size of every text definition is calculated. 
+That will be considered the minimum size of the component. If the style
+does not specify any text definitions, the minimum size preferred by the
+component will be used.
+
+<stylesheet name="Default">
+	<properties>
+		<property name="default_bg_color" value="#323334"/>
+		<property name="default_fg_color" value="#323334"/>
+		<property name="border_size" value=1/>
+		<property name="border_size" value=1/>
+	</properties>
+
+	<global>
+		<font family="Tahoma" size="12" color=":default_fg_color">
+	</global>
+
+	<styles>
+		<style name="button">
+			<background>
+				<rect insets=1 pen="none" brush=":default_bg_color">
+			</background>
+		</style>
+	</styles>
+
+	<mappings>
+		<map control="wxStyledButton" style="button">
+	</mappings>
+</stylesheet>

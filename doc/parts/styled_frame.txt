@@ -1,0 +1,10 @@
+# Styled Frame
+
+Is a custom implementation of a wxFrame to support styled headers and borders.
+
+## Layout
+Explain the sizer and component hierarchy.
+
+## DragHandler
+
+## ResizeHandler
