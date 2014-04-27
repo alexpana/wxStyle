@@ -85,6 +85,10 @@ public:
         return m_isFocused; 
     }
 
+    bool isHovered() {
+        return m_isHovered;
+    }
+
     virtual void SetText(const wxString& text) {
         m_text = text;
     }
@@ -163,14 +167,23 @@ protected:
 private:
     void Init();
 
-    void MouseMoved(wxMouseEvent& mouseEvent) { OnMouseDown(mouseEvent); }
+    void MouseMoved(wxMouseEvent& mouseEvent) { OnMouseMoved(mouseEvent); }
     void MouseDown(wxMouseEvent& mouseEvent) { OnMouseDown(mouseEvent); }
     void MouseDoubleClick(wxMouseEvent& mouseEvent) { OnMouseDoubleClick(mouseEvent); }
     void MouseWheelMoved(wxMouseEvent& mouseEvent) { OnMouseWheelMoved(mouseEvent); }
     void MouseReleased(wxMouseEvent& mouseEvent) { OnMouseReleased(mouseEvent); }
     void RightClick(wxMouseEvent& mouseEvent) { OnRightClick(mouseEvent); }
-    void MouseLeaveWindow(wxMouseEvent& mouseEvent) { OnMouseLeaveWindow(mouseEvent); }
-    void MouseEnterWindow(wxMouseEvent& mouseEvent) { OnMouseEnterWindow(mouseEvent); }
+
+    void MouseEnterWindow(wxMouseEvent& mouseEvent) { 
+        m_isHovered = true;
+        OnMouseEnterWindow(mouseEvent); 
+    }
+
+    void MouseLeaveWindow(wxMouseEvent& mouseEvent) { 
+        m_isHovered = false;
+        OnMouseLeaveWindow(mouseEvent); 
+    }
+
     void MouseEvents(wxMouseEvent& mouseEvent) { OnMouseEvents(mouseEvent); }
 
     void KeyPressed(wxKeyEvent& keyEvent) { OnKeyPressed(keyEvent); }
@@ -196,6 +209,8 @@ private:
     std::shared_ptr<IRenderer> m_renderer;
 
     bool m_isFocused;
+
+    bool m_isHovered;
 
     wxString m_text;
 

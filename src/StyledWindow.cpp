@@ -1,8 +1,9 @@
 #pragma once
 
+#include <wx/graphics.h>
+#include <wx/dcbuffer.h>
+
 #include "StyledWindow.h"
-#include "wx\graphics.h"
-#include "wx\dcbuffer.h"
 
  namespace wxstyle {
 
@@ -38,6 +39,8 @@ StyledWindow::StyledWindow(wxWindow* parent, wxString text, wxStandardID id):
 void StyledWindow::Init() {
     SetMinSize(wxSize(DEFAULT_WIDTH, DEFAULT_HEIGHT));
     SetBackgroundStyle(wxBG_STYLE_PAINT);
+    m_isFocused = false;
+    m_isHovered = false;
 }
 
 wxColor StyledWindow::GetInheritedBackgroundColor() {

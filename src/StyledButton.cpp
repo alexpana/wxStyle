@@ -6,23 +6,16 @@
 #include <wx/dcbuffer.h>
 #include <wx/font.h>
 
-#include "FunctionRederer.h"
-
 namespace wxstyle {
 
-StyledButton::StyledButton() : StyledWindow(nullptr, "") {
-}
-
-StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(parent, text) {
-    SetBackgroundColour(parent->GetBackgroundColour());
-    SetMinSize(wxSize(10, 30));
-
-    SetRenderer(std::make_shared<FunctionRenderer>([this](StyledWindow* window) {
+class DefaultButtonRenderer : public IRenderer {
+public:
+    virtual void Render(StyledWindow* window) const {
         wxAutoBufferedPaintDC deviceContext(window);
         auto g = wxGraphicsContext::Create(deviceContext);
 
-        int w = GetSize().GetWidth();
-        int h = GetSize().GetHeight();
+        int w = window->GetSize().GetWidth();
+        int h = window->GetSize().GetHeight();
 
         int radius = 0;
         wxColor startColor = wxColor(0x303030);
@@ -31,7 +24,7 @@ StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(paren
 
         wxBrush brush;
 
-        ClearBackground(g);
+        ClearBackground(window, g);
 
         // bottom highlight
         brush.SetColour(0x454545);
@@ -39,7 +32,7 @@ StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(paren
         g->DrawRoundedRectangle(0, 0, w, h, radius);
 
         // border
-        if (HasFocus()) {
+        if (window->HasFocus()) {
             brush.SetColour(0x904040);
         } else {
             brush.SetColour(0x191919);
@@ -54,7 +47,7 @@ StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(paren
 
         // gradient
         int textOffset = 0;
-        if (m_state != ARMED) {
+        if (dynamic_cast<StyledButton*>(window)->GetState() != StyledButton::ARMED) {
             wxGraphicsGradientStops stops;
             stops.Add(startColor, 1);
             stops.Add(endColor, 0);
@@ -65,23 +58,42 @@ StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(paren
             stops.Add(endColor, 1);
             g->SetBrush(g->CreateLinearGradientBrush(0, 0, 0, h, stops));
             textOffset = 1;
-
         }
+
         g->DrawRoundedRectangle(1, 2, w-2, h-4, radius);
 
-        // TODO: Font not properly measured
+        RenderText(g, deviceContext, window, w, h, textOffset);
 
+
+        delete g;   
+    }
+
+    void ClearBackground(StyledWindow *window, wxGraphicsContext *g) const {
+        wxRect clientRect = window->GetClientRect();
+        g->SetBrush(g->CreateBrush(window->GetBackgroundColour()));
+        g->DrawRectangle(clientRect.GetX(), clientRect.GetY(), clientRect.GetWidth(), clientRect.GetHeight());
+    }
+
+    void RenderText(wxGraphicsContext *g, wxAutoBufferedPaintDC &deviceContext, StyledWindow *window, int w, int h, int textOffset) const {
         g->SetFont(g->CreateFont(12, "Tahoma", wxFONTFLAG_BOLD, 0x161616));
-        wxSize textSize = deviceContext.GetTextExtent(GetText());
+        wxSize textSize = deviceContext.GetTextExtent(window->GetText());
 
-        g->DrawText(GetText(), (w - textSize.GetWidth()) / 2, (h - textSize.GetHeight()) / 2 + 1 + textOffset);
+        g->DrawText(window->GetText(), (w - textSize.GetWidth()) / 2, (h - textSize.GetHeight()) / 2 + 1 + textOffset);
 
         g->SetFont(g->CreateFont(12, "Tahoma", wxFONTFLAG_BOLD, 0xAAAAAA));
 
-        g->DrawText(GetText(), (w - textSize.GetWidth()) / 2, (h - textSize.GetHeight()) / 2 + textOffset);
+        g->DrawText(window->GetText(), (w - textSize.GetWidth()) / 2, (h - textSize.GetHeight()) / 2 + textOffset);
+    }
+};
 
-        delete g;   
-    }));
+StyledButton::StyledButton() : StyledWindow(nullptr, "") {
+}
+
+StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(parent, text) {
+    SetBackgroundColour(parent->GetBackgroundColour());
+    SetMinSize(wxSize(10, 30));
+
+    SetRenderer(std::make_shared<DefaultButtonRenderer>());
 }
 
 StyledButton::~StyledButton() {

@@ -33,6 +33,7 @@ public:
         nativeLabel->SetForegroundColour("#AFAFAF");
 
         styledCheckBox = new StyledCheckBox(contentPanel, "Styled CheckBox");
+        styledCheckBox->SetForegroundColour("#AFAFAF");
 
         nativeButton = new wxButton(contentPanel, wxID_ANY, "Native Button");
 
@@ -41,7 +42,8 @@ public:
         nativeTextField = new wxTextCtrl(contentPanel, wxID_ANY);
 
         nativeComboBox = new wxComboBox(contentPanel, wxID_ANY);
-        nativeComboBox->Set(wxArrayString(4, {"luffy", "sanji", "zoro", "nami"}));
+        wxString options[] = {"luffy", "sanji", "zoro", "nami"};
+        nativeComboBox->Set(wxArrayString(4, options));
     }
 
     void InitLayout() 
@@ -55,8 +57,8 @@ public:
         sizer->Add(styledLabel, flags);
         sizer->Add(nativeButton, flags);
         sizer->Add(styledButton, flags);
-        sizer->Add(styledCheckBox, flags);
         sizer->Add(nativeCheckBox, flags);
+        sizer->Add(styledCheckBox, flags);
 
         /* Not yet implemented */
         sizer->Add(nativeTextField, flags);

@@ -20,6 +20,10 @@ public:
     StyledButton(wxWindow* parent, wxString text);
     virtual ~StyledButton();
 
+    State GetState() {
+        return m_state;
+    }
+
 protected:
     void OnMouseDown(wxMouseEvent& mouseEvent) override;
     void OnMouseDoubleClick(wxMouseEvent& mouseEvent) override;
