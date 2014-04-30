@@ -8,86 +8,86 @@
 
 namespace wxstyle {
 
-class DragHandler;
-class ResizeHandler;
-class FrameHeader;
+    class DragHandler;
+    class ResizeHandler;
+    class FrameHeader;
 
-class StyledFrame : public wxFrame {
+    class StyledFrame : public wxFrame {
 
-public:
-    StyledFrame();
-    ~StyledFrame();
+    public:
+        StyledFrame();
+        ~StyledFrame();
 
-    /* Returns a wxPanel that represents the content area of
-     * the frame. Clients must use this panel as a parent to
-     * all child windows of this frame */
-    wxPanel* GetContentPanel();
+        /* Returns a wxPanel that represents the content area of
+         * the frame. Clients must use this panel as a parent to
+         * all child windows of this frame */
+        wxPanel* GetContentPanel();
 
-    /* Resizes this frame to fit its contents */
-    void Fit() {
-        m_frameSizer->Fit(this);
-        wxSize minSize = m_frameInnerSizer->GetMinSize() + wxSize(m_borderSize * 2, m_borderSize * 2);
-        SetSize(minSize);
-        SetMinSize(minSize);
-    }
-
-    /* Sets the size of the border around this frame.
-     * The border represents the area where the frame can be
-     * stretched. */
-    void SetBorderSize(int borderSize) {
-        m_borderSize = borderSize;
-        for (auto borderSegment : m_borderVector) {
-            borderSegment->SetMinSize(wxSize(borderSize, borderSize));
+        /* Resizes this frame to fit its contents */
+        void Fit() {
+            m_frameSizer->Fit(this);
+            wxSize minSize = m_frameInnerSizer->GetMinSize() + wxSize(m_borderSize * 2, m_borderSize * 2);
+            SetSize(minSize);
+            SetMinSize(minSize);
         }
-    }
 
-    void SetBorderColor(wxColor borderColor) {
-        m_borderColor = borderColor;
-        for (auto borderSegment : m_borderVector) {
-            borderSegment->SetBackgroundColour(borderColor);
+        /* Sets the size of the border around this frame.
+         * The border represents the area where the frame can be
+         * stretched. */
+        void SetBorderSize(int borderSize) {
+            m_borderSize = borderSize;
+            for (auto borderSegment : m_borderVector) {
+                borderSegment->SetMinSize(wxSize(borderSize, borderSize));
+            }
         }
-    }
 
-    bool SetBackgroundColour(const wxColour &colour) override;
+        void SetBorderColor(wxColor borderColor) {
+            m_borderColor = borderColor;
+            for (auto borderSegment : m_borderVector) {
+                borderSegment->SetBackgroundColour(borderColor);
+            }
+        }
 
-private:
-    void Init();
-    void InitBorders();
+        bool SetBackgroundColour(const wxColour &colour) override;
 
-    void HighlightTopBorder() {}
-    void HighlightLeftBorder() {}
-    void HighlightRightBorder() {}
-    void HighlightBottomBorder() {}
-    void RemoveBorderHighlight() {}
+    private:
+        void Init();
+        void InitBorders();
 
-private:
-    wxPanel *m_framePanel;
-    wxFlexGridSizer *m_frameSizer;
+        void HighlightTopBorder() {}
+        void HighlightLeftBorder() {}
+        void HighlightRightBorder() {}
+        void HighlightBottomBorder() {}
+        void RemoveBorderHighlight() {}
 
-    wxPanel *m_frameInnerPanel;
-    wxBoxSizer *m_frameInnerSizer;
+    private:
+        wxPanel *m_framePanel;
+        wxFlexGridSizer *m_frameSizer;
 
-    wxPanel *m_contentPanel;
+        wxPanel *m_frameInnerPanel;
+        wxBoxSizer *m_frameInnerSizer;
 
-    ResizeHandler *m_resizeHandler;
+        wxPanel *m_contentPanel;
 
-    /* Header panel */
-    FrameHeader *m_headerPanel;
+        ResizeHandler *m_resizeHandler;
 
-    /* Border panels */
-    wxPanel *m_borderTop;
-    wxPanel *m_borderRight;
-    wxPanel *m_borderBottom;
-    wxPanel *m_borderLeft;
-    wxPanel *m_borderTopLeft;
-    wxPanel *m_borderTopRight;
-    wxPanel *m_borderBottomLeft;
-    wxPanel *m_borderBottomRight;
-    std::vector<wxPanel*> m_borderVector;
+        /* Header panel */
+        FrameHeader *m_headerPanel;
 
-    /* Properties */
-    int m_borderSize;
-    wxColor m_borderColor;
-};
+        /* Border panels */
+        wxPanel *m_borderTop;
+        wxPanel *m_borderRight;
+        wxPanel *m_borderBottom;
+        wxPanel *m_borderLeft;
+        wxPanel *m_borderTopLeft;
+        wxPanel *m_borderTopRight;
+        wxPanel *m_borderBottomLeft;
+        wxPanel *m_borderBottomRight;
+        std::vector<wxPanel*> m_borderVector;
+
+        /* Properties */
+        int m_borderSize;
+        wxColor m_borderColor;
+    };
 
 } // namespace wxstyle

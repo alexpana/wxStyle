@@ -16,6 +16,7 @@ public:
         wxAutoBufferedPaintDC deviceContext(window);
         auto g = wxGraphicsContext::Create(deviceContext);
         wxString text = window->GetLabel();
+        std::shared_ptr<Style> style = window->GetStyle();
 
         int fontFlags = wxFONTFLAG_DEFAULT;
         if (window->GetFont().GetWeight() == wxFONTWEIGHT_BOLD) {

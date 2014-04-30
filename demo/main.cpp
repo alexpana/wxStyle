@@ -82,4 +82,4 @@ private:
     wxComboBox *nativeComboBox;
 };
 
-IMPLEMENT_APP(DemoApp);
+IMPLEMENT_APP(DemoApp);-

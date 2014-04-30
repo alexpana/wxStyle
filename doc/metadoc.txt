@@ -1,0 +1,4 @@
+# Latex packages
+	* babel: internationalization support
+	* glossaries: ftp://ftp.tpnet.pl/pub/CTAN/macros/latex/contrib/glossaries/glossariesbegin.pdf
+	

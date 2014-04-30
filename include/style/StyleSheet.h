@@ -49,7 +49,7 @@ private:
 	ImplType m_value;
 };
 
-class StyleSheet {
+class Stylesheet {
 public:
 	boost::optional<StyleProperty> GetProperty(std::string name) {
 		auto mapValue = m_properties.find(name);
