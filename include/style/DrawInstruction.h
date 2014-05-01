@@ -18,6 +18,8 @@ namespace wxstyle {
 	class DrawRectangleInstruction : public IDrawInstruction {
 	private:
 		class Builder {
+		friend DrawRectangleInstruction;
+
 		public:
 			static Builder* newBuilder() {
 				return new Builder();
@@ -55,6 +57,10 @@ namespace wxstyle {
 		private:
 			Builder() : m_color(0x000000ul), m_penSize(1), m_penColor(0x000000ul), m_penStyle(wxPENSTYLE_SOLID) {}
 
+			Builder(DimRect rect, wxColor color, int penSize, wxColor penColor, wxPenStyle penStyle) :
+				m_rect(rect), m_color(color), m_penSize(penSize), m_penColor(penColor), m_penStyle(penStyle)
+			{}
+
 			DimRect m_rect;
 			wxColor m_color;
 			int m_penSize;
@@ -79,8 +85,12 @@ namespace wxstyle {
 				computedRect.GetHeight());
 		}
 
-		static Builder* newBuilder() {
-			return Builder::newBuilder();
+		static Builder* NewBuilder() {
+			return new Builder();
+		}
+
+		Builder* ToBuilder() {
+			return new Builder(m_rect, m_color, m_penSize, m_penColor, m_penStyle);
 		}
 
 		DimRect GetRect() const {
