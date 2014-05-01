@@ -10,6 +10,10 @@ namespace wxstyle {
 			m_h.GetValue(referenceRect.GetHeight()));
 	}
 
+	wxRect DimRect::GetValue(const wxSize& referenceSize) const {
+		return GetValue(wxRect(0, 0, referenceSize.GetWidth(), referenceSize.GetHeight()));
+	}
+
 	std::ostream& operator<<(std::ostream& lhs, const DimRect& rhs) {
 		return lhs << "DimRect(" 
 			<< "x:" << rhs.m_x << " "

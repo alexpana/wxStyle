@@ -20,6 +20,7 @@ namespace wxstyle {
 		{}
 
 		wxRect GetValue(const wxRect& referenceRect) const;
+		wxRect GetValue(const wxSize& referenceSize) const;
 	};
 
 	std::ostream& operator<<(std::ostream& lhs, const DimRect& rhs);

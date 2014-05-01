@@ -12,7 +12,7 @@ namespace wxstyle {
 
     class IDrawInstruction {
 	public:
-		virtual void Draw(wxGraphicsContext* g, const wxRect& windowSize) const = 0;
+		virtual void Draw(wxGraphicsContext* g, const wxSize& windowSize) const = 0;
     };
 
 } // namespace wxstyle

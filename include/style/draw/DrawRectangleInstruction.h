@@ -44,7 +44,7 @@ namespace wxstyle{
 			m_rect(rect), m_color(color), m_penSize(penSize), m_penColor(penColor), m_penStyle(penStyle), m_cornerRadius(cornerRadius)
 		{}
 
-		void Draw(wxGraphicsContext* g, const wxRect& windowSize) const override;
+		void Draw(wxGraphicsContext* g, const wxSize& windowSize) const override;
 
 		static Builder* NewBuilder() {
 			return new Builder();
