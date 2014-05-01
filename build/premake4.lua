@@ -1,16 +1,9 @@
+require 'paths'
+
 newoption{
 	trigger = "destination", 
 	description = "Destination folder"
 }
-
--- Root directory of project checkout relative to this .lua file
-ROOT_DIR = "../"
-
--- System libraries directory
-SYSTEM_LIBS = "e:/libs"
-
--- Boost libraries directory
-BOOST_LIBS = "e:/libs/boost_1_55_0"
 
 wx_lib_files = {
 	"wxmsw31ud_core",

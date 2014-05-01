@@ -1,10 +1,10 @@
 #pragma once
 
-#include <unordered_map>
+#include <wx/event.h>
+#include <wx/frame.h>
+#include <wx/panel.h>
 
-#include "wx\event.h"
-#include "wx\frame.h"
-#include "wx\panel.h"
+#include <unordered_map>
 
 namespace wxstyle {
 

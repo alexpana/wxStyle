@@ -7,7 +7,7 @@ namespace wxstyle {
 
     class Dimension {
     public:
-        explicit Dimension(int absolute = 0, float relative = 0) : m_absolute(absolute), m_relative(relative) {}
+        Dimension(int absolute = 0, float relative = 0) : m_absolute(absolute), m_relative(relative) {}
 
         int GetAbsolute() const {
             return m_absolute;

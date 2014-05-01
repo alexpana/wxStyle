@@ -9,7 +9,7 @@ namespace wxstyle {
     public:
         static StyleBuilder NewBuilder();
 
-        StyleBuilder* SetShadowDefinition(const shadowDefinition& shadowDefinition) {
+        StyleBuilder* SetShadowDefinition(const ShadowDefinition& shadowDefinition) {
             return this;
         }
 

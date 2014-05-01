@@ -1,9 +1,9 @@
 #pragma once
 
-#include "wx\event.h"
-#include "wx\timer.h"
-#include "wx\panel.h"
-#include "wx\frame.h"
+#include <wx/event.h>
+#include <wx/timer.h>
+#include <wx/panel.h>
+#include <wx/frame.h>
 
 namespace wxstyle {
 
