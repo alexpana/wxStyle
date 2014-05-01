@@ -5,7 +5,7 @@ namespace wxstyle {
 typedef DrawRectangleInstruction::Builder Builder;
 
 	Builder::Builder() : 
-		m_rect(0, 0, Dimension(0, 1), Dimension(0, 1)), m_color(0x000000ul), m_penSize(0), m_penColor(0x000000ul), m_penStyle(wxPENSTYLE_T), m_cornerRadius(0) 
+		m_rect(0, 0, Dimension(0, 1), Dimension(0, 1)), m_color(0x000000ul), m_penSize(0), m_penColor(0x000000ul), m_penStyle(wxPENSTYLE_TRANSPARENT), m_cornerRadius(0) 
 	{}
 
 	Builder::Builder(const DimRect& rect, const wxColor& color, int penSize, const wxColor& penColor, const wxPenStyle penStyle, const int cornerRadius) :
@@ -56,12 +56,20 @@ typedef DrawRectangleInstruction::Builder Builder;
 
 		wxRect computedRect = m_rect.GetValue(windowSize);
 
-		g->DrawRoundedRectangle(
-			computedRect.GetX(),
-			computedRect.GetY(),
-			computedRect.GetWidth(),
-			computedRect.GetHeight(),
-			m_cornerRadius);
+		if (m_cornerRadius <= 0) {
+			g->DrawRectangle(
+				computedRect.GetX(),
+				computedRect.GetY(),
+				computedRect.GetWidth(),
+				computedRect.GetHeight());
+		} else {
+			g->DrawRoundedRectangle(
+				computedRect.GetX(),
+				computedRect.GetY(),
+				computedRect.GetWidth(),
+				computedRect.GetHeight(),
+				m_cornerRadius);
+		}
 	}
 
 	std::ostream& operator<<(std::ostream& lhs, const DrawRectangleInstruction& rhs) {
