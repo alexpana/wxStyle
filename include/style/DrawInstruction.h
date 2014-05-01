@@ -10,12 +10,12 @@
 
 namespace wxstyle {    
 
-    class DrawInstruction {
+    class IDrawInstruction {
 	public:
 		virtual void Draw(wxGraphicsContext* g, const wxRect& windowSize) const = 0;
     };
 
-	class DrawRectangleInstruction : public DrawInstruction {
+	class DrawRectangleInstruction : public IDrawInstruction {
 	private:
 		class Builder {
 		public:
