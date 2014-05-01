@@ -12,43 +12,43 @@ typedef DrawRectangleInstruction::Builder Builder;
 		m_rect(rect), m_brush(brush), m_penSize(penSize), m_penColor(penColor), m_penStyle(penStyle), m_cornerRadius(cornerRadius)
 	{}
 
-	Builder* Builder::newBuilder() {
-		return new Builder();
+	Builder Builder::newBuilder() {
+		return Builder();
 	}
 
-	Builder* Builder::SetRect(const DimRect& rect) {
+	Builder& Builder::SetRect(const DimRect& rect) {
 		m_rect = rect;
-		return this;
+		return *this;
 	}
 
-	Builder* Builder::SetColor(const wxColor& color) {
+	Builder& Builder::SetColor(const wxColor& color) {
 		m_brush = wxBrush(color);
-		return this;
+		return *this;
 	}
 
-	Builder* Builder::SetBrush(const wxBrush& brush) {
+	Builder& Builder::SetBrush(const wxBrush& brush) {
 		m_brush = brush;
-		return this;
+		return *this;
 	}
 
-	Builder* Builder::SetPenSize(const int penSize) {
+	Builder& Builder::SetPenSize(const int penSize) {
 		m_penSize = penSize;
-		return this;
+		return *this;
 	}
 
-	Builder* Builder::SetPenColor(const wxColor& penColor) {
+	Builder& Builder::SetPenColor(const wxColor& penColor) {
 		m_penColor = penColor;
-		return this;
+		return *this;
 	}
 
-	Builder* Builder::SetPenStyle(const wxPenStyle penStyle) {
+	Builder& Builder::SetPenStyle(const wxPenStyle penStyle) {
 		m_penStyle = penStyle;
-		return this;
+		return *this;
 	}
 
-	Builder* Builder::SetCornerRadius(const int cornerRadius) {
+	Builder& Builder::SetCornerRadius(const int cornerRadius) {
 		m_cornerRadius = cornerRadius;
-		return this;
+		return *this;
 	}
 
 	DrawRectangleInstruction Builder::Build() {
@@ -56,25 +56,25 @@ typedef DrawRectangleInstruction::Builder Builder;
 	}
 
 	void DrawRectangleInstruction::Draw(wxGraphicsContext* g, const wxSize& windowSize) const {
-		g->SetBrush(wxBrush(m_brush));
-		g->SetPen(wxPen(m_penColor, m_penSize, m_penStyle));
+		g->SetBrush(wxBrush("#0000FF"));
+		//g->SetPen(wxPen(m_penColor, m_penSize, m_penStyle));
 
 		wxRect computedRect = m_rect.GetValue(windowSize);
 
-		if (m_cornerRadius <= 0) {
+		//if (m_cornerRadius <= 0) {
 			g->DrawRectangle(
 				computedRect.GetX(),
 				computedRect.GetY(),
 				computedRect.GetWidth(),
 				computedRect.GetHeight());
-		} else {
-			g->DrawRoundedRectangle(
-				computedRect.GetX(),
-				computedRect.GetY(),
-				computedRect.GetWidth(),
-				computedRect.GetHeight(),
-				m_cornerRadius);
-		}
+// 		} else {
+// 			g->DrawRoundedRectangle(
+// 				computedRect.GetX(),
+// 				computedRect.GetY(),
+// 				computedRect.GetWidth(),
+// 				computedRect.GetHeight(),
+// 				m_cornerRadius);
+// 		}
 	}
 
 	std::ostream& operator<<(std::ostream& lhs, const DrawRectangleInstruction& rhs) {

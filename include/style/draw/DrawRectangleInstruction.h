@@ -10,21 +10,21 @@ namespace wxstyle{
 			friend DrawRectangleInstruction;
 
 		public:
-			static Builder* newBuilder();
+			static Builder newBuilder();
 
-			Builder* SetRect(const DimRect& rect);
+			Builder& SetRect(const DimRect& rect);
 
-			Builder* SetColor(const wxColor& color);
+			Builder& SetColor(const wxColor& color);
 
-			Builder* SetBrush(const wxBrush& brush);
+			Builder& SetBrush(const wxBrush& brush);
 
-			Builder* SetPenSize(const int penSize);
+			Builder& SetPenSize(const int penSize);
 
-			Builder* SetPenColor(const wxColor& penColor);
+			Builder& SetPenColor(const wxColor& penColor);
 
-			Builder* SetPenStyle(const wxPenStyle penStyle);
+			Builder& SetPenStyle(const wxPenStyle penStyle);
 
-			Builder* SetCornerRadius(const int cornerRadius);
+			Builder& SetCornerRadius(const int cornerRadius);
 
 			DrawRectangleInstruction Build();
 
@@ -48,12 +48,12 @@ namespace wxstyle{
 
 		void Draw(wxGraphicsContext* g, const wxSize& windowSize) const override;
 
-		static Builder* NewBuilder() {
-			return new Builder();
+		static Builder NewBuilder() {
+			return Builder();
 		}
 
-		Builder* ToBuilder() {
-			return new Builder(m_rect, m_brush, m_penSize, m_penColor, m_penStyle, m_cornerRadius);
+		Builder ToBuilder() {
+			return Builder(m_rect, m_brush, m_penSize, m_penColor, m_penStyle, m_cornerRadius);
 		}
 
 		DimRect GetRect() const {
