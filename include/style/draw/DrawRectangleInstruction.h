@@ -16,6 +16,8 @@ namespace wxstyle{
 
 			Builder* SetColor(const wxColor& color);
 
+			Builder* SetBrush(const wxBrush& brush);
+
 			Builder* SetPenSize(const int penSize);
 
 			Builder* SetPenColor(const wxColor& penColor);
@@ -29,10 +31,10 @@ namespace wxstyle{
 		private:
 			Builder();
 
-			Builder(const DimRect& rect, const wxColor& color, int penSize, const wxColor& penColor, const wxPenStyle penStyle, const int cornerRadius);
+			Builder(const DimRect& rect, const wxBrush& brush, int penSize, const wxColor& penColor, const wxPenStyle penStyle, const int cornerRadius);
 
 			DimRect m_rect;
-			wxColor m_color;
+			wxBrush m_brush;
 			int m_penSize;
 			wxColor m_penColor;
 			wxPenStyle m_penStyle;
@@ -40,8 +42,8 @@ namespace wxstyle{
 		};
 
 	public:
-		DrawRectangleInstruction(const DimRect& rect, const wxColor& color, const int penSize, const wxColor& penColor, const wxPenStyle penStyle, int cornerRadius) :
-			m_rect(rect), m_color(color), m_penSize(penSize), m_penColor(penColor), m_penStyle(penStyle), m_cornerRadius(cornerRadius)
+		DrawRectangleInstruction(const DimRect& rect, const wxBrush& brush, const int penSize, const wxColor& penColor, const wxPenStyle penStyle, int cornerRadius) :
+			m_rect(rect), m_brush(brush), m_penSize(penSize), m_penColor(penColor), m_penStyle(penStyle), m_cornerRadius(cornerRadius)
 		{}
 
 		void Draw(wxGraphicsContext* g, const wxSize& windowSize) const override;
@@ -51,15 +53,15 @@ namespace wxstyle{
 		}
 
 		Builder* ToBuilder() {
-			return new Builder(m_rect, m_color, m_penSize, m_penColor, m_penStyle, m_cornerRadius);
+			return new Builder(m_rect, m_brush, m_penSize, m_penColor, m_penStyle, m_cornerRadius);
 		}
 
 		DimRect GetRect() const {
 			return m_rect;
 		}
 
-		wxColor GetColor() const {
-			return m_color;
+		wxBrush GetBrush() const {
+			return m_brush;
 		}
 
 		int GetPenSize() const {
@@ -80,7 +82,7 @@ namespace wxstyle{
 
 	private:
 		const DimRect m_rect;
-		const wxColor m_color;
+		const wxBrush m_brush;
 		const int m_penSize;
 		const wxColor m_penColor;
 		const wxPenStyle m_penStyle;
