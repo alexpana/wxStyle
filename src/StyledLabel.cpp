@@ -12,9 +12,8 @@ public:
     ~DefaultLabelRenderer() {};
 
     virtual void Render(StyledWindow* window) const {
-
         wxAutoBufferedPaintDC deviceContext(window);
-        auto g = wxGraphicsContext::Create(deviceContext);
+        auto g = std::auto_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
         wxString text = window->GetLabel();
         std::shared_ptr<Style> style = window->GetStyle();
 
@@ -24,20 +23,20 @@ public:
         }
 
         g->SetFont(g->CreateFont(12, "Tahoma", fontFlags, window->GetForegroundColour()));
-        g->SetBrush(g->CreateBrush(window->GetForegroundColour()));
+        g->SetBrush(wxBrush(window->GetForegroundColour()));
 
         wxSize textSize = deviceContext.GetTextExtent(text);
         wxSize labelSize = window->GetSize();
         wxAlignment textAlignment = dynamic_cast<StyledLabel*>(window)->GetTextAlignment();
         wxPoint textPosition = GetTextPositionFromAlignment(textAlignment, labelSize, textSize);
 
-        RenderBackground(g, window);
-        RenderText(g, text, textPosition, fontFlags, window);
+        RenderBackground(g.get(), window);
+        RenderText(g.get(), text, textPosition, fontFlags, window);
     }
 
     void RenderBackground( wxGraphicsContext * g, StyledWindow* window ) const
     {
-        g->SetBrush(g->CreateBrush(window->GetInheritedBackgroundColor()));
+        g->SetBrush(wxBrush(window->GetInheritedBackgroundColor()));
         g->DrawRectangle(0, 0, window->GetSize().GetWidth(), window->GetSize().GetHeight());
     }
 

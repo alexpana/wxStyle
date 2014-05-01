@@ -8,9 +8,9 @@ class DefaultCheckBoxRenderer : public IRenderer {
 public:
     virtual void Render(StyledWindow *window) const {
         wxAutoBufferedPaintDC deviceContext(window);
-        auto g = wxGraphicsContext::Create(deviceContext);
+        auto g = std::auto_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
 
-        ClearBackground(window, g);
+        ClearBackground(window, g.get());
 
         // Draw glow / highlight
         wxColor highlightColor;

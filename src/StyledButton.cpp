@@ -13,7 +13,7 @@ class DefaultButtonRenderer : public IRenderer {
 public:
     virtual void Render(StyledWindow* window) const {
         wxAutoBufferedPaintDC deviceContext(window);
-        auto g = wxGraphicsContext::Create(deviceContext);
+        auto g = std::auto_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
 
         int w = window->GetSize().GetWidth();
         int h = window->GetSize().GetHeight();
@@ -25,26 +25,26 @@ public:
 
         wxBrush brush;
 
-        ClearBackground(window, g);
+        ClearBackground(window, g.get());
 
-        //// bottom highlight
-        //brush.SetColour(0x454545);
-        //g->SetBrush(g->CreateBrush(brush));
-        //g->DrawRoundedRectangle(0, 0, w, h, radius);
+        // bottom highlight
+        brush.SetColour(0x454545);
+        g->SetBrush(g->CreateBrush(brush));
+        g->DrawRoundedRectangle(0, 0, w, h, radius);
 
-        //// border
-        //if (window->HasFocus()) {
-        //    brush.SetColour(0x904040);
-        //} else {
-        //    brush.SetColour(0x191919);
-        //}
-        //g->SetBrush(g->CreateBrush(brush));
-        //g->DrawRoundedRectangle(0, 0, w, h-1, radius);
+        // border
+        if (window->HasFocus()) {
+            brush.SetColour(0x904040);
+        } else {
+            brush.SetColour(0x191919);
+        }
+        g->SetBrush(g->CreateBrush(brush));
+        g->DrawRoundedRectangle(0, 0, w, h-1, radius);
 
-        //// top highlight
-        //brush.SetColour(highlight);
-        //g->SetBrush(g->CreateBrush(brush));
-        //g->DrawRoundedRectangle(1, 1, w-2, h-3, radius);
+        // top highlight
+        brush.SetColour(highlight);
+        g->SetBrush(g->CreateBrush(brush));
+        g->DrawRoundedRectangle(1, 1, w-2, h-3, radius);
 
         // gradient
         int textOffset = 0;
@@ -61,32 +61,7 @@ public:
             textOffset = 1;
         }
 
-		//g->SetPen(*wxBLACK_PEN);
-
-		g->SetBrush(*wxBLUE_BRUSH);
-		g->DrawRectangle(0, 0, w, h);
-
-		g->SetBrush(*wxRED_BRUSH);
-        g->DrawRectangle(2, 2, w-4, h-4);
-
-		DrawRectangleInstruction borderInstruction = DrawRectangleInstruction::NewBuilder()
-			->SetColor("#0000FF")
-			->SetPenSize(0)
-			->Build();
-
-		DrawRectangleInstruction backgroundInstruction = DrawRectangleInstruction::NewBuilder()
-			->SetRect(DimRect(2, 2, Dimension(-4, 1), Dimension(-4, 1)))
-			->SetColor("#FF0000")
-			->SetPenSize(0)
-			->SetCornerRadius(2)
-			->Build();
-
-		//borderInstruction.Draw(g, window->GetSize());
-		//backgroundInstruction.Draw(g, window->GetSize());
-
         RenderText(g, deviceContext, window, w, h, textOffset);
-
-        delete g;   
     }
 
     void ClearBackground(StyledWindow *window, wxGraphicsContext *g) const {
