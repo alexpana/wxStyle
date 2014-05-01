@@ -1,9 +1,9 @@
 #pragma once
 
-#include "DrawInstruction.h"
-#include "StyleDefinitions.h"
-
 #include <vector>
+
+#include "style/draw/IDrawInstruction.h"
+#include "style/StyleDefinitions.h"
 
 namespace wxstyle {
 

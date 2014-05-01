@@ -2,7 +2,7 @@
 #include <boost/test/parameterized_test.hpp>
 #include <boost/optional/optional.hpp>
 
-#include "style/DrawInstruction.h"
+#include "style/draw/DrawRectangleInstruction.h"
 
 BOOST_AUTO_TEST_SUITE(draw_instructions_suite)
 
