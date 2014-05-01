@@ -5,7 +5,7 @@ namespace wxstyle {
 typedef DrawRectangleInstruction::Builder Builder;
 
 	Builder::Builder() : 
-		m_color(0x000000ul), m_penSize(1), m_penColor(0x000000ul), m_penStyle(wxPENSTYLE_SOLID), m_cornerRadius(0) 
+		m_rect(0, 0, Dimension(0, 1), Dimension(0, 1)), m_color(0x000000ul), m_penSize(1), m_penColor(0x000000ul), m_penStyle(wxPENSTYLE_SOLID), m_cornerRadius(0) 
 	{}
 
 	Builder::Builder(const DimRect& rect, const wxColor& color, int penSize, const wxColor& penColor, const wxPenStyle penStyle, const int cornerRadius) :
