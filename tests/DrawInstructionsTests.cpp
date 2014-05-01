@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE(draw_rectangle) {
 		->SetPenSize(1)
 		->Build();
 
-	BOOST_CHECK_EQUAL(instr, DrawRectangleInstruction(DimRect(0, 0, 10, 10), "#000000", 1, "#000000", wxPENSTYLE_SOLID));
+	BOOST_CHECK_EQUAL(instr, DrawRectangleInstruction(DimRect(0, 0, 10, 10), "#000000", 1, "#000000", wxPENSTYLE_SOLID, 0));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -50,15 +50,19 @@ namespace wxstyle {
 				return this;
 			}
 
+			Builder* SetCornerRadius(const int cornerRadius) {
+				m_cornerRadius = cornerRadius;
+			}
+
 			DrawRectangleInstruction Build() {
-				return DrawRectangleInstruction(m_rect, m_color, m_penSize, m_penColor, m_penStyle);
+				return DrawRectangleInstruction(m_rect, m_color, m_penSize, m_penColor, m_penStyle, m_cornerRadius);
 			}
 
 		private:
-			Builder() : m_color(0x000000ul), m_penSize(1), m_penColor(0x000000ul), m_penStyle(wxPENSTYLE_SOLID) {}
+			Builder() : m_color(0x000000ul), m_penSize(1), m_penColor(0x000000ul), m_penStyle(wxPENSTYLE_SOLID), m_cornerRadius(0) {}
 
-			Builder(DimRect rect, wxColor color, int penSize, wxColor penColor, wxPenStyle penStyle) :
-				m_rect(rect), m_color(color), m_penSize(penSize), m_penColor(penColor), m_penStyle(penStyle)
+			Builder(const DimRect& rect, const wxColor& color, int penSize, const wxColor& penColor, const wxPenStyle penStyle, const int cornerRadius) :
+				m_rect(rect), m_color(color), m_penSize(penSize), m_penColor(penColor), m_penStyle(penStyle), m_cornerRadius(cornerRadius)
 			{}
 
 			DimRect m_rect;
@@ -66,11 +70,12 @@ namespace wxstyle {
 			int m_penSize;
 			wxColor m_penColor;
 			wxPenStyle m_penStyle;
+			int m_cornerRadius;
 		};
 
 	public:
-		DrawRectangleInstruction(const DimRect& rect, const wxColor& color, const int penSize, const wxColor& penColor, const wxPenStyle penStyle) :
-			m_rect(rect), m_color(color), m_penSize(penSize), m_penColor(penColor), m_penStyle(penStyle)
+		DrawRectangleInstruction(const DimRect& rect, const wxColor& color, const int penSize, const wxColor& penColor, const wxPenStyle penStyle, int cornerRadius) :
+			m_rect(rect), m_color(color), m_penSize(penSize), m_penColor(penColor), m_penStyle(penStyle), m_cornerRadius(cornerRadius)
 		{}
 
 		void Draw(wxGraphicsContext* g, const wxRect& windowSize) const {
@@ -79,10 +84,12 @@ namespace wxstyle {
 
 			wxRect computedRect = m_rect.GetValue(windowSize);
 
-			g->DrawRectangle(computedRect.GetX(),
+			g->DrawRoundedRectangle(
+				computedRect.GetX(),
 				computedRect.GetY(),
 				computedRect.GetWidth(),
-				computedRect.GetHeight());
+				computedRect.GetHeight(),
+				m_cornerRadius);
 		}
 
 		static Builder* NewBuilder() {
@@ -90,7 +97,7 @@ namespace wxstyle {
 		}
 
 		Builder* ToBuilder() {
-			return new Builder(m_rect, m_color, m_penSize, m_penColor, m_penStyle);
+			return new Builder(m_rect, m_color, m_penSize, m_penColor, m_penStyle, m_cornerRadius);
 		}
 
 		DimRect GetRect() const {
@@ -113,12 +120,17 @@ namespace wxstyle {
 			return m_penStyle;
 		}
 
+		int GetCornerRadius() const {
+			return m_cornerRadius;
+		}
+
 	private:
 		const DimRect m_rect;
 		const wxColor m_color;
 		const int m_penSize;
 		const wxColor m_penColor;
 		const wxPenStyle m_penStyle;
+		const int m_cornerRadius;
 	};
 
 	std::ostream& operator<<(std::ostream& lhs, const DrawRectangleInstruction& rhs);
