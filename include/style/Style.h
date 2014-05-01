@@ -22,7 +22,7 @@ namespace wxstyle {
         boost::optional<ValueDefinition<wxColor>> backgroundColorDefinition;
         boost::optional<ValueDefinition<wxColor>> foregroundColorDefinition;
         boost::optional<ValueDefinition<bool>> opacityDefinition;
-        boost::optional<ValueDefinition<std::vector<DrawInstruction*>>> drawInstructions;
+        boost::optional<ValueDefinition<std::vector<IDrawInstruction*>>> drawInstructions;
     };
 
 } // namespace wxstyle

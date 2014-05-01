@@ -10,7 +10,7 @@ using namespace wxstyle;
 using namespace std;
 
 BOOST_AUTO_TEST_CASE(draw_rectangle) {
-	DrawRectangleInstruction instr = DrawRectangleInstruction::newBuilder()
+	DrawRectangleInstruction instr = DrawRectangleInstruction::NewBuilder()
 		->SetRect(DimRect(0, 0, 10, 10))
 		->SetPenStyle(wxPENSTYLE_SOLID)
 		->SetPenSize(1)
