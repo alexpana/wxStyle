@@ -8,20 +8,22 @@ namespace wxstyle {
 
 	class DimPoint {
 	public:
+		Dimension m_x;
+		Dimension m_y;
+
+		DimPoint() {}
+
 		DimPoint(const Dimension& x, const Dimension& y) : m_x(x), m_y(y) {}
-		wxPoint GetValue(const wxPoint& referencePoint) {
+
+		wxPoint GetValue(const wxPoint& referencePoint) const {
 			return wxPoint(m_x.GetValue(referencePoint.x),
 				m_y.GetValue(referencePoint.y));
 		}
 
-		wxSize GetValue(const wxSize& referenceSize) {
+		wxSize GetValue(const wxSize& referenceSize) const {
 			return wxSize(m_x.GetValue(referenceSize.GetWidth()),
 				m_y.GetValue(referenceSize.GetHeight()));
 		}
-
-	private:
-		const Dimension m_x;
-		const Dimension m_y;
 	};
 
 } // namespace wxstyle
