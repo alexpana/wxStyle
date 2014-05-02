@@ -69,8 +69,9 @@ typedef DrawRectangleInstruction::Builder Builder;
 			g->SetBrush(m_brush);
 		}
 
-		if (m_penStyle > 0) {
-			g->SetPen(wxPen(m_penColor, m_penSize, m_penStyle));
+		if (m_penSize > 0) {
+			wxPen *pen = wxThePenList->FindOrCreatePen(m_penColor, m_penSize, m_penStyle);
+			g->SetPen(*pen);
 		}
 
 		if (m_cornerRadius <= 0) {

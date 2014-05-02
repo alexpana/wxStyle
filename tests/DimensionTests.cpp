@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(value_calculation)
 }
 
 BOOST_AUTO_TEST_CASE(dim_point) {
-	DimPoint point(Dimension(5, 0.1), Dimension(-1, 1));
+	DimPoint point(Dimension(5, 0.1f), Dimension(-1, 1));
 	BOOST_REQUIRE_EQUAL(point.GetValue(wxSize(100, 50)), wxSize(15, 49));
 	BOOST_REQUIRE_EQUAL(point.GetValue(wxPoint(100, 50)), wxPoint(15, 49));
 }

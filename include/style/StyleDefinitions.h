@@ -63,6 +63,8 @@ namespace wxstyle {
             if (other.m_style) this->m_style = other.m_style;
             return *this;
         }
+
+		wxFontInfo CreateFontInfo() const;
     };
 
     std::ostream& operator<<(std::ostream& lhs, const FontDefinition& rhs);
