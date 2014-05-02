@@ -13,7 +13,7 @@ public:
 
     virtual void Render(StyledWindow* window) const {
         wxAutoBufferedPaintDC deviceContext(window);
-        auto g = std::auto_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
+        auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
         wxString text = window->GetLabel();
         std::shared_ptr<Style> style = window->GetStyle();
 

@@ -5,6 +5,7 @@
 #include <wx/graphics.h>
 #include <wx/dcbuffer.h>
 #include <wx/font.h>
+
 #include "style/draw/DrawRectangleInstruction.h"
 
 namespace wxstyle {
@@ -13,7 +14,7 @@ class DefaultButtonRenderer : public IRenderer {
 public:
     virtual void Render(StyledWindow* window) const {
         wxAutoBufferedPaintDC deviceContext(window);
-        auto g = std::auto_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
+        auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
 
         int w = window->GetSize().GetWidth();
         int h = window->GetSize().GetHeight();
