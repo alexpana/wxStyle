@@ -6,7 +6,9 @@
 #include <tuple>
 #include <string>
 
+#include "asserthelper.h"
 #include "Dimension.h"
+#include "DimPoint.h"
 
 BOOST_AUTO_TEST_SUITE(dimension_suite)
 
@@ -63,6 +65,12 @@ BOOST_AUTO_TEST_CASE(value_calculation)
 	BOOST_REQUIRE_EQUAL(Dimension(0, 1).GetValue(15), 15);
 	BOOST_REQUIRE_EQUAL(Dimension(0, 2).GetValue(4), 8);
 	BOOST_REQUIRE_EQUAL(Dimension(20, 2).GetValue(4), 28);
+}
+
+BOOST_AUTO_TEST_CASE(dim_point) {
+	DimPoint point(Dimension(5, 0.1), Dimension(-1, 1));
+	BOOST_REQUIRE_EQUAL(point.GetValue(wxSize(100, 50)), wxSize(15, 49));
+	BOOST_REQUIRE_EQUAL(point.GetValue(wxPoint(100, 50)), wxPoint(15, 49));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

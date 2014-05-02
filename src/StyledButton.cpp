@@ -61,7 +61,7 @@ public:
             textOffset = 1;
         }
 
-        RenderText(g, deviceContext, window, w, h, textOffset);
+        RenderText(g.get(), deviceContext, window, w, h, textOffset);
     }
 
     void ClearBackground(StyledWindow *window, wxGraphicsContext *g) const {
