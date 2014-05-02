@@ -47,7 +47,7 @@ namespace wxstyle {
 		DrawTextInstruction Build();
 
 	private:
-		Builder();
+		Builder() : m_verticalTextAnchor(VTA_CENTER), m_horizontalTextAnchor(HTA_CENTER) {};
 
 		Builder(const wxString& text, const ShadowDefinition& shadowDefinition, const FontDefinition& fontDefinition,
 			const wxColor& textColor, const HorizontalTextAnchor& horizontalTextAnchor, const VerticalTextAnchor verticalTextAnchor,

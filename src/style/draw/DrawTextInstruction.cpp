@@ -45,8 +45,6 @@ namespace wxstyle {
 		return DrawTextInstruction(m_text, m_shadowDefinition, m_fontDefinition, m_textColor, m_horizontalTextAnchor, m_verticalTextAnchor, m_textPosition);
 	}
 
-	DrawTextInstruction::Builder::Builder() {}
-
 	Builder::Builder(const wxString& text, const ShadowDefinition& shadowDefinition, const FontDefinition& fontDefinition,
 		const wxColor& textColor, const HorizontalTextAnchor& horizontalTextAnchor, const VerticalTextAnchor verticalTextAnchor,
 		const DimPoint& textPosition) : 
@@ -61,13 +59,38 @@ namespace wxstyle {
 		m_verticalTextAnchor(verticalTextAnchor), m_textPosition(textPosition)
 	{}
 
-	void DrawTextInstruction::Draw(wxGraphicsContext* g, const wxSize& windowSize) const {
-		double w, h;
-		//g->Create()->GetTextExtent(m_text, &w, &h);
-		wxSize finalPosition = m_textPosition.GetValue(windowSize);
-		int x = finalPosition.GetWidth(), y = finalPosition.GetHeight();
+	wxPoint ComputeOffset(double w, double h, HorizontalTextAnchor hta, VerticalTextAnchor vta) {
+		int x, y;
 
+		switch(hta) {
+		case HTA_LEFT: x = 0; break;
+		case HTA_CENTER: x = - w / 2; break;
+		case HTA_RIGHT: x = - w; break;
+		}
+
+		switch(vta) {
+		case VTA_TOP: y = 0; break;
+		case VTA_CENTER: y = - h / 2; break;
+		case VTA_BOTTOM: y = - h; break;
+		}
+
+		return wxPoint(x, y);
+	}
+
+	void DrawTextInstruction::Draw(wxGraphicsContext* g, const wxSize& windowSize) const {
+
+		// We need to set the font before computing it's extent
 		wxFontInfo fontInfo = m_fontDefinition.CreateFontInfo();
+		g->SetFont(fontInfo, m_textColor);
+
+		double w, h;
+		g->GetTextExtent(m_text, &w, &h);
+
+		wxPoint offset = ComputeOffset(w, h, m_horizontalTextAnchor, m_verticalTextAnchor);
+
+		wxSize finalPosition = m_textPosition.GetValue(windowSize);
+		int x = finalPosition.GetWidth() + offset.x;
+		int y = finalPosition.GetHeight() + offset.y;
 
 		// Draw Shadow
 		g->SetFont(fontInfo, m_shadowDefinition.m_color);
