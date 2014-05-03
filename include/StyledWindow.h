@@ -82,13 +82,17 @@ namespace wxstyle {
          *  window at any given time. Focused windows receive keyboard events and are drawn
          *  slightly highlighted.
          */
-        bool isFocused() { 
+        bool IsFocused() { 
             return m_isFocused; 
         }
 
-        bool isHovered() {
+        bool IsHovered() {
             return m_isHovered;
         }
+
+		bool IsPressed() {
+			return m_isPressed;
+		}
 
         virtual void SetText(const wxString& text) {
             m_text = text;
@@ -187,10 +191,19 @@ namespace wxstyle {
         void Init();
 
         void MouseMoved(wxMouseEvent& mouseEvent) { OnMouseMoved(mouseEvent); }
-        void MouseDown(wxMouseEvent& mouseEvent) { OnMouseDown(mouseEvent); }
-        void MouseDoubleClick(wxMouseEvent& mouseEvent) { OnMouseDoubleClick(mouseEvent); }
+        void MouseDown(wxMouseEvent& mouseEvent) { 
+			m_isPressed = true;
+			OnMouseDown(mouseEvent); 
+		}
+        void MouseDoubleClick(wxMouseEvent& mouseEvent) {
+			m_isPressed = true;
+			OnMouseDoubleClick(mouseEvent); 
+		}
+		void MouseReleased(wxMouseEvent& mouseEvent) { 
+			m_isPressed = false;
+			OnMouseReleased(mouseEvent); 
+		}
         void MouseWheelMoved(wxMouseEvent& mouseEvent) { OnMouseWheelMoved(mouseEvent); }
-        void MouseReleased(wxMouseEvent& mouseEvent) { OnMouseReleased(mouseEvent); }
         void RightClick(wxMouseEvent& mouseEvent) { OnRightClick(mouseEvent); }
 
         void MouseEnterWindow(wxMouseEvent& mouseEvent) { 
@@ -232,6 +245,8 @@ namespace wxstyle {
         bool m_isFocused;
 
         bool m_isHovered;
+
+		bool m_isPressed;
 
         wxString m_text;
 

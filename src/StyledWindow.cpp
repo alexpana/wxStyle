@@ -41,6 +41,7 @@ void StyledWindow::Init() {
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     m_isFocused = false;
     m_isHovered = false;
+    m_isPressed = false;
 }
 
 wxColor StyledWindow::GetInheritedBackgroundColor() {
