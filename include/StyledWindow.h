@@ -1,10 +1,14 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
+
+#include <boost/optional.hpp>
 
 #include <wx/dcbuffer.h>
 #include <wx/sizer.h>
 #include <wx/colour.h>
+
 
 #include "Renderer.h"
 #include "style/Style.h"
@@ -120,6 +124,30 @@ namespace wxstyle {
             return m_style;
         }
 
+		/**
+		 *	Searches for a property from its name.
+		 *
+		 *	Some components define custom properties to be queried
+		 *	by the style system: a combobox can be checked or unchecked,
+		 *	a loading bar has a fill percentage, etc.
+		 *
+		 *	Clients can define their own custom properties to be used
+		 *	inside styles, or other situations.
+		 */
+		boost::optional<wxString> GetProperty(const wxString& propertyName);
+
+		/**
+		 *	Sets the value of a user-defined property. This is overridden
+		 *	by any component specific properties.
+		 */
+		void SetProperty(const wxString& propertyName, const wxString& propertyValue);
+
+		/**
+		 *	Unset a user-defined property. This does not work for component-
+		 *	specific properties.
+		 */
+		void UnsetProperty(const wxString& propertyName);
+
     protected:
 
         /* Handling method for mouse motion events. */
@@ -182,6 +210,17 @@ namespace wxstyle {
             paintEvent.Skip(false);
         };
 
+		/**
+		 *	Allows inheriting windows to define dynamic properties. 
+		 *	The properties defined by every window are:
+		 *	'hovered', 'focused' and 'pressed'.
+		 *
+		 *	In order to keep these definitions, and all the definitions
+		 *	of parent windows, implementers of this method must call
+		 *	the super definition.
+		 */
+		virtual boost::optional<wxString> GetComponentProperty(const wxString& propertyName);
+
         wxGraphicsContext* CreateGraphicsContext();
 
         static const int DEFAULT_WIDTH = 200;
@@ -233,6 +272,15 @@ namespace wxstyle {
 
         void Paint(wxPaintEvent& paintEvent) { OnPaint(paintEvent); };
 
+	private:
+		/** Hash function for wxString objects. **/
+		struct wxStringHash {
+		public:
+			std::size_t operator()(const wxString& s) {
+				return std::hash<const char*>()(s.GetData().AsChar());
+			}
+		};
+
     private:
         bool m_isOpaque;
 
@@ -249,6 +297,8 @@ namespace wxstyle {
 		bool m_isPressed;
 
         wxString m_text;
+
+		std::unordered_map<wxString, wxString, wxStringHash> m_propertyMap;
 
         DECLARE_EVENT_TABLE()
     };
