@@ -37,6 +37,16 @@ namespace wxstyle {
             return *this;
 
         }
+
+		ShadowDefinition& SetColor(const wxColor& color) {
+			m_color = color;
+			return *this;
+		}
+
+		ShadowDefinition& SetOffset(const wxPoint& offset) {
+			m_offset = offset;
+			return *this;
+		}
     };
 
     /**
@@ -63,6 +73,14 @@ namespace wxstyle {
             if (other.m_style) this->m_style = other.m_style;
             return *this;
         }
+
+		FontDefinition& SetFace(const wxString& fontFace);
+
+		FontDefinition& SetSize(int size);
+
+		FontDefinition& SetWeight(wxFontWeight weight);
+
+		FontDefinition& SetStyle(wxFontStyle style);
 
 		wxFontInfo CreateFontInfo() const;
     };

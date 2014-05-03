@@ -38,4 +38,24 @@ namespace wxstyle {
 		return fontInfo;
 	}
 
+	FontDefinition& FontDefinition::SetFace(const wxString& fontFace) {
+		m_face = fontFace;
+		return *this;
+	}
+
+	FontDefinition& FontDefinition::SetSize(int size) {
+		m_size = size;
+		return *this;
+	}
+
+	FontDefinition& FontDefinition::SetWeight(wxFontWeight weight) {
+		m_weight = weight;
+		return *this;
+	}
+
+	FontDefinition& FontDefinition::SetStyle(wxFontStyle style) {
+		m_style = style;
+		return *this;
+	}
+
 } // namespace wxstyle
