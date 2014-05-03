@@ -18,6 +18,8 @@ namespace wxstyle {
 		// size
 		wxFontInfo fontInfo = m_size ? wxFontInfo(m_size.get()) : wxFontInfo();
 
+		fontInfo.Encoding(wxFONTENCODING_SYSTEM);
+
 		// style
 		if (m_style) {
 			fontInfo.Italic(m_style.get() == wxFONTSTYLE_ITALIC);
