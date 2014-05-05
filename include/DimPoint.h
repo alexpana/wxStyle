@@ -26,4 +26,7 @@ namespace wxstyle {
 		}
 	};
 
+    bool operator==(const DimPoint& lhs, const DimPoint& rhs);
+    std::ostream& operator<<(std::ostream& lhs, const DimPoint& rhs);
+
 } // namespace wxstyle

@@ -9,14 +9,18 @@ namespace wxstyle {
     class DrawImageInstruction : public IDrawInstruction {
     public:
         class Builder {
-        public:
-            Builder();
-            Builder(const wxString& imagePath, const DimPoint& position);
+        friend DrawImageInstruction;
 
+        public:
             Builder& SetImagePath(const wxString& imagePath);
             Builder& SetPosition(const DimPoint& position);
 
             DrawImageInstruction Build();
+
+        private:
+            Builder();
+            Builder(const wxString& imagePath, const DimPoint& position);
+
         private:
             wxString m_imagePath;
             DimPoint m_position;
@@ -24,6 +28,14 @@ namespace wxstyle {
 
     public:
         DrawImageInstruction(const wxString& imagePath, const DimPoint& position);
+
+        static Builder NewBuilder() {
+            return Builder();
+        }
+
+        Builder ToBuilder() {
+            return Builder(m_imagePath, m_position);
+        }
 
         wxString GetImagePath() const {
             return m_imagePath;
