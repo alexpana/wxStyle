@@ -9,6 +9,7 @@ namespace wxstyle {
     ImageRepository* ImageRepository::GetInstance() {
         if (INSTANCE == nullptr) {
             INSTANCE = new ImageRepository();
+            INSTANCE->SetRepositoryPath(wxGetCwd());
         }
 
         return INSTANCE;
