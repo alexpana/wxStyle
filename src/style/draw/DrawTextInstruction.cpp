@@ -26,12 +26,12 @@ namespace wxstyle {
 		return *this;
 	}
 
-	Builder& Builder::SetHorizontalAnchor(const HorizontalTextAnchor horizontalAnchor) {
+	Builder& Builder::SetHorizontalAnchor(const HorizontalAnchor horizontalAnchor) {
 		m_horizontalTextAnchor = horizontalAnchor;
 		return *this;
 	}
 
-	Builder& Builder::SetVerticalAnchor(const VerticalTextAnchor verticalAnchor) {
+	Builder& Builder::SetVerticalAnchor(const VerticalAnchor verticalAnchor) {
 		m_verticalTextAnchor = verticalAnchor;
 		return *this;
 	}
@@ -46,36 +46,18 @@ namespace wxstyle {
 	}
 
 	Builder::Builder(const wxString& text, const ShadowDefinition& shadowDefinition, const FontDefinition& fontDefinition,
-		const wxColor& textColor, const HorizontalTextAnchor& horizontalTextAnchor, const VerticalTextAnchor verticalTextAnchor,
+		const wxColor& textColor, const HorizontalAnchor& horizontalTextAnchor, const VerticalAnchor verticalTextAnchor,
 		const DimPoint& textPosition) : 
 		m_text(text), m_shadowDefinition(shadowDefinition), m_fontDefinition(fontDefinition), m_textColor(textColor), m_horizontalTextAnchor(horizontalTextAnchor),
 		m_verticalTextAnchor(verticalTextAnchor), m_textPosition(textPosition)
 	{}
 
 	DrawTextInstruction::DrawTextInstruction(const wxString& text, const ShadowDefinition& shadowDefinition, const FontDefinition& fontDefinition,
-		const wxColor& textColor, const HorizontalTextAnchor& horizontalTextAnchor, const VerticalTextAnchor verticalTextAnchor,
+		const wxColor& textColor, const HorizontalAnchor& horizontalTextAnchor, const VerticalAnchor verticalTextAnchor,
 		const DimPoint& textPosition) : 
 		m_text(text), m_shadowDefinition(shadowDefinition), m_fontDefinition(fontDefinition), m_textColor(textColor), m_horizontalTextAnchor(horizontalTextAnchor),
 		m_verticalTextAnchor(verticalTextAnchor), m_textPosition(textPosition)
 	{}
-
-	wxPoint ComputeOffset(double w, double h, HorizontalTextAnchor hta, VerticalTextAnchor vta) {
-		int x, y;
-
-		switch(hta) {
-		case HTA_LEFT: x = 0; break;
-		case HTA_CENTER: x = - w / 2; break;
-		case HTA_RIGHT: x = - w; break;
-		}
-
-		switch(vta) {
-		case VTA_TOP: y = 0; break;
-		case VTA_CENTER: y = - h / 2; break;
-		case VTA_BOTTOM: y = - h; break;
-		}
-
-		return wxPoint(x, y);
-	}
 
 	void DrawTextInstruction::Draw(wxGraphicsContext* g, const wxSize& windowSize) const {
 
