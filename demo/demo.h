@@ -19,6 +19,7 @@
 #include <string>
 
 #include "Dimension.h"
+#include "style/draw/ImageRepository.h"
 #include "StyledButton.h"
 #include "StyledCheckbox.h"
 #include "StyledFrame.h"
