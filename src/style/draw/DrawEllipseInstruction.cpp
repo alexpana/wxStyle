@@ -6,7 +6,7 @@
 
 namespace wxstyle {
 
-    DrawEllipseInstruction::DrawEllipseInstruction(const Params& params) : DrawShapeInstruction(params) {}
+    DrawEllipseInstruction::DrawEllipseInstruction(const DrawShapeInstruction::Params& params) : DrawShapeInstruction(params) {}
 
     void DrawEllipseInstruction::Draw(wxGraphicsContext* g, const wxSize& windowSize) const {
         wxRect computedRect = GetParams().GetRect().GetValue(windowSize);
