@@ -3,6 +3,7 @@
 #include <wx/brush.h>
 #include <wx/colour.h>
 
+#include "style/draw/Anchor.h"
 #include "DimRect.h"
 
 namespace wxstyle {
@@ -16,6 +17,8 @@ namespace wxstyle {
         wxColour penColor;
         wxPenStyle penStyle;
         int cornerRadius;
+        HorizontalAnchor horizontalAnchor;
+        VerticalAnchor verticalAnchor;
         boost::optional<GradientDefinitionPtr> gradientDefinition;
     };
 
@@ -27,6 +30,8 @@ namespace wxstyle {
         impl->penColor = *wxBLACK;
         impl->penStyle = wxPENSTYLE_SOLID;
         impl->cornerRadius = 0;
+        impl->horizontalAnchor = HA_LEFT;
+        impl->verticalAnchor = VA_TOP;
     }
 
     Params& Params::SetRect(const DimRect& rect) {
@@ -69,6 +74,16 @@ namespace wxstyle {
         return *this;
     }
 
+    Params& Params::SetHorizontalAnchor(HorizontalAnchor horizontalAnchor) {
+        impl->horizontalAnchor = horizontalAnchor;
+        return *this;
+    }
+
+    Params& Params::SetVerticalAnchor(VerticalAnchor verticalAnchor) {
+        impl->verticalAnchor = verticalAnchor;
+        return *this;
+    }
+
     DimRect Params::GetRect() const {
         return impl->rect;
     }
@@ -99,6 +114,14 @@ namespace wxstyle {
 
     int Params::GetCornerRadius() const {
         return impl->cornerRadius;
+    }
+
+    HorizontalAnchor Params::GetHorizontalAnchor() const {
+        return impl->horizontalAnchor;
+    }
+
+    VerticalAnchor Params::GetVerticalAnchor() const {
+        return impl->verticalAnchor;
     }
 
     DrawShapeInstruction::DrawShapeInstruction(const Params& params) : parameters(params) {}

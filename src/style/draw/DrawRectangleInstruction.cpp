@@ -10,6 +10,7 @@ namespace wxstyle {
 
 	void DrawRectangleInstruction::Draw(wxGraphicsContext* g, const wxSize& windowSize) const {
 		wxRect computedRect = GetParams().GetRect().GetValue(windowSize);
+        wxPoint offset = ComputeOffset(computedRect.GetWidth(), computedRect.GetHeight(), GetParams().GetHorizontalAnchor(), GetParams().GetVerticalAnchor());
 
 		if (GetParams().HasGradientDefinition()) {
 			g->SetBrush(GetParams().GetGradientDefinition().get()->CreateBrush(*g, computedRect));
@@ -24,14 +25,14 @@ namespace wxstyle {
 
 		if (GetParams().GetCornerRadius() <= 0) {
 			g->DrawRectangle(
-				computedRect.GetX(),
-				computedRect.GetY(),
+				computedRect.GetX() + offset.x,
+				computedRect.GetY() + offset.y,
 				computedRect.GetWidth(),
 				computedRect.GetHeight());
  		} else {
  			g->DrawRoundedRectangle(
- 				computedRect.GetX(),
- 				computedRect.GetY(),
+ 				computedRect.GetX() + offset.x,
+ 				computedRect.GetY() + offset.y,
  				computedRect.GetWidth(),
  				computedRect.GetHeight(),
  				GetParams().GetCornerRadius());

@@ -2,6 +2,7 @@
 
 #include <wx/pen.h>
 
+#include "style/draw/Anchor.h"
 #include "style/draw/DrawInstruction.h"
 #include "style/draw/Gradient.h"
 
@@ -50,6 +51,14 @@ namespace wxstyle {
             Params& SetCornerRadius(const int cornerRadius);
 
             int GetCornerRadius() const;
+
+            Params& SetHorizontalAnchor(HorizontalAnchor horizontalAnchor);
+
+            HorizontalAnchor GetHorizontalAnchor() const;
+
+            Params& SetVerticalAnchor(VerticalAnchor verticalAnchor);
+
+            VerticalAnchor GetVerticalAnchor() const;
 
         private:
             struct ParamsImpl;

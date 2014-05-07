@@ -9,7 +9,8 @@ namespace wxstyle {
     DrawEllipseInstruction::DrawEllipseInstruction(const DrawShapeInstruction::Params& params) : DrawShapeInstruction(params) {}
 
     void DrawEllipseInstruction::Draw(wxGraphicsContext* g, const wxSize& windowSize) const {
-        wxRect computedRect = GetParams().GetRect().GetValue(windowSize);
+        wxRect computedRect = GetParams().GetRect().GetValue(wxRect(windowSize.GetWidth(), windowSize.GetHeight(), windowSize.GetWidth(), windowSize.GetHeight()));
+        wxPoint offset = ComputeOffset(computedRect.GetWidth(), computedRect.GetHeight(), GetParams().GetHorizontalAnchor(), GetParams().GetVerticalAnchor());
 
         if (GetParams().HasGradientDefinition()) {
             g->SetBrush(GetParams().GetGradientDefinition().get()->CreateBrush(*g, computedRect));
@@ -23,8 +24,8 @@ namespace wxstyle {
         }
 
         g->DrawEllipse(
-            computedRect.GetX(),
-            computedRect.GetY(),
+            computedRect.GetX() + offset.x,
+            computedRect.GetY() + offset.y,
             computedRect.GetWidth(),
             computedRect.GetHeight());
     }
