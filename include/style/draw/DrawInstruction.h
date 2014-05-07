@@ -1,12 +1,7 @@
 #pragma once
 
-#include <wx/brush.h>
-#include <wx/colour.h>
-#include <wx/gdicmn.h>
-#include <wx/graphics.h>
-#include <wx/pen.h>
-
-#include "DimRect.h"
+class wxSize;
+class wxGraphicsContext;
 
 namespace wxstyle {    
 

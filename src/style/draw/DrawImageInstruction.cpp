@@ -1,8 +1,9 @@
 #include "style/draw/DrawImageInstruction.h"
 
-#include "style/draw/ImageRepository.h"
-
 #include <wx/bitmap.h>
+#include <wx/graphics.h>
+
+#include "style/draw/ImageRepository.h"
 
 namespace wxstyle {
 
