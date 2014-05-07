@@ -1,11 +1,11 @@
 #pragma once
 
-#include "style/draw/IDrawInstruction.h"
+#include "style/draw/DrawInstruction.h"
 #include "style/draw/Gradient.h"
 
 namespace wxstyle{ 
 
-	class DrawRectangleInstruction : public IDrawInstruction {
+	class DrawRectangleInstruction : public DrawInstruction {
 	public:
 		class Builder {
 			friend DrawRectangleInstruction;

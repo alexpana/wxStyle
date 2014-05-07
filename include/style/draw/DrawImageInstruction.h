@@ -4,10 +4,10 @@
 
 #include "DimPoint.h"
 #include "style/draw/Anchor.h"
-#include "style/draw/IDrawInstruction.h"
+#include "style/draw/DrawInstruction.h"
 
 namespace wxstyle {
-    class DrawImageInstruction : public IDrawInstruction {
+    class DrawImageInstruction : public DrawInstruction {
     public:
         class Builder {
         friend DrawImageInstruction;

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "style/draw/IDrawInstruction.h"
+#include "style/draw/DrawInstruction.h"
 #include "style/StyleDefinitions.h"
 
 namespace wxstyle {
@@ -22,7 +22,7 @@ namespace wxstyle {
         boost::optional<ValueDefinition<wxColor>> backgroundColorDefinition;
         boost::optional<ValueDefinition<wxColor>> foregroundColorDefinition;
         boost::optional<ValueDefinition<bool>> opacityDefinition;
-        boost::optional<ValueDefinition<std::vector<IDrawInstruction*>>> drawInstructions;
+        boost::optional<ValueDefinition<std::vector<DrawInstruction*>>> drawInstructions;
     };
 
 } // namespace wxstyle

@@ -10,7 +10,7 @@
 
 namespace wxstyle {    
 
-    class IDrawInstruction {
+    class DrawInstruction {
 	public:
 		virtual void Draw(wxGraphicsContext* g, const wxSize& windowSize) const = 0;
     };

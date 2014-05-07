@@ -4,14 +4,14 @@
 #include <wx/graphics.h>
 
 #include "style/draw/Anchor.h"
-#include "style/draw/IDrawInstruction.h"
+#include "style/draw/DrawInstruction.h"
 #include "style/StyleDefinitions.h"
 
 #include "DimPoint.h"
 
 namespace wxstyle {
 
-	class DrawTextInstruction : public IDrawInstruction {
+	class DrawTextInstruction : public DrawInstruction {
 
 	public:
 
