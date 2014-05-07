@@ -36,7 +36,7 @@ namespace wxstyle {
 
 		LinearGradientDefinition(Direction direction) : m_direction(direction) {}
 
-		virtual wxGraphicsBrush CreateBrush(const wxGraphicsContext& g, const wxRect& referenceRect) const override {
+		wxGraphicsBrush CreateBrush(const wxGraphicsContext& g, const wxRect& referenceRect) const override {
 			if (m_direction == VERTICAL) {
 				return g.CreateLinearGradientBrush(0, -2, 0, referenceRect.GetHeight(), GetGradientStops());
 			} else {
@@ -47,5 +47,20 @@ namespace wxstyle {
 	private:
 		Direction m_direction;
 	};
+
+    class RadialGradientDefinition : public GradientDefinition {
+    public:
+        RadialGradientDefinition() {};
+
+        wxGraphicsBrush CreateBrush(const wxGraphicsContext& g, const wxRect& referenceRect) const override {
+            return g.CreateRadialGradientBrush(
+                referenceRect.GetWidth() / 2 + referenceRect.GetX(), 
+                referenceRect.GetHeight() / 2 + referenceRect.GetY(), 
+                referenceRect.GetWidth() / 2 + referenceRect.GetX(), 
+                referenceRect.GetHeight() / 2 + referenceRect.GetY(),
+                referenceRect.GetWidth() / 2, 
+                GetGradientStops());
+        }
+    };
 
 } // namespace wxstyle
