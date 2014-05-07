@@ -25,7 +25,7 @@ namespace wxstyle {
         impl->brush = *wxBLACK_BRUSH;
         impl->penSize = 0;
         impl->penColor = *wxBLACK;
-        impl->penStyle = wxPENSTYLE_TRANSPARENT;
+        impl->penStyle = wxPENSTYLE_SOLID;
         impl->cornerRadius = 0;
     }
 
