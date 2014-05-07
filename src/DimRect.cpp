@@ -4,7 +4,7 @@ namespace wxstyle {
 
 	wxRect DimRect::GetValue(const wxRect& referenceRect) const {
 		return wxRect(
-			m_x.GetValue(referenceRect.GetY()),
+			m_x.GetValue(referenceRect.GetX()),
 			m_y.GetValue(referenceRect.GetY()),
 			m_w.GetValue(referenceRect.GetWidth()),
 			m_h.GetValue(referenceRect.GetHeight()));
