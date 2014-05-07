@@ -2,58 +2,84 @@
 
 #include <wx/bitmap.h>
 #include <wx/graphics.h>
+#include <wx/string.h>
 
+#include "DimPoint.h"
+#include "DiMRect.h"
 #include "style/draw/ImageRepository.h"
 
 namespace wxstyle {
 
-    typedef DrawImageInstruction::Builder Builder;
+    typedef DrawImageInstruction::Params Params;
 
-    Builder::Builder() : 
-        m_imagePath(""), m_position(DimPoint(0, 0)), m_horizontalAnchor(HA_CENTER), m_verticalAnchor(VA_CENTER), m_imageSize(DimPoint(Dimension(0, 1), Dimension(0, 1)))
-    {}
+    struct Params::ParamsImpl {
+        wxString imagePath;
+        DimPoint position;
+        DimPoint imageSize;
+        HorizontalAnchor horizontalAnchor;
+        VerticalAnchor verticalAnchor;
+    };
 
-    Builder::Builder(const wxString& imagePath, const DimPoint& position, HorizontalAnchor horizontalAnchor, VerticalAnchor verticalAnchor, const DimPoint& size) :
-        m_imagePath(imagePath), m_position(position), m_horizontalAnchor(horizontalAnchor), m_verticalAnchor(verticalAnchor), m_imageSize(size)
-    {}
+    Params::Params() {
+        impl = std::make_shared<ParamsImpl>();
+        impl->horizontalAnchor = HA_CENTER;
+        impl->verticalAnchor = VA_CENTER;
+    }
 
-    Builder& Builder::SetImagePath(const wxString& imagePath) {
-        m_imagePath = imagePath;
+    Params& Params::SetImagePath(const wxString& imagePath) {
+        impl->imagePath = imagePath;
         return *this;
     }
 
-    Builder& Builder::SetPosition(const DimPoint& position) {
-        m_position = position;
+    Params& Params::SetPosition(const DimPoint& position) {
+        impl->position = position;
         return *this;
     }
 
-    Builder& Builder::SetHorizontalAnchor(HorizontalAnchor horizontalAnchor) {
-        m_horizontalAnchor = horizontalAnchor;
+    Params& Params::SetHorizontalAnchor(HorizontalAnchor horizontalAnchor) {
+        impl->horizontalAnchor = horizontalAnchor;
         return *this;
     }
 
-    Builder& Builder::SetVerticalAnchor(VerticalAnchor verticalAnchor) {
-        m_verticalAnchor = verticalAnchor;
+    Params& Params::SetVerticalAnchor(VerticalAnchor verticalAnchor) {
+        impl->verticalAnchor = verticalAnchor;
         return *this;
     }
 
-    Builder& Builder::SetImageSize(const DimPoint& size) {
-        m_imageSize = size;
+    Params& Params::SetImageSize(const DimPoint& size) {
+        impl->imageSize = size;
         return *this;
     }
 
-    DrawImageInstruction Builder::Build() {
-        return DrawImageInstruction(m_imagePath, m_position, m_horizontalAnchor, m_verticalAnchor, m_imageSize);
+    wxString Params::GetImagePath() const {
+        return impl->imagePath;
     }
 
+    DimPoint Params::GetPosition() const {
+        return impl->position;
+    }
 
-    DrawImageInstruction::DrawImageInstruction(const wxString& imagePath, const DimPoint& position, HorizontalAnchor horizontalAnchor, VerticalAnchor verticalAnchor, const DimPoint& size) :
-        m_imagePath(imagePath), m_position(position), m_horizontalAnchor(horizontalAnchor), m_verticalAnchor(verticalAnchor), m_imageSize(size)
-    {}
+    HorizontalAnchor Params::GetHorizontalAnchor() const {
+        return impl->horizontalAnchor;
+    }
+
+    VerticalAnchor Params::GetVerticalAnchor() const {
+        return impl->verticalAnchor;
+    }
+
+    DimPoint Params::GetImageSize() const {
+        return impl->imageSize;
+    }
+
+    DrawImageInstruction::DrawImageInstruction(const Params& params) : parameters(params) {}
+
+    Params DrawImageInstruction::GetParams() const {
+        return parameters;
+    }
 
     void DrawImageInstruction::Draw(wxGraphicsContext* g, const wxSize& windowSize) const {
 
-        wxImage *image = ImageRepository::GetInstance()->GetImage(m_imagePath);
+        wxImage *image = ImageRepository::GetInstance()->GetImage(GetParams().GetImagePath());
 
         if (image == nullptr) {
             return;
@@ -61,13 +87,15 @@ namespace wxstyle {
 
         wxBitmap bitmap = wxBitmap(*image);
 
+        DimPoint position = GetParams().GetPosition();
+        DimPoint imageSize = GetParams().GetImageSize();
 
-        wxPoint imagePosition(m_position.GetValue(windowSize).GetWidth(), m_position.GetValue(windowSize).GetHeight());
-        wxSize imageSize(m_imageSize.GetValue(image->GetSize()));
+        wxPoint imagePosition(position.GetValue(windowSize).GetWidth(), position.GetValue(windowSize).GetHeight());
+        wxSize finalImageSize(imageSize.GetValue(image->GetSize()));
 
-        wxPoint offset = ComputeOffset(imageSize, m_horizontalAnchor, m_verticalAnchor);
+        wxPoint offset = ComputeOffset(finalImageSize, GetParams().GetHorizontalAnchor(), GetParams().GetVerticalAnchor());
 
-        g->DrawBitmap(bitmap, imagePosition.x + offset.x, imagePosition.y + offset.y, imageSize.GetWidth(), imageSize.GetHeight());
+        g->DrawBitmap(bitmap, imagePosition.x + offset.x, imagePosition.y + offset.y, finalImageSize.GetWidth(), finalImageSize.GetHeight());
     }
 
 } // namespace wxstyle

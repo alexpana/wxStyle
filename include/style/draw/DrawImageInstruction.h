@@ -1,67 +1,57 @@
 #pragma once
 
-#include <wx/bitmap.h>
+#include <memory>
 
-#include "DimPoint.h"
 #include "style/draw/Anchor.h"
 #include "style/draw/DrawInstruction.h"
 
+class wxBitmap;
+
 namespace wxstyle {
+    class DimPoint;
+
     class DrawImageInstruction : public DrawInstruction {
     public:
-        class Builder {
-        friend DrawImageInstruction;
-
+        class Params {
         public:
-            Builder& SetImagePath(const wxString& imagePath);
-            Builder& SetPosition(const DimPoint& position);
-            Builder& SetHorizontalAnchor(HorizontalAnchor horizontalAnchor);
-            Builder& SetVerticalAnchor(VerticalAnchor verticalAnchor);
-            Builder& SetImageSize(const DimPoint& size);
+            Params();
 
-            DrawImageInstruction Build();
+            Params& SetImagePath(const wxString& imagePath);
+
+            wxString GetImagePath() const;
+
+            Params& SetPosition(const DimPoint& position);
+
+            DimPoint GetPosition() const;
+
+            Params& SetHorizontalAnchor(HorizontalAnchor horizontalAnchor);
+
+            HorizontalAnchor GetHorizontalAnchor() const;
+
+            Params& SetVerticalAnchor(VerticalAnchor verticalAnchor);
+
+            VerticalAnchor GetVerticalAnchor() const;
+
+            Params& SetImageSize(const DimPoint& size);
+
+            DimPoint GetImageSize() const;
 
         private:
-            Builder();
-            Builder(const wxString& imagePath, const DimPoint& position, HorizontalAnchor horizontalAnchor, VerticalAnchor verticalAnchor, const DimPoint& size);
-
-        private:
-            wxString m_imagePath;
-            DimPoint m_position;
-            DimPoint m_imageSize;
-            HorizontalAnchor m_horizontalAnchor;
-            VerticalAnchor m_verticalAnchor;
+            struct ParamsImpl;
+            std::shared_ptr<ParamsImpl> impl;
         };
 
     public:
-        DrawImageInstruction(const wxString& imagePath, const DimPoint& position, HorizontalAnchor horizontalAnchor, VerticalAnchor verticalAnchor, const DimPoint& size);
-
-        static Builder NewBuilder() {
-            return Builder();
-        }
-
-        Builder ToBuilder() {
-            return Builder(m_imagePath, m_position, m_horizontalAnchor, m_verticalAnchor, m_imageSize);
-        }
-
-        wxString GetImagePath() const {
-            return m_imagePath;
-        }
-
-        DimPoint GetPosition() const {
-            return m_position;
-        }
+        DrawImageInstruction(const Params& params);
 
         virtual void Draw(wxGraphicsContext* g, const wxSize& windowSize) const override;
 
+        Params GetParams() const;
+
     private:
-        const wxString m_imagePath;
-        const DimPoint m_position;
-        HorizontalAnchor m_horizontalAnchor;
-        VerticalAnchor m_verticalAnchor;
-        DimPoint m_imageSize;
+        Params parameters;
 
         // used for caching the bitmap
-        const boost::optional<wxBitmap> m_cachedBitmap;
+        //const boost::optional<wxBitmap> m_cachedBitmap;
     };
 } // namespace wxstyle
