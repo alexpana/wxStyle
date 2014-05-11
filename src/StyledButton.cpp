@@ -6,80 +6,154 @@
 #include <wx/dcbuffer.h>
 #include <wx/font.h>
 
+#include "Dimension.h"
+#include "DimPoint.h"
+#include "DimRect.h"
+#include "style/draw/DrawImageInstruction.h"
+#include "style/draw/DrawEllipseInstruction.h"
 #include "style/draw/DrawRectangleInstruction.h"
+#include "style/draw/DrawTextInstruction.h"
 
 namespace wxstyle {
 
 	class DefaultButtonRenderer : public IRenderer {
-	public:
+
+    public:
 		virtual void Render(StyledWindow* window) const {
-			wxAutoBufferedPaintDC deviceContext(window);
+            RenderPhotoshopImpl(window);
+        }
+
+    private:
+        void RenderPhotoshopImpl(StyledWindow* window) const {
+            static const int radius = 0;
+            static const wxColour borderColor = "#2c2c2c";
+            static const wxColour bottomHighlight = "#46474B";
+            static const wxColour topHighlight = "#606268";
+            static const wxColour pressedColor = "#35363A";
+
+            const int w = window->GetSize().GetWidth();
+            const int h = window->GetSize().GetHeight();
+
+            wxAutoBufferedPaintDC deviceContext(window);
+            auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
+
+            ClearBackground(g.get(), window);
+
+            DrawRectangleInstruction bottomHighlightInstruction(DrawShapeInstruction::Params()
+                .SetColor(bottomHighlight)
+                .SetCornerRadius(radius)
+                .SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(0, 1.0))));
+
+            DrawRectangleInstruction borderInstruction = DrawRectangleInstruction(DrawShapeInstruction::Params()
+                .SetColor(borderColor)
+                .SetCornerRadius(radius)
+                .SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(-1, 1.0))));
+
+            DrawRectangleInstruction topHighlightInstruction = DrawRectangleInstruction(DrawShapeInstruction::Params()
+                .SetColor(topHighlight)
+                .SetCornerRadius(radius)
+                .SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-3, 1.0))));
+
+            GradientDefinitionPtr gradient = std::make_shared<LinearGradientDefinition>(LinearGradientDefinition::Direction::VERTICAL);
+            gradient->AddColorStop(0, "#505156");
+            gradient->AddColorStop(1, "#404146");
+
+            DrawRectangleInstruction backgroundColorInstruction(DrawShapeInstruction::Params()
+                .SetGradientDefinition(gradient)
+                .SetCornerRadius(radius)
+                .SetRect(DimRect(1, 2, Dimension(-2, 1.0), Dimension(-4, 1.0))));
+
+            DrawRectangleInstruction pressedBackgroundInstruction(DrawShapeInstruction::Params()
+                .SetColor(pressedColor)
+                .SetCornerRadius(radius)
+                .SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-3, 1.0))));
+
+            DrawTextInstruction drawTextInstruction(DrawTextInstruction::Params()
+                .SetText(window->GetText())
+                .SetFontDefinition((FontDefinition().SetSize(10).SetFace("Tahoma")))
+                .SetTextColor("#BABCC0")
+                .SetShadowDefinition(ShadowDefinition().SetColor("#434343").SetOffset(wxPoint(0, -1)))
+                .SetTextPosition(DimPoint(Dimension(0, 0.5), Dimension(-2, 0.5))));
+
+            bottomHighlightInstruction.Draw(g.get(), window->GetSize());
+            borderInstruction.Draw(g.get(), window->GetSize());
+
+            if (window->IsPressed()) {
+                pressedBackgroundInstruction.Draw(g.get(), window->GetSize());
+            } else {
+                topHighlightInstruction.Draw(g.get(), window->GetSize());
+                backgroundColorInstruction.Draw(g.get(), window->GetSize());
+            }
+
+            drawTextInstruction.Draw(g.get(), window->GetSize());
+        }
+
+        void RenderGradientImpl(StyledWindow* window) const {
+            static const int radius = 0;
+            static const wxColor bottomHighlight = "#454545";
+            static const wxColor borderColor = "#1c1617";
+            static const wxColor startColor = "#302D2D";
+            static const wxColor endColor = "#404040";
+            static const wxColor highlight = "#a5D5B5B";
+
+            const int w = window->GetSize().GetWidth();
+            const int h = window->GetSize().GetHeight();
+
+            wxAutoBufferedPaintDC deviceContext(window);
 			auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
 
-			int w = window->GetSize().GetWidth();
-			int h = window->GetSize().GetHeight();
-
-			int radius = 0;
-			wxColor startColor = wxColor(0x303030);
-			wxColor endColor = wxColor(0x505050);
-			wxColor highlight = wxColor(0xa585858);
-
-			wxBrush brush;
-
-			ClearBackground(window, g.get());
+			ClearBackground(g.get(), window);
 
 			// bottom highlight
-			brush.SetColour(0x454545);
-			g->SetBrush(g->CreateBrush(brush));
-			g->DrawRoundedRectangle(0, 0, w, h, radius);
+            DrawRectangleInstruction(DrawShapeInstruction::Params()
+                .SetColor(bottomHighlight)
+                .SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(0, 1.0))))
+                .Draw(g.get(), window->GetSize());
 
 			// border
-			if (window->HasFocus()) {
-				brush.SetColour(0x904040);
-			} else {
-				brush.SetColour(0x191919);
-			}
-			g->SetBrush(g->CreateBrush(brush));
-			g->DrawRoundedRectangle(0, 0, w, h-1, radius);
+            DrawRectangleInstruction(DrawShapeInstruction::Params()
+                .SetColor(borderColor)
+                .SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(-1, 1.0))))
+            .Draw(g.get(), window->GetSize());
 
 			// top highlight
-			brush.SetColour(highlight);
-			g->SetBrush(g->CreateBrush(brush));
-			g->DrawRoundedRectangle(1, 1, w-2, h-3, radius);
+            DrawRectangleInstruction(DrawShapeInstruction::Params()
+                .SetColor(highlight)
+                .SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-2, 1.0))))
+                .Draw(g.get(), window->GetSize());
 
-			// gradient
 			int textOffset = 0;
+            GradientDefinitionPtr gradient = std::make_shared<LinearGradientDefinition>(LinearGradientDefinition::Direction::VERTICAL);
 			if (dynamic_cast<StyledButton*>(window)->GetState() != StyledButton::ARMED) {
-				wxGraphicsGradientStops stops;
-				stops.Add(startColor, 1);
-				stops.Add(endColor, 0);
-				g->SetBrush(g->CreateLinearGradientBrush(0, 0, 0, h, stops));
+                gradient->AddColorStop(1, startColor);
+                gradient->AddColorStop(0.9f, endColor);
+                gradient->AddColorStop(0, endColor);
 			} else {
-				wxGraphicsGradientStops stops;
-				stops.Add(startColor, 0);
-				stops.Add(endColor, 1);
-				g->SetBrush(g->CreateLinearGradientBrush(0, 0, 0, h, stops));
+                gradient->AddColorStop(0, startColor);
+                gradient->AddColorStop(0.1f, endColor);
+                gradient->AddColorStop(1, endColor);
 				textOffset = 1;
 			}
 
-			RenderText(g.get(), deviceContext, window, w, h, textOffset);
+            DrawRectangleInstruction(DrawShapeInstruction::Params()
+                .SetGradientDefinition(gradient)
+                .SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-3, 1.0))))
+            .Draw(g.get(), window->GetSize());
+
+            DrawTextInstruction(DrawTextInstruction::Params()
+                .SetText(window->GetText())
+                .SetFontDefinition((FontDefinition().SetSize(10).SetFace("Tahoma").SetWeight(wxFONTWEIGHT_BOLD)))
+                .SetTextColor("#AAAAAA")
+                .SetShadowDefinition(ShadowDefinition().SetColor("#161616").SetOffset(wxPoint(0, 1 )))
+                .SetTextPosition(DimPoint(Dimension(0, 0.5), Dimension(-2, 0.5))))
+            .Draw(g.get(), window->GetSize());
 		}
 
-		void ClearBackground(StyledWindow *window, wxGraphicsContext *g) const {
-			wxRect clientRect = window->GetClientRect();
-			g->SetBrush(g->CreateBrush(window->GetBackgroundColour()));
-			g->DrawRectangle(clientRect.GetX(), clientRect.GetY(), clientRect.GetWidth(), clientRect.GetHeight());
-		}
-
-		void RenderText(wxGraphicsContext *g, wxAutoBufferedPaintDC &deviceContext, StyledWindow *window, int w, int h, int textOffset) const {
-			g->SetFont(g->CreateFont(12, "Tahoma", wxFONTFLAG_BOLD, 0x161616));
-			wxSize textSize = deviceContext.GetTextExtent(window->GetText());
-
-			g->DrawText(window->GetText(), (w - textSize.GetWidth()) / 2, (h - textSize.GetHeight()) / 2 + 1 + textOffset);
-
-			g->SetFont(g->CreateFont(12, "Tahoma", wxFONTFLAG_BOLD, 0xAAAAAA));
-
-			g->DrawText(window->GetText(), (w - textSize.GetWidth()) / 2, (h - textSize.GetHeight()) / 2 + textOffset);
+		void ClearBackground(wxGraphicsContext *g, StyledWindow *window) const {
+            DrawRectangleInstruction(DrawShapeInstruction::Params()
+                .SetColor(window->GetBackgroundColour())
+                .SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(0, 1.0))))
+            .Draw(g, window->GetSize());
 		}
 	};
 
@@ -88,7 +162,7 @@ namespace wxstyle {
 
 	StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(parent, text) {
 		SetBackgroundColour(parent->GetBackgroundColour());
-		SetMinSize(wxSize(10, 30));
+		SetMinSize(wxSize(10, 26));
 
 		SetRenderer(std::make_shared<DefaultButtonRenderer>());
 	}
