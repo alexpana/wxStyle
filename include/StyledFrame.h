@@ -15,7 +15,7 @@ namespace wxstyle {
     class StyledFrame : public wxFrame {
 
     public:
-        StyledFrame();
+        StyledFrame(const wxString& title);
         ~StyledFrame();
 
         /* Returns a wxPanel that represents the content area of

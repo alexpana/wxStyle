@@ -28,14 +28,14 @@ public:
 
     void InitComponents() 
     {
-        mainFrame = new StyledFrame();
+        mainFrame = new StyledFrame("Demo Board");
         mainFrame->Show(true);
         mainFrame->SetMinSize(wxSize(200, 200));
 
         wxPanel *contentPanel = mainFrame->GetContentPanel();
 
         styledLabel = new StyledLabel(contentPanel);
-        styledLabel->SetLabel("Styled Label");
+        styledLabel->SetText("Styled Label");
         styledLabel->SetForegroundColour("#AFAFAF");
 
         styledButton = new wxstyle::StyledButton(contentPanel, "Styled Button");

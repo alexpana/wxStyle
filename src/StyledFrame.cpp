@@ -13,7 +13,7 @@
 
 namespace wxstyle {
 
-StyledFrame::StyledFrame() : wxFrame(nullptr, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxNO_BORDER) {
+StyledFrame::StyledFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxDefaultSize, wxNO_BORDER) {
     Init();
 }
 
@@ -37,7 +37,7 @@ void StyledFrame::Init() {
     m_frameInnerPanel->SetBackgroundColour("#3e3e42");
 
     m_headerPanel = new FrameHeader(m_frameInnerPanel, this);
-    m_headerPanel->SetTitle("Demo Board");
+    m_headerPanel->SetTitle(GetTitle());
     m_headerPanel->SetMinSize(wxSize(0, 26));
     m_headerPanel->SetBackgroundColour("#3e3e42");
 
