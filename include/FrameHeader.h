@@ -1,14 +1,11 @@
 #pragma once
 
 #include "StyledWindow.h"
-#include "StyledLabel.h"
-
-#include <wx/panel.h>
-#include <wx/stattext.h>
 
 namespace wxstyle {
 
     class DragHandler;
+    class StyledLabel;
 
     class FrameHeader : public StyledWindow {
     public:
@@ -23,10 +20,7 @@ namespace wxstyle {
 
         virtual void SetIcon() {}
 
-        virtual void SetTitle(const wxString& title) {
-            m_title = title;
-            m_titleLabel->SetLabel(m_title);
-        }
+        virtual void SetTitle(const wxString& title);
 
         virtual wxString GetTitle() {
             return m_title;
