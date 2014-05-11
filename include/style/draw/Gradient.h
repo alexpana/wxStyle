@@ -9,7 +9,7 @@ namespace wxstyle {
 
 	class GradientDefinition {
 	public:
-		GradientDefinition& AddColorStop(const int index, const wxColor& color) {
+		GradientDefinition& AddColorStop(const float index, const wxColor& color) {
 			m_gradientStops.Add(color, index);
 			return *this;
 		}
@@ -38,9 +38,9 @@ namespace wxstyle {
 
 		wxGraphicsBrush CreateBrush(const wxGraphicsContext& g, const wxRect& referenceRect) const override {
 			if (m_direction == VERTICAL) {
-				return g.CreateLinearGradientBrush(0, -2, 0, referenceRect.GetHeight(), GetGradientStops());
+				return g.CreateLinearGradientBrush(0, referenceRect.GetTop() - 1, 0, referenceRect.GetHeight() + 2, GetGradientStops());
 			} else {
-				return g.CreateLinearGradientBrush(-2, 0, referenceRect.GetWidth(), 0, GetGradientStops());
+				return g.CreateLinearGradientBrush(referenceRect.GetLeft() - 1, 0, referenceRect.GetWidth() + 2, 0, GetGradientStops());
 			}
 		}
 
