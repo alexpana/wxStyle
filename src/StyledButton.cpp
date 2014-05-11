@@ -78,7 +78,7 @@ namespace wxstyle {
             bottomHighlightInstruction.Draw(g.get(), window->GetSize());
             borderInstruction.Draw(g.get(), window->GetSize());
 
-            if (window->IsPressed()) {
+            if (window->IsPressed() && window->IsHovered()) {
                 pressedBackgroundInstruction.Draw(g.get(), window->GetSize());
             } else {
                 topHighlightInstruction.Draw(g.get(), window->GetSize());
