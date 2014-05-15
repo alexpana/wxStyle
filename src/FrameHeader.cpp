@@ -1,10 +1,17 @@
 #include "FrameHeader.h"
 
-#include "DragHandler.h"
-#include "StyledLabel.h"
-
 #include <wx/sizer.h>
 #include <wx/graphics.h>
+
+#include "DimPoint.h"
+#include "DimRect.h"
+#include "DragHandler.h"
+#include "Renderer.h"
+#include "StyledFrame.h"
+#include "StyledLabel.h"
+#include "style/draw/DrawImageInstruction.h"
+#include "style/draw/DrawRectangleInstruction.h"
+#include "style/draw/DrawTextInstruction.h"
 
 namespace wxstyle {
 
@@ -12,35 +19,129 @@ namespace wxstyle {
     wxByte FrameHeader::ACTION_MINIMIZE = 0x02;
     wxByte FrameHeader::ACTION_MAXIMIZE = 0x04;
 
-    void FrameHeader::Init(wxWindow *parent, wxWindow *topLevelWindow) {
+    class TextLabelRenderer : public IRenderer {
+    public:
+        void Render(StyledWindow* window) const override {
+            wxAutoBufferedPaintDC deviceContext(window);
+            auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
+
+            DrawRectangleInstruction(DrawRectangleInstruction::Params()
+                .SetColor(window->GetInheritedBackgroundColor()))
+            .Draw(g.get(), window->GetSize());
+
+            DrawTextInstruction(DrawTextInstruction::Params()
+                .SetFontDefinition(FontDefinition().SetSize(9).SetFace("Tahoma").SetWeight(wxFONTWEIGHT_BOLD))
+                .SetText(window->GetText())
+                .SetTextColor("#ACACAC")
+                .SetHorizontalAnchor(HA_LEFT)
+                .SetTextPosition(DimPoint(4, Dimension(0, 0.5f))))
+            .Draw(g.get(), window->GetSize());
+        }
+    };
+
+    class IconRenderer : public IRenderer {
+    public:
+        IconRenderer(const wxString image) : m_imagePath(image) {}
+
+        void Render(StyledWindow* window) const override {
+            wxAutoBufferedPaintDC deviceContext(window);
+            auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
+
+            DrawRectangleInstruction(DrawRectangleInstruction::Params()
+                .SetColor(window->GetInheritedBackgroundColor()))
+            .Draw(g.get(), window->GetSize());
+
+            if (window->IsHovered()) {
+                DrawRectangleInstruction(DrawRectangleInstruction::Params()
+                    .SetColor("#353538")
+                    .SetRect(DimRect(1, 1, Dimension(-2, 1), Dimension(-2, 1))))
+                .Draw(g.get(), window->GetSize());
+            }
+
+            if (window->IsPressed()) {
+                DrawRectangleInstruction(DrawRectangleInstruction::Params()
+                    .SetColor("#007acc")
+                    .SetRect(DimRect(1, 1, Dimension(-2, 1), Dimension(-2, 1))))
+                .Draw(g.get(), window->GetSize());
+            }
+
+            DrawImageInstruction(DrawImageInstruction::Params()
+                .SetImagePath(m_imagePath)
+                .SetImageSize(DimPoint(Dimension(0, 1), Dimension(0, 1)))
+                .SetPosition(DimPoint(Dimension(0, 0.5), Dimension(0, 0.5)))
+                .SetVerticalAnchor(VA_CENTER)
+                .SetHorizontalAnchor(HA_CENTER))
+                .Draw(g.get(), window->GetSize());
+
+        }
+    private:
+        wxString m_imagePath;
+    };
+
+    void FrameHeader::Init(wxWindow *parent, StyledFrame *topLevelWindow) {
         wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-        SetSizer(sizer);
 
         m_titleLabel = new StyledLabel(this);
         m_titleLabel->SetFont(m_titleLabel->GetFont().Bold());
         m_titleLabel->SetForegroundColour("#DADADA");
+        m_titleLabel->SetRenderer(std::make_shared<TextLabelRenderer>(TextLabelRenderer()));
 
-        sizer->Add(m_titleLabel, wxSizerFlags().Center().Border(wxLEFT, 4).Expand());
+        m_minimizeButton = std::make_shared<StyledButton>(this, "");
+        m_minimizeButton->SetMinSize(wxSize(26, 0));
+        m_minimizeButton->SetRenderer(std::make_shared<IconRenderer>("icons/minimize.png"));
+        m_minimizeButton->SetOpaque(false);
+        m_minimizeButton->Bind(wxEVT_BUTTON, [topLevelWindow](const wxEvent& evt){ 
+            topLevelWindow->Iconize(true);
+        });
+
+        m_maximizeButton = std::make_shared<StyledButton>(this, "");
+        m_maximizeButton->SetMinSize(wxSize(26, 0));
+        m_maximizeButton->SetRenderer(std::make_shared<IconRenderer>("icons/maximize.png"));
+        m_maximizeButton->SetOpaque(false);
+        m_maximizeButton->Bind(wxEVT_BUTTON, [topLevelWindow](const wxEvent& evt){ 
+            topLevelWindow->Maximize(!topLevelWindow->IsMaximized());
+        });
+
+        m_closeButton = std::make_shared<StyledButton>(this, "");
+        m_closeButton->SetMinSize(wxSize(26, 0));
+        m_closeButton->SetRenderer(std::make_shared<IconRenderer>("icons/close.png"));
+        m_closeButton->SetOpaque(false);
+        m_closeButton->Bind(wxEVT_BUTTON, [topLevelWindow](const wxEvent& evt){ 
+            topLevelWindow->Close(true);
+        });
+
+        sizer->Add(m_titleLabel, wxSizerFlags(1).Expand());
+
+        sizer->Add(m_minimizeButton.get(), wxSizerFlags().Expand());
+        sizer->Add(m_maximizeButton.get(), wxSizerFlags().Expand());
+        sizer->Add(m_closeButton.get(), wxSizerFlags().Expand());
 
         /* Install the drag handler on the header panel */
         m_dragHandler = new DragHandler(topLevelWindow);
         m_dragHandler->Install(this);
         m_dragHandler->Install(m_titleLabel);
 
-        SetOpaque(false);
+        SetOpaque(true);
+        SetBackgroundColour("#202020");
+
+        SetSizer(sizer);
     }
 
     void FrameHeader::OnPaint(wxPaintEvent& paintEvent) {
         wxAutoBufferedPaintDC dc(this);
         auto g = wxGraphicsContext::Create(dc);
 
-        g->SetBrush(g->CreateBrush(GetInheritedBackgroundColor()));
+        g->SetBrush(wxBrush("#202050"));
         g->DrawRectangle(0, 0, GetSize().GetWidth(), GetSize().GetHeight());
     }
 
     void FrameHeader::SetTitle(const wxString& title) {
         m_title = title;
-        m_titleLabel->SetLabel(m_title);
+        m_titleLabel->SetText(m_title);
+    }
+
+    void FrameHeader::OnResize(wxSizeEvent& resizeEvent) {
+        Layout();
     }
 
 } // namespace wxstyle

@@ -25,6 +25,8 @@ BEGIN_EVENT_TABLE(StyledWindow, wxWindow)
     EVT_SET_FOCUS(StyledWindow::FocusGained)
     EVT_KILL_FOCUS(StyledWindow::FocusLost)
 
+    EVT_SIZE(StyledWindow::Resize)
+
     // Render Events
     EVT_PAINT(StyledWindow::Paint)
 END_EVENT_TABLE()
@@ -39,6 +41,7 @@ END_EVENT_TABLE()
 	void StyledWindow::Init() {
 		SetMinSize(wxSize(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 		SetBackgroundStyle(wxBG_STYLE_PAINT);
+        SetAutoLayout(true);
 		m_isFocused = false;
 		m_isHovered = false;
 		m_isPressed = false;

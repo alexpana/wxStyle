@@ -210,6 +210,9 @@ namespace wxstyle {
             paintEvent.Skip(false);
         };
 
+        /* Handle method for resize events. */
+        virtual void OnResize(wxSizeEvent& resizeEvent) { Refresh(); };
+
 		/**
 		 *	Allows inheriting windows to define dynamic properties. 
 		 *	The properties defined by every window are:
@@ -223,7 +226,7 @@ namespace wxstyle {
 
         wxGraphicsContext* CreateGraphicsContext();
 
-        static const int DEFAULT_WIDTH = 200;
+        static const int DEFAULT_WIDTH = 100;
         static const int DEFAULT_HEIGHT = 30;
 
     private:
@@ -268,6 +271,11 @@ namespace wxstyle {
         void FocusLost(wxFocusEvent& focusEvent) { 
             m_isFocused = false;
             OnFocusLost(focusEvent); 
+        }
+
+        void Resize(wxSizeEvent& resizeEvent) { 
+            Layout();
+            OnResize(resizeEvent); 
         }
 
         void Paint(wxPaintEvent& paintEvent) { OnPaint(paintEvent); };

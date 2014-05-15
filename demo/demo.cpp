@@ -77,6 +77,7 @@ public:
         sizer->Add(nativeComboBox, flags);
 
         mainFrame->Fit();
+        mainFrame->SetSize(mainFrame->GetSize() + wxSize(60, 0));
     }
 
     int OnExit() override {

@@ -1,6 +1,8 @@
 #include <wx/graphics.h>
 
+#include "DimRect.h"
 #include "StyledCheckBox.h"
+#include "style/draw/DrawRectangleInstruction.h"
 
 namespace wxstyle {
 
@@ -26,19 +28,20 @@ namespace wxstyle {
 			g->SetBrush(g->CreateBrush(wxBrush("#1e1919")));
 			g->DrawEllipse(1, 1, 12, 12);
         
+            GradientDefinitionPtr gradientDefinition = std::make_shared<RadialGradientDefinition>(RadialGradientDefinition());
+            gradientDefinition->AddColorStop(0, "#000000");
+            gradientDefinition->AddColorStop(1, "#FFFFFF");
+
 			if (dynamic_cast<StyledCheckBox*>(window)->IsChecked()) {
-				wxGraphicsGradientStops gradientStops;
-				gradientStops.Add(wxColor("#4b6224"), 0.0f);
-				gradientStops.Add(wxColor("#719d34"), 0.3f);
-				gradientStops.Add(wxColor("#719d34"), 1.0f);
-				wxGraphicsBrush brush = g->CreateRadialGradientBrush(7, 7, 7, 7, 5, gradientStops);
-        
-				g->SetBrush(brush);
+				DrawRectangleInstruction(
+                    DrawRectangleInstruction::Params()
+                        .SetRect(DimRect(1, 1, 12, 12))
+                        .SetGradientDefinition(gradientDefinition))
+                    .Draw(g.get(), window->GetSize());
 			} else {
 				g->SetBrush(g->CreateBrush(wxBrush("#595757")));
+                g->DrawEllipse(2, 2, 10, 10);
 			}
-
-			g->DrawEllipse(2, 2, 10, 10);
 
 			int fontFlags = wxFONTFLAG_DEFAULT;
 			if (window->GetFont().GetWeight() == wxFONTWEIGHT_BOLD) {

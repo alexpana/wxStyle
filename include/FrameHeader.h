@@ -1,10 +1,12 @@
 #pragma once
 
+#include "StyledButton.h"
 #include "StyledWindow.h"
 
 namespace wxstyle {
 
     class DragHandler;
+    class StyledFrame;
     class StyledLabel;
 
     class FrameHeader : public StyledWindow {
@@ -13,7 +15,7 @@ namespace wxstyle {
         static wxByte ACTION_MINIMIZE;
         static wxByte ACTION_MAXIMIZE;
 
-        FrameHeader(wxWindow *parent, wxWindow *topLevelWindow) : StyledWindow(parent) {
+        FrameHeader(wxWindow *parent, StyledFrame *topLevelWindow) : StyledWindow(parent) {
             Init(parent, topLevelWindow);
         }
         virtual ~FrameHeader() {}
@@ -36,9 +38,10 @@ namespace wxstyle {
 
     protected:
         void OnPaint(wxPaintEvent& paintEvent) override;
+        void OnResize(wxSizeEvent& resizeEvent) override;
 
     private:
-        void Init(wxWindow* parent, wxWindow *topLevelWindow);
+        void Init(wxWindow* parent, StyledFrame *topLevelWindow);
 
     private:
         wxString m_title;
@@ -47,6 +50,10 @@ namespace wxstyle {
         StyledLabel *m_titleLabel;
 
         DragHandler *m_dragHandler;
+
+        std::shared_ptr<StyledButton> m_closeButton;
+        std::shared_ptr<StyledButton> m_maximizeButton;
+        std::shared_ptr<StyledButton> m_minimizeButton;
     };
 
 } // namespace wxstyle
