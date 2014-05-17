@@ -55,22 +55,22 @@ namespace wxstyle {
     class FontDefinition {
     public:
         /// The face of the font.
-        boost::optional<wxString> m_face;
+        boost::optional<wxString> fontFace;
 
         /// The size of the font.
-        boost::optional<int> m_size;
+        boost::optional<int> fontSize;
 
         /// The weight of the font (light, normal or bold).
-        boost::optional<wxFontWeight> m_weight;
+        boost::optional<wxFontWeight> fontWeight;
 
         /// The style of the font (normal, italic or slant).
-        boost::optional<wxFontStyle> m_style;
+        boost::optional<wxFontStyle> fontStyle;
 
         FontDefinition& Merge(const FontDefinition& other) {
-            if (other.m_face) this->m_face = other.m_face;
-            if (other.m_size) this->m_size = other.m_size;
-            if (other.m_weight) this->m_weight = other.m_weight;
-            if (other.m_style) this->m_style = other.m_style;
+            if (other.fontFace) this->fontFace = other.fontFace;
+            if (other.fontSize) this->fontSize = other.fontSize;
+            if (other.fontWeight) this->fontWeight = other.fontWeight;
+            if (other.fontStyle) this->fontStyle = other.fontStyle;
             return *this;
         }
 
@@ -93,22 +93,27 @@ namespace wxstyle {
      */
     class IconDefinition {
     public:
-        IconDefinition& Merge(const IconDefinition& other) {
+		boost::optional<wxString> iconName;
+
+		IconDefinition& Merge(const IconDefinition& other) {
             return *this;
         }
     };
-
 
     /**
      *  Definition for the text alignment property.
      */
     class TextAlignmentDefinition {
     public:
+		enum Alignment {
+			LEFT, CENTER, RIGHT
+		};
+
         /// The alignment of the text, as made possible by the wxAlignment enum
-        boost::optional<wxAlignment> m_alignment;
+        boost::optional<Alignment> textAlignment;
 
         TextAlignmentDefinition& Merge(const TextAlignmentDefinition& other) {
-            if (other.m_alignment) this->m_alignment = other.m_alignment;
+            if (other.textAlignment) this->textAlignment = other.textAlignment;
             return *this;
         }
     };

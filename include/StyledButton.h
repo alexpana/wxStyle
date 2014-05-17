@@ -1,6 +1,7 @@
 #pragma once
 
-#include "wx/window.h"
+#include <memory>
+#include <wx/window.h>
 
 #include "StyledWindow.h"
 
@@ -8,21 +9,11 @@ namespace wxstyle {
 
     class StyledButton : public StyledWindow {
     public:
-        enum State
-        {
-            DISABLED = 0x0, 
-            IDLE = 0x1, 
-            HOVERED = 0x2, 
-            ARMED = 0x4
-        };
-
         StyledButton();
         StyledButton(wxWindow* parent, wxString text);
         virtual ~StyledButton();
 
-        State GetState() {
-            return m_state;
-        }
+        bool IsArmed();
 
     protected:
         void OnMouseDown(wxMouseEvent& mouseEvent) override;
@@ -38,7 +29,8 @@ namespace wxstyle {
         void SendClickEvent();
 
     private:
-        State m_state;
+		struct StyledButtonImpl;
+		std::unique_ptr<StyledButtonImpl> pimpl;
     };
 
 } // namespace wxstyle

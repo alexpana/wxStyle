@@ -37,15 +37,15 @@ BOOST_AUTO_TEST_CASE(test_merge_value_definition) {
 BOOST_AUTO_TEST_CASE(test_merge_font_definition) {
     FontDefinition fd1, fd2, fdr;
 
-    fd1.m_face = "some_font_name";
-    fd1.m_size = 10;
+    fd1.fontFace = "some_font_name";
+    fd1.fontSize = 10;
 
-    fd2.m_size = 12;
-    fd2.m_style = wxFONTSTYLE_SLANT;
+    fd2.fontSize = 12;
+    fd2.fontStyle = wxFONTSTYLE_SLANT;
 
-    fdr.m_face = "some_font_name";
-    fdr.m_size = 12;
-    fdr.m_style = wxFONTSTYLE_SLANT;
+    fdr.fontFace = "some_font_name";
+    fdr.fontSize = 12;
+    fdr.fontStyle = wxFONTSTYLE_SLANT;
 
     BOOST_REQUIRE_EQUAL(StyleUtils::MergeDefinitions(fd1, fd2), fdr);
 }

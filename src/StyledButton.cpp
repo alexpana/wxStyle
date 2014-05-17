@@ -16,6 +16,13 @@
 
 namespace wxstyle {
 
+	struct StyledButton::StyledButtonImpl {
+	public:
+		bool isArmed;
+
+		StyledButtonImpl() : isArmed(false) {}
+	};
+
 	class DefaultButtonRenderer : public IRenderer {
 
     public:
@@ -89,6 +96,13 @@ namespace wxstyle {
         }
 
         void RenderGradientImpl(StyledWindow* window) const {
+			StyledButton* button = (StyledButton*) window;
+
+			if (button->GetStyle()->drawInstructions) {
+				// draw using the instructions
+			} else {
+				// draw using the default style
+			}
             static const int radius = 0;
             static const wxColor bottomHighlight = "#454545";
             static const wxColor borderColor = "#1c1617";
@@ -122,9 +136,8 @@ namespace wxstyle {
                 .SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-2, 1.0))))
                 .Draw(g.get(), window->GetSize());
 
-			int textOffset = 0;
             GradientDefinitionPtr gradient = std::make_shared<LinearGradientDefinition>(LinearGradientDefinition::Direction::VERTICAL);
-			if (dynamic_cast<StyledButton*>(window)->GetState() != StyledButton::ARMED) {
+			if (button->IsArmed()) {
                 gradient->AddColorStop(1, startColor);
                 gradient->AddColorStop(0.9f, endColor);
                 gradient->AddColorStop(0, endColor);
@@ -132,7 +145,6 @@ namespace wxstyle {
                 gradient->AddColorStop(0, startColor);
                 gradient->AddColorStop(0.1f, endColor);
                 gradient->AddColorStop(1, endColor);
-				textOffset = 1;
 			}
 
             DrawRectangleInstruction(DrawShapeInstruction::Params()
@@ -157,30 +169,38 @@ namespace wxstyle {
 		}
 	};
 
-	StyledButton::StyledButton() : StyledWindow(nullptr, "") {
+	StyledButton::StyledButton() : StyledWindow(nullptr, ""),
+		pimpl(new StyledButtonImpl)
+	{
 	}
 
-	StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(parent, text) {
+	StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(parent, text),
+		pimpl(new StyledButtonImpl)
+	{
 		SetBackgroundColour(parent->GetBackgroundColour());
 		SetMinSize(wxSize(10, 26));
 
 		SetRenderer(std::make_shared<DefaultButtonRenderer>());
 	}
-
+	
 	StyledButton::~StyledButton() {
+	}
+	
+	bool StyledButton::IsArmed() {
+		return pimpl->isArmed;
 	}
 
 	void StyledButton::OnMouseDown(wxMouseEvent& mouseEvent) {
-		m_state = ARMED;
+		pimpl->isArmed = true;
 		Refresh();
 	}
 
 	void StyledButton::OnMouseReleased(wxMouseEvent& mouseEvent) {
-		if (m_state == ARMED) {
+		if (IsArmed()) {
 			SendClickEvent();
 		}
 
-		m_state = IDLE;
+		pimpl->isArmed = false;
 		Refresh();
 	}
 
@@ -193,18 +213,18 @@ namespace wxstyle {
 
 	void StyledButton::OnMouseMoved(wxMouseEvent& mouseEvent) {
 		if (mouseEvent.ButtonDown(wxMOUSE_BTN_LEFT)) {
-			m_state = ARMED;
+			pimpl->isArmed = true;
 		}
 	}
 
 	void StyledButton::OnMouseLeaveWindow(wxMouseEvent& mouseEvent) {
-		m_state = IDLE;
+		pimpl->isArmed = false;
 		Refresh();
 	}
 
 	void StyledButton::OnMouseEnterWindow(wxMouseEvent& mouseEvent) {
 		if (mouseEvent.ButtonIsDown(wxMOUSE_BTN_LEFT)) {
-			m_state = ARMED;
+			pimpl->isArmed = true;
 		}
 		Refresh();
 	}
