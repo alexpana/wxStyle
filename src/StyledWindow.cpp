@@ -109,53 +109,6 @@
 		return GetParent()->GetBackgroundColour();
 	}
 
-	boost::optional<wxString> StyledWindow::GetProperty(const wxString& propertyName) {
-		static const auto EMPTY_VALUE = boost::optional<wxString>();
-		
-		// check for component-defined properties
-		auto componentProperty = GetComponentProperty(propertyName);
-		if (componentProperty) {
-			return componentProperty.get();
-		}
-
-		// check for user-defined properties
-		auto p = pimpl->propertyMap.find(propertyName);
-		if (p == pimpl->propertyMap.end()) {
-			return EMPTY_VALUE;
-		} else {
-			return p->second;
-		}
-	}
-
-	void StyledWindow::SetProperty(const wxString& propertyName, const wxString& propertyValue) {
-		pimpl->propertyMap[propertyName] = propertyValue;
-	}
-
-	void StyledWindow::UnsetProperty(const wxString& propertyName) {
-		pimpl->propertyMap.erase(propertyName);
-	}
-
-	boost::optional<wxString> StyledWindow::GetComponentProperty(const wxString& propertyName) {
-		if (propertyName == "text") {
-			return pimpl->text;
-		}
-
-		if (propertyName == "focused") {
-			return pimpl->isFocused ? "t" : "f";
-		}
-
-
-		if (propertyName == "hovered") {
-			return pimpl->isHovered ? "t" : "f";
-		}
-
-		if (propertyName == "pressed") {
-			return pimpl->isPressed ? "t" : "f";
-		}
-
-		return boost::optional<wxString>();
-	}
-
     void StyledWindow::SetText(const wxString& text) {
 		pimpl->text = text;
 	}

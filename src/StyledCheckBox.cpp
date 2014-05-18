@@ -61,7 +61,7 @@ namespace wxstyle {
 
 	void StyledCheckBox::Init() {
 		SetRenderer(std::shared_ptr<DefaultCheckBoxRenderer>(new DefaultCheckBoxRenderer()));
-		SetMinSize(wxSize(DEFAULT_WIDTH, 14));
+		SetMinSize(wxSize(DEFAULT_MIN_WIDTH, 14));
 		SetOpaque(false);
 		m_isChecked = false;
 	}
@@ -73,13 +73,4 @@ namespace wxstyle {
 	void StyledCheckBox::OnMouseDoubleClick(wxMouseEvent& mouseEvent) {
 		OnMouseDown(mouseEvent);
 	}
-
-	boost::optional<wxString> StyledCheckBox::GetComponentProperty(const wxString& propertyName) {
-		if (propertyName == "checked") {
-			return m_isChecked ? "t" : "f";
-		}
-
-		return boost::optional<wxString>();
-	}
-
 } // namespace wxstyle

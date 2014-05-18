@@ -126,11 +126,6 @@ namespace wxstyle {
 		wxSize GetMinSize() const override;
 		void SetMinSize(const wxSize& size) override;
 
-		/** Property **/
-		boost::optional<wxString> GetProperty(const wxString& propertyName);
-		void SetProperty(const wxString& propertyName, const wxString& propertyValue);
-		void UnsetProperty(const wxString& propertyName);
-
     protected:
         virtual void OnMouseMoved(wxMouseEvent& mouseEvent) { Refresh(); }
         virtual void OnMouseDown(wxMouseEvent& mouseEvent) { Refresh(); }
@@ -147,8 +142,6 @@ namespace wxstyle {
         virtual void OnFocusLost(wxFocusEvent& focusEvent) { Refresh(); }
         virtual void OnPaint(wxPaintEvent& paintEvent);
         virtual void OnResize(wxSizeEvent& resizeEvent) { Refresh(); };
-
-		virtual boost::optional<wxString> GetComponentProperty(const wxString& propertyName);
 
     private:
         void Init();

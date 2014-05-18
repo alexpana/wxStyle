@@ -27,8 +27,6 @@ namespace wxstyle {
         void OnMouseDown(wxMouseEvent& mouseEvent) override;
         void OnMouseDoubleClick(wxMouseEvent& mouseEvent) override;
 
-		boost::optional<wxString> GetComponentProperty(const wxString& propertyName) override;
-
     private:
         void Init();
 
