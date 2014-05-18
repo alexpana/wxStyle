@@ -15,17 +15,26 @@ namespace wxstyle {
 
         bool IsArmed();
 
+		// buttons have support for icons
+		const std::shared_ptr<wxBitmap> GetIcon() const;
+		void SetIcon(const std::shared_ptr<wxBitmap> icon);
+
+		wxSize GetMinSize() const override;
+
+		wxRect GetInsets() const;
+		void SetInsets(const wxRect& insets);
+
+		wxSize GetTextMetrics() const;
+
     protected:
         void OnMouseDown(wxMouseEvent& mouseEvent) override;
         void OnMouseDoubleClick(wxMouseEvent& mouseEvent) override;
         void OnMouseReleased(wxMouseEvent& mouseEvent) override;
 
-        void OnMouseMoved(wxMouseEvent& mouseEvent) override;
         void OnMouseLeaveWindow(wxMouseEvent& mouseEvent) override;
         void OnMouseEnterWindow(wxMouseEvent& mouseEvent) override;
 
     private:
-        void ClearBackground(wxGraphicsContext *g);
         void SendClickEvent();
 
     private:

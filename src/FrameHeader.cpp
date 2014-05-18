@@ -44,25 +44,27 @@ namespace wxstyle {
         IconRenderer(const wxString image) : m_imagePath(image) {}
 
         void Render(StyledWindow* window) const override {
-            wxAutoBufferedPaintDC deviceContext(window);
+			StyledButton *button = (StyledButton*) window;
+
+            wxAutoBufferedPaintDC deviceContext(button);
             auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
 
             DrawRectangleInstruction(DrawRectangleInstruction::Params()
-                .SetColor(window->GetInheritedBackgroundColor()))
-            .Draw(g.get(), window->GetSize());
+                .SetColor(button->GetInheritedBackgroundColor()))
+            .Draw(g.get(), button->GetSize());
 
-            if (window->IsHovered()) {
+            if (button->IsHovered() || button->IsPressed()) {
                 DrawRectangleInstruction(DrawRectangleInstruction::Params()
                     .SetColor("#353538")
                     .SetRect(DimRect(1, 1, Dimension(-2, 1), Dimension(-2, 1))))
-                .Draw(g.get(), window->GetSize());
+                .Draw(g.get(), button->GetSize());
             }
 
-            if (window->IsPressed()) {
+            if (button->IsArmed() && button->IsHovered()) {
                 DrawRectangleInstruction(DrawRectangleInstruction::Params()
                     .SetColor("#007acc")
                     .SetRect(DimRect(1, 1, Dimension(-2, 1), Dimension(-2, 1))))
-                .Draw(g.get(), window->GetSize());
+                .Draw(g.get(), button->GetSize());
             }
 
             DrawImageInstruction(DrawImageInstruction::Params()
@@ -71,7 +73,7 @@ namespace wxstyle {
                 .SetPosition(DimPoint(Dimension(0, 0.5), Dimension(0, 0.5)))
                 .SetVerticalAnchor(VA_CENTER)
                 .SetHorizontalAnchor(HA_CENTER))
-                .Draw(g.get(), window->GetSize());
+                .Draw(g.get(), button->GetSize());
 
         }
     private:

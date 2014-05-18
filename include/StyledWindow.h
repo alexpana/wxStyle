@@ -25,32 +25,47 @@ namespace wxstyle {
      */
     class StyledWindow : public wxWindow
     { 
+	protected:
+		static const int DEFAULT_MIN_WIDTH = 100;
+		static const int DEFAULT_MIN_HEIGHT = 30;
+
+	public:
+		class MouseListener {
+		public:
+			virtual void MouseMoved(wxMouseEvent& mouseEvent) {}
+			virtual void MouseDown(wxMouseEvent& mouseEvent) {}
+			virtual void MouseDoubleClick(wxMouseEvent& mouseEvent) {}
+			virtual void MouseWheelMoved(wxMouseEvent& mouseEvent) {}
+			virtual void MouseReleased(wxMouseEvent& mouseEvent) {}
+
+			virtual void MouseLeaveWindow(wxMouseEvent& mouseEvent) {}
+			virtual void MouseEnterWindow(wxMouseEvent& mouseEvent) {}
+		};
+
+		class KeyboardListener {
+		public:
+			virtual void KeyPressed(wxKeyEvent& keyEvent) {}
+			virtual void KeyReleased(wxKeyEvent& keyEvent) {}
+		};
+
+		class FocusListener {
+		public:
+			virtual void FocusGained(wxFocusEvent& focusEvent) {}
+			virtual void FocusLost(wxFocusEvent& focusEvent) {}
+		};
+
+		class SizeListener {
+		public:
+			virtual void Resize(wxSizeEvent& resizeEvent) {}
+		};
+
     public:
-
-        /**
-         *  Default constructor.Every window must have a parent on which to
-         *  draw itself.
-         */
         StyledWindow(wxWindow* parent = nullptr, wxString text = "", wxStandardID id = wxID_ANY);
-
         virtual ~StyledWindow() {}
 
-        /**
-         *  Sets the opacity of the window.
-         *  
-         *  Non-opaque windows inherit their parent's background color. Opaque windows
-         *  use their own background color.
-         */
-        virtual void SetOpaque(bool opaque) {
-            m_isOpaque = opaque;
-        }
-
-        /**
-         *  Returns whether or not the window is opaque.
-         */
-        virtual bool IsOpaque() {
-            return m_isOpaque;
-        }
+		/** Opacity **/
+        virtual void SetOpaque(bool opaque);
+        virtual bool IsOpaque() const;
 
         /**
          *  Returns the background color of the window.
@@ -64,251 +79,99 @@ namespace wxstyle {
          */
         virtual wxColor GetInheritedBackgroundColor();
 
-        /**
-         *  Assigns the renderer to the window.
-         *
-         *  The renderer will be used starting with the next paint event to
-         *  draw the contents of this window.
-         */
-        void SetRenderer(std::shared_ptr<IRenderer> renderer) {
-            m_renderer = renderer;
-        }
+        /** Renderer **/
+        void SetRenderer(std::shared_ptr<IRenderer> renderer);
+        std::shared_ptr<IRenderer> GetRenderer();
 
-        /**
-         *  Returns a shared pointer to the renderer currently assigned to this window.
-         */
-        std::shared_ptr<IRenderer> GetRenderer() {
-            return m_renderer;
-        }
+		/** Insets **/
+		wxRect GetInsets() const;
+		void SetInsets(const wxRect& insets);
 
-        /**
-         *  Returns whether or not this window has focus. There can be only one focused
-         *  window at any given time. Focused windows receive keyboard events and are drawn
-         *  slightly highlighted.
-         */
-        bool IsFocused() { 
-            return m_isFocused; 
-        }
+		wxSize GetTextMetrics() const;
 
-        bool IsHovered() {
-            return m_isHovered;
-        }
+		/** Focus **/
+        bool IsFocused() const;
 
-		bool IsPressed() {
-			return m_isPressed;
-		}
+		/** Hover state **/
+        bool IsHovered() const;
 
-        virtual void SetText(const wxString& text) {
-            m_text = text;
-        }
+		/** Press state **/
+		bool IsPressed() const;
 
-        /**
-         *  Returns the text of the window.
-         */
-        virtual wxString GetText() {
-            return m_text;
-        }
+		/** Mouse Listeners **/
+		void RegisterMouseListener(const std::shared_ptr<MouseListener>& listener);
+		void UnregisterMouseListener(const std::shared_ptr<MouseListener>& listener);
 
-        /**
-         *  Sets the style of the window.
-         *  Note that styles can be shared between windows.
-         */
-        virtual void SetStyle(std::shared_ptr<Style> style) {
-            m_style = style;
-        }
+		/** Mouse Listeners **/
+		void RegisterKeyboardListener(const std::shared_ptr<KeyboardListener>& listener);
+		void UnregisterKeyboardListener(const std::shared_ptr<KeyboardListener>& listener);
 
-        /**
-         *  Returns the style used by the window.
-         */
-        virtual std::shared_ptr<Style> GetStyle() {
-            return m_style;
-        }
+		/** Mouse Listeners **/
+		void RegisterFocusListener(const std::shared_ptr<FocusListener>& listener);
+		void UnregisterFocusListener(const std::shared_ptr<FocusListener>& listener);
 
-		/**
-		 *	Searches for a property from its name.
-		 *
-		 *	Some components define custom properties to be queried
-		 *	by the style system: a combobox can be checked or unchecked,
-		 *	a loading bar has a fill percentage, etc.
-		 *
-		 *	Clients can define their own custom properties to be used
-		 *	inside styles, or other situations.
-		 */
+		/** Mouse Listeners **/
+		void RegisterSizeListener(const std::shared_ptr<SizeListener>& listener);
+		void UnregisterSizeListener(const std::shared_ptr<SizeListener>& listener);
+
+		/** Text **/
+        virtual void SetText(const wxString& text);
+        virtual wxString GetText() const;
+
+		/** Style **/
+        virtual void SetStyle(std::shared_ptr<Style> style);
+        virtual std::shared_ptr<Style> GetStyle();
+
+		/** MinSize **/
+		wxSize GetMinSize() const override;
+		void SetMinSize(const wxSize& size) override;
+
+		/** Property **/
 		boost::optional<wxString> GetProperty(const wxString& propertyName);
-
-		/**
-		 *	Sets the value of a user-defined property. This is overridden
-		 *	by any component specific properties.
-		 */
 		void SetProperty(const wxString& propertyName, const wxString& propertyValue);
-
-		/**
-		 *	Unset a user-defined property. This does not work for component-
-		 *	specific properties.
-		 */
 		void UnsetProperty(const wxString& propertyName);
 
     protected:
-
-        /* Handling method for mouse motion events. */
         virtual void OnMouseMoved(wxMouseEvent& mouseEvent) { Refresh(); }
-
-        /* Handle method for mouse button press events. */
         virtual void OnMouseDown(wxMouseEvent& mouseEvent) { Refresh(); }
-
-        /**
-         *  Handle method for mouse double click events. This method is called
-         *  on the second mouse down event, not up!
-         *
-         *  NOTE: Double click events are forcedly interpreted by wxWidgets
-         *  and we cannot avoid them. They may interfere with the window's basic
-         *  mouse down process, so it's not uncommon to delegate the event
-         *  to the mouse down handle method.
-         */
         virtual void OnMouseDoubleClick(wxMouseEvent& mouseEvent) { Refresh(); }
-
-        /* Handle method for mouse wheel events. */
         virtual void OnMouseWheelMoved(wxMouseEvent& mouseEvent) { Refresh(); }
-
-        /* Handle method for mouse button release events. */
         virtual void OnMouseReleased(wxMouseEvent& mouseEvent) { Refresh(); }
-
-        /* Handle method for mouse right click events. */
         virtual void OnRightClick(wxMouseEvent& mouseEvent) { Refresh(); }
-
-        /**
-         *  Handle method for mouse leave events. These events occur when the mouse
-         *  cursor leaves the surface of the window.
-         */
         virtual void OnMouseLeaveWindow(wxMouseEvent& mouseEvent) { Refresh(); }
-
-        /**
-         *  Handle method for mouse enter events. These events occur when the mouse
-         *  enters the surface of the window.
-         */
         virtual void OnMouseEnterWindow(wxMouseEvent& mouseEvent) { Refresh(); }
-
-        /* Convenience method for handling ALL mouse events. */
         virtual void OnMouseEvents(wxMouseEvent& mouseEvent) { Refresh(); }
-
-    
-        /* Handle method for keyboard a key press events. */
         virtual void OnKeyPressed(wxKeyEvent& keyEvent) { Refresh(); }
-
-        /* Handle method for keyboard a key release events. */
         virtual void OnKeyReleased(wxKeyEvent& keyEvent) { Refresh(); }
-
-        /* Handle method for focus gained events. */
         virtual void OnFocusGained(wxFocusEvent& focusEvent) { Refresh(); }
-
-        /* Handle method for focus lost events. */
         virtual void OnFocusLost(wxFocusEvent& focusEvent) { Refresh(); }
-
-        /* Handle method for paint events. */
-        virtual void OnPaint(wxPaintEvent& paintEvent) {
-            m_renderer->Render(this);
-            paintEvent.Skip(false);
-        };
-
-        /* Handle method for resize events. */
+        virtual void OnPaint(wxPaintEvent& paintEvent);
         virtual void OnResize(wxSizeEvent& resizeEvent) { Refresh(); };
 
-		/**
-		 *	Allows inheriting windows to define dynamic properties. 
-		 *	The properties defined by every window are:
-		 *	'hovered', 'focused' and 'pressed'.
-		 *
-		 *	In order to keep these definitions, and all the definitions
-		 *	of parent windows, implementers of this method must call
-		 *	the super definition.
-		 */
 		virtual boost::optional<wxString> GetComponentProperty(const wxString& propertyName);
-
-        wxGraphicsContext* CreateGraphicsContext();
-
-        static const int DEFAULT_WIDTH = 100;
-        static const int DEFAULT_HEIGHT = 30;
 
     private:
         void Init();
-
-        void MouseMoved(wxMouseEvent& mouseEvent) { OnMouseMoved(mouseEvent); }
-        void MouseDown(wxMouseEvent& mouseEvent) { 
-			m_isPressed = true;
-			OnMouseDown(mouseEvent); 
-		}
-        void MouseDoubleClick(wxMouseEvent& mouseEvent) {
-			m_isPressed = true;
-			OnMouseDoubleClick(mouseEvent); 
-		}
-		void MouseReleased(wxMouseEvent& mouseEvent) { 
-			m_isPressed = false;
-			OnMouseReleased(mouseEvent); 
-		}
-        void MouseWheelMoved(wxMouseEvent& mouseEvent) { OnMouseWheelMoved(mouseEvent); }
-        void RightClick(wxMouseEvent& mouseEvent) { OnRightClick(mouseEvent); }
-
-        void MouseEnterWindow(wxMouseEvent& mouseEvent) { 
-            m_isHovered = true;
-            OnMouseEnterWindow(mouseEvent); 
-        }
-
-        void MouseLeaveWindow(wxMouseEvent& mouseEvent) { 
-            m_isHovered = false;
-            OnMouseLeaveWindow(mouseEvent); 
-        }
-
-        void MouseEvents(wxMouseEvent& mouseEvent) { OnMouseEvents(mouseEvent); }
-
-        void KeyPressed(wxKeyEvent& keyEvent) { OnKeyPressed(keyEvent); }
-        void KeyReleased(wxKeyEvent& keyEvent) { OnKeyReleased(keyEvent); }
-
-        void FocusGained(wxFocusEvent& focusEvent) { 
-            m_isFocused = true;
-            OnFocusGained(focusEvent); 
-        }
-
-        void FocusLost(wxFocusEvent& focusEvent) { 
-            m_isFocused = false;
-            OnFocusLost(focusEvent); 
-        }
-
-        void Resize(wxSizeEvent& resizeEvent) { 
-            Layout();
-            OnResize(resizeEvent); 
-        }
-
-        void Paint(wxPaintEvent& paintEvent) { OnPaint(paintEvent); };
+		void BindEventHandlers();
 
 	private:
-		/** Hash function for wxString objects. **/
-		struct wxStringHash {
-		public:
-			std::size_t operator()(const wxString& s) {
-				return std::hash<const char*>()(s.GetData().AsChar());
-			}
-		};
+        void MouseMoved(wxMouseEvent& mouseEvent);
+        void MouseDown(wxMouseEvent& mouseEvent);
+        void MouseDoubleClick(wxMouseEvent& mouseEvent);
+		void MouseReleased(wxMouseEvent& mouseEvent);
+        void MouseWheelMoved(wxMouseEvent& mouseEvent);
+        void MouseEnterWindow(wxMouseEvent& mouseEvent);
+        void MouseLeaveWindow(wxMouseEvent& mouseEvent);
+        void KeyPressed(wxKeyEvent& keyEvent);
+        void KeyReleased(wxKeyEvent& keyEvent);
+        void FocusGained(wxFocusEvent& focusEvent);
+        void FocusLost(wxFocusEvent& focusEvent);
+        void Resize(wxSizeEvent& resizeEvent);
+        void Paint(wxPaintEvent& paintEvent);
 
     private:
-        bool m_isOpaque;
-
-        wxColor m_backgroundColor;
-
-        std::shared_ptr<IRenderer> m_renderer;
-
-        std::shared_ptr<Style> m_style;
-
-        bool m_isFocused;
-
-        bool m_isHovered;
-
-		bool m_isPressed;
-
-        wxString m_text;
-
-		std::unordered_map<wxString, wxString, wxStringHash> m_propertyMap;
-
-        DECLARE_EVENT_TABLE()
+		class Implementation;
+		std::shared_ptr<Implementation> pimpl;
     };
 
 } // namespace wxstyle

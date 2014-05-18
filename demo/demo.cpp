@@ -39,6 +39,9 @@ public:
         styledLabel->SetForegroundColour("#AFAFAF");
 
         styledButton = new wxstyle::StyledButton(contentPanel, "Styled Button");
+		styledButton->SetInsets(wxRect(12, 12, 12, 12));
+		styledButtonWithIcon = new wxstyle::StyledButton(contentPanel, "Styled Button");
+		styledButtonWithIcon->SetIcon(std::make_shared<wxBitmap>(wxBitmap(*ImageRepository::GetInstance()->GetImage("icons/close.png"))));
 
         nativeLabel = new wxStaticText(contentPanel, wxID_ANY, "");
         nativeLabel->SetLabelText("Native Label");
@@ -69,6 +72,7 @@ public:
         sizer->Add(styledLabel, flags);
         sizer->Add(nativeButton, flags);
         sizer->Add(styledButton, flags);
+		sizer->Add(styledButtonWithIcon, flags);
         sizer->Add(nativeCheckBox, flags);
         sizer->Add(styledCheckBox, flags);
 
@@ -89,7 +93,8 @@ private:
     StyledFrame *mainFrame;
 
     StyledButton *styledButton;
-    StyledLabel *styledLabel;
+    StyledButton *styledButtonWithIcon;
+	StyledLabel *styledLabel;
     StyledCheckBox *styledCheckBox;
 
     wxButton *nativeButton;

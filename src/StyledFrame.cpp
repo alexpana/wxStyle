@@ -52,7 +52,7 @@ namespace wxstyle {
 
         /* Initialize the borders */
         InitBorders();
-        SetBorderSize(3);
+        SetBorderSize(5);
 
         /* Set the default colors */
         SetBackgroundColour("#3e3e42");
