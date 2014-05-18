@@ -6,6 +6,11 @@
 
 namespace wxstyle {
 
+	class StyledCheckBox::Implementation {
+	public:
+		bool checked;
+	};
+
 	class DefaultCheckBoxRenderer : public IRenderer {
 	public:
 		virtual void Render(StyledWindow *window) const {
@@ -59,11 +64,30 @@ namespace wxstyle {
 		}
 	};
 
+	StyledCheckBox::StyledCheckBox(wxWindow *parent, wxString text) : 
+		StyledWindow(parent, text),
+		pimpl(new Implementation)
+	{ 
+		Init(); 
+	}
+
 	void StyledCheckBox::Init() {
 		SetRenderer(std::shared_ptr<DefaultCheckBoxRenderer>(new DefaultCheckBoxRenderer()));
 		SetMinSize(wxSize(DEFAULT_MIN_WIDTH, 14));
 		SetOpaque(false);
-		m_isChecked = false;
+		pimpl->checked = false;
+	}
+
+	void StyledCheckBox::SetChecked(bool checked) {
+		pimpl->checked = checked;
+	}
+
+	bool StyledCheckBox::IsChecked() {
+		return pimpl->checked;
+	}
+
+	void StyledCheckBox::ToggleChecked() {
+		pimpl->checked = ! pimpl->checked;
 	}
 
 	void StyledCheckBox::OnMouseDown(wxMouseEvent& mouseEvent) {

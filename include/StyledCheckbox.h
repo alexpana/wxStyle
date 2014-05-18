@@ -1,6 +1,6 @@
 #pragma once
 
-#include <wx/graphics.h>
+#include <memory>
 
 #include "StyledWindow.h"
 
@@ -8,20 +8,11 @@ namespace wxstyle {
 
     class StyledCheckBox : public StyledWindow {
     public:
-        StyledCheckBox(wxWindow* parent, wxString text) : StyledWindow(parent, text) { Init(); }
-        ~StyledCheckBox() {}
+        StyledCheckBox(wxWindow* parent, wxString text);
 
-        void SetChecked(bool checked) {
-            m_isChecked = checked;
-        }
-
-        bool IsChecked() {
-            return m_isChecked;
-        }
-
-        void ToggleChecked() {
-            m_isChecked = !m_isChecked;
-        }
+        void SetChecked(bool checked);
+        bool IsChecked();
+        void ToggleChecked();
 
     protected:
         void OnMouseDown(wxMouseEvent& mouseEvent) override;
@@ -31,7 +22,8 @@ namespace wxstyle {
         void Init();
 
     private:
-        bool m_isChecked;
+		class Implementation;
+        std::unique_ptr<Implementation> pimpl;
     };
 
 } // namespace wxstyle
