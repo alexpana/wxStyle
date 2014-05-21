@@ -23,7 +23,7 @@ namespace wxstyle {
 	public:
 		bool isArmed;
 		wxRect insets;
-		std::shared_ptr<wxBitmap> icon;
+		std::shared_ptr<wxImage> icon;
 		StyledButtonImpl() : isArmed(false), insets(wxRect(5, 5, 5, 5)) {}
 	};
 
@@ -52,16 +52,16 @@ namespace wxstyle {
 		void RenderIcon(wxGraphicsContext* g, StyledButton *button) const {
 			auto icon = button->GetIcon();
 
-			wxRect textSize = button->GetTextMetrics();
+            if (icon) {
+			    wxRect textSize = button->GetTextMetrics();
 
-			if (icon) {
-				DrawImageInstruction(DrawImageInstruction::Params()
-					.SetImagePath("icons/close.png")
-					.SetImageSize(DimPoint(Dimension(0, 1), Dimension(0, 1)))
-					.SetPosition(DimPoint(Dimension(- textSize.GetWidth() / 2, 0.5), Dimension(0, 0.5)))
-					.SetVerticalAnchor(VA_CENTER)
-					.SetHorizontalAnchor(HA_CENTER))
-				.Draw(g, button->GetSize());
+			    DrawImageInstruction(DrawImageInstruction::Params()
+				    .SetImage(icon)
+				    .SetImageSize(DimPoint(Dimension(0, 1), Dimension(0, 1)))
+				    .SetPosition(DimPoint(Dimension(- textSize.GetWidth() / 2, 0.5), Dimension(0, 0.5)))
+				    .SetVerticalAnchor(VA_CENTER)
+				    .SetHorizontalAnchor(HA_CENTER))
+			    .Draw(g, button->GetSize());
 			}
 		}
 
@@ -201,11 +201,11 @@ namespace wxstyle {
 	StyledButton::~StyledButton() {
 	}
 	
-	const std::shared_ptr<wxBitmap> StyledButton::GetIcon() const {
+	const std::shared_ptr<wxImage> StyledButton::GetIcon() const {
 		return pimpl->icon;
 	}
 
-	void StyledButton::SetIcon(const std::shared_ptr<wxBitmap> icon) {
+	void StyledButton::SetIcon(const std::shared_ptr<wxImage> icon) {
 		pimpl->icon = icon;
 	}
 

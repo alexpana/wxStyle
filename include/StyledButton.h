@@ -16,8 +16,8 @@ namespace wxstyle {
         bool IsArmed();
 
 		// buttons have support for icons
-		const std::shared_ptr<wxBitmap> GetIcon() const;
-		void SetIcon(const std::shared_ptr<wxBitmap> icon);
+		const std::shared_ptr<wxImage> GetIcon() const;
+		void SetIcon(const std::shared_ptr<wxImage> icon);
 
 		wxSize GetMinSize() const override;
 
