@@ -12,6 +12,7 @@
 #include "style/draw/DrawImageInstruction.h"
 #include "style/draw/DrawRectangleInstruction.h"
 #include "style/draw/DrawTextInstruction.h"
+#include "style/draw/ImageRepository.h"
 
 namespace wxstyle {
 
@@ -41,16 +42,13 @@ namespace wxstyle {
 
     class IconRenderer : public IRenderer {
     public:
-        IconRenderer(const wxString image) : m_imagePath(image) {}
-
         void Render(StyledWindow* window) const override {
 			StyledButton *button = (StyledButton*) window;
 
             wxAutoBufferedPaintDC deviceContext(button);
             auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
 
-            DrawRectangleInstruction(DrawRectangleInstruction::Params()
-                .SetColor(button->GetInheritedBackgroundColor()))
+            DrawRectangleInstruction(DrawRectangleInstruction::Params().SetColor(button->GetInheritedBackgroundColor()))
             .Draw(g.get(), button->GetSize());
 
             if (button->IsHovered() || button->IsPressed()) {
@@ -68,7 +66,7 @@ namespace wxstyle {
             }
 
             DrawImageInstruction(DrawImageInstruction::Params()
-                .SetImagePath(m_imagePath)
+                .SetImage(button->GetIcon())
                 .SetImageSize(DimPoint(Dimension(0, 1), Dimension(0, 1)))
                 .SetPosition(DimPoint(Dimension(0, 0.5), Dimension(0, 0.5)))
                 .SetVerticalAnchor(VA_CENTER)
@@ -76,8 +74,6 @@ namespace wxstyle {
                 .Draw(g.get(), button->GetSize());
 
         }
-    private:
-        wxString m_imagePath;
     };
 
     void FrameHeader::Init(wxWindow *parent, StyledFrame *topLevelWindow) {
@@ -90,7 +86,8 @@ namespace wxstyle {
 
         m_minimizeButton = std::make_shared<StyledButton>(this, "");
         m_minimizeButton->SetMinSize(wxSize(26, 0));
-        m_minimizeButton->SetRenderer(std::make_shared<IconRenderer>("icons/minimize.png"));
+        m_minimizeButton->SetRenderer(std::make_shared<IconRenderer>());
+        m_minimizeButton->SetIcon(ImageRepository::GetInstance()->GetImage("icons/minimize.png"));
         m_minimizeButton->SetOpaque(false);
         m_minimizeButton->Bind(wxEVT_BUTTON, [topLevelWindow](const wxEvent& evt){ 
             topLevelWindow->Iconize(true);
@@ -98,7 +95,8 @@ namespace wxstyle {
 
         m_maximizeButton = std::make_shared<StyledButton>(this, "");
         m_maximizeButton->SetMinSize(wxSize(26, 0));
-        m_maximizeButton->SetRenderer(std::make_shared<IconRenderer>("icons/maximize.png"));
+        m_maximizeButton->SetRenderer(std::make_shared<IconRenderer>());
+        m_maximizeButton->SetIcon(ImageRepository::GetInstance()->GetImage("icons/maximize.png"));
         m_maximizeButton->SetOpaque(false);
         m_maximizeButton->Bind(wxEVT_BUTTON, [topLevelWindow](const wxEvent& evt){ 
             topLevelWindow->Maximize(!topLevelWindow->IsMaximized());
@@ -106,7 +104,8 @@ namespace wxstyle {
 
         m_closeButton = std::make_shared<StyledButton>(this, "");
         m_closeButton->SetMinSize(wxSize(26, 0));
-        m_closeButton->SetRenderer(std::make_shared<IconRenderer>("icons/close.png"));
+        m_closeButton->SetRenderer(std::make_shared<IconRenderer>());
+        m_closeButton->SetIcon(ImageRepository::GetInstance()->GetImage("icons/close.png"));
         m_closeButton->SetOpaque(false);
         m_closeButton->Bind(wxEVT_BUTTON, [topLevelWindow](const wxEvent& evt){ 
             topLevelWindow->Close(true);
