@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <unordered_map>
 
 #include <wx/image.h>
@@ -12,7 +13,7 @@ namespace wxstyle {
 
         static void ReleaseInstance();
 
-        wxImage* GetImage(const wxString& imageName);
+        std::shared_ptr<wxImage> GetImage(const wxString& imageName);
 
         wxString GetRepositoryPath();
 
@@ -23,7 +24,6 @@ namespace wxstyle {
 
     private:
         ImageRepository();
-        ~ImageRepository();
 
         bool LoadImage(const wxString& image);
 
@@ -38,7 +38,7 @@ namespace wxstyle {
 
     private:
         wxString m_repositoryPath;
-        std::unordered_map<wxString, wxImage*, wxStringHash> m_imageMap;
+        std::unordered_map<wxString, std::shared_ptr<wxImage>, wxStringHash> m_imageMap;
     };
 
 } // namespace wxstyle
