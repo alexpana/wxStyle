@@ -1,6 +1,7 @@
 #include "style/draw/ImageRepository.h"
 
 #include <wx/filename.h>
+#include <wx/log.h>
 
 namespace wxstyle {
 
@@ -44,6 +45,8 @@ namespace wxstyle {
         wxString filePath = m_repositoryPath + wxFileName::GetPathSeparator() + imageName;
 
         if (wxFileName::FileExists(filePath)) {
+            // Hack used for disabling PNG loader error.
+            wxLogNull _unused;
 
             wxImage* image = new wxImage(filePath);
             if (image != nullptr && image->IsOk()) {
