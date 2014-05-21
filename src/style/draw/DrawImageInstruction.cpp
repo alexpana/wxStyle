@@ -1,7 +1,5 @@
 #include "style/draw/DrawImageInstruction.h"
 
-#include <boost/optional.hpp>
-
 #include <wx/bitmap.h>
 #include <wx/graphics.h>
 #include <wx/string.h>
@@ -20,7 +18,7 @@ namespace wxstyle {
         DimPoint imageSize;
         HorizontalAnchor horizontalAnchor;
         VerticalAnchor verticalAnchor;
-        boost::optional<std::shared_ptr<wxImage>> image;
+        std::shared_ptr<wxImage> image;
     };
 
     Params::Params() {
@@ -84,7 +82,7 @@ namespace wxstyle {
     }
 
     std::shared_ptr<wxImage> Params::GetImage() const {
-        return impl->image.get();
+        return impl->image;
     }
 
     DrawImageInstruction::DrawImageInstruction(const Params& params) : parameters(params) {}
