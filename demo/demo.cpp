@@ -41,7 +41,7 @@ public:
         styledButton = new wxstyle::StyledButton(contentPanel, "Styled Button");
 		styledButton->SetInsets(wxRect(12, 12, 12, 12));
 		styledButtonWithIcon = new wxstyle::StyledButton(contentPanel, "Styled Button");
-		styledButtonWithIcon->SetIcon(std::make_shared<wxBitmap>(wxBitmap(*ImageRepository::GetInstance()->GetImage("icons/close.png"))));
+		styledButtonWithIcon->SetIcon(ImageRepository::GetInstance()->GetImage("icons/close.png"));
 
         nativeLabel = new wxStaticText(contentPanel, wxID_ANY, "");
         nativeLabel->SetLabelText("Native Label");
