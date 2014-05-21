@@ -7,12 +7,13 @@
 
 namespace wxstyle {
 
+    class StyledWindow;
+
     class DragHandler : public wxEvtHandler {
     public:
         DragHandler(wxWindow *const handledWindow);
-        void Install(wxWindow *window);
+        void Install(StyledWindow *window);
 
-    private:
         void Start(const wxMouseEvent& mouseEvent);
         void Update(const wxMouseEvent& mouseEvent);
         void Stop(const wxMouseEvent& mouseEvent);

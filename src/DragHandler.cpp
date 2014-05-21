@@ -2,7 +2,32 @@
 
 #include <wx/gdicmn.h>
 
+#include "StyledWindow.h"
+
 namespace wxstyle {
+
+    class DragHandlerMouseListener : public StyledWindow::MouseListener {
+    public:
+        DragHandlerMouseListener(DragHandler& dragHandler) 
+            : handler(dragHandler)
+        {
+        }
+
+        void MouseDown(const wxMouseEvent& mouseEvent) override {
+            handler.Start(mouseEvent);
+        }
+
+        void MouseReleased(const wxMouseEvent& mouseEvent) override {
+            handler.Stop(mouseEvent);
+        }
+
+        virtual void MouseMoved(const wxMouseEvent& mouseEvent) override {
+            handler.Update(mouseEvent);
+        }
+
+    private:
+        DragHandler& handler;
+    };
 
 	DragHandler::DragHandler(wxWindow *const window) : 
 		m_handledWindow(window),
@@ -11,10 +36,8 @@ namespace wxstyle {
 	{
 	}
 
-	void DragHandler::Install(wxWindow *window) {
-		window->Bind(wxEVT_LEFT_DOWN, &DragHandler::Start, this);
-		window->Bind(wxEVT_LEFT_UP, &DragHandler::Stop, this);
-		window->Bind(wxEVT_MOTION, &DragHandler::Update, this);
+	void DragHandler::Install(StyledWindow *window) {
+        window->RegisterMouseListener(std::make_shared<DragHandlerMouseListener>(*this));
 	}
 
 	void DragHandler::Start(const wxMouseEvent& mouseEvent) {
