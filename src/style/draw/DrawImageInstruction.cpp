@@ -1,5 +1,7 @@
 #include "style/draw/DrawImageInstruction.h"
 
+#include <boost/optional.hpp>
+
 #include <wx/bitmap.h>
 #include <wx/graphics.h>
 #include <wx/string.h>
@@ -18,6 +20,7 @@ namespace wxstyle {
         DimPoint imageSize;
         HorizontalAnchor horizontalAnchor;
         VerticalAnchor verticalAnchor;
+        boost::optional<std::shared_ptr<wxImage>> image;
     };
 
     Params::Params() {
@@ -51,6 +54,11 @@ namespace wxstyle {
         return *this;
     }
 
+    Params& Params::SetImage(const std::shared_ptr<wxImage>& image) {
+        impl->image = image;
+        return *this;
+    }
+
     wxString Params::GetImagePath() const {
         return impl->imagePath;
     }
@@ -71,6 +79,14 @@ namespace wxstyle {
         return impl->imageSize;
     }
 
+    bool Params::HasImage() const {
+        return impl->image;
+    }
+
+    std::shared_ptr<wxImage> Params::GetImage() const {
+        return impl->image.get();
+    }
+
     DrawImageInstruction::DrawImageInstruction(const Params& params) : parameters(params) {}
 
     Params DrawImageInstruction::GetParams() const {
@@ -79,7 +95,13 @@ namespace wxstyle {
 
     void DrawImageInstruction::Draw(wxGraphicsContext* g, const wxSize& windowSize) const {
 
-        wxImage *image = ImageRepository::GetInstance()->GetImage(GetParams().GetImagePath());
+        wxImage *image;
+
+        if (GetParams().HasImage()) {
+            image = GetParams().GetImage().get();
+        } else {
+            image = ImageRepository::GetInstance()->GetImage(GetParams().GetImagePath()).get();
+        }
 
         if (image == nullptr) {
             return;

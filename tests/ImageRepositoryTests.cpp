@@ -34,9 +34,9 @@ BOOST_AUTO_TEST_CASE(load_image) {
 
     ImageRepository *repository = ImageRepository::GetInstance();
 
-    wxImage *testImage = repository->GetImage("test_image.jpg");
+    std::shared_ptr<wxImage> testImage = repository->GetImage("test_image.jpg");
 
-    BOOST_REQUIRE(testImage != nullptr);
+    BOOST_REQUIRE(testImage);
     BOOST_CHECK_EQUAL(testImage->GetWidth(), 8);
     BOOST_CHECK_EQUAL(testImage->GetHeight(), 8);
 }

@@ -25,16 +25,7 @@ namespace wxstyle {
     ImageRepository::ImageRepository() {
     }
 
-    ImageRepository::~ImageRepository() {
-        for (auto& image : m_imageMap) {
-            image.second->Destroy();
-            delete image.second;
-        }
-
-        m_imageMap.clear();
-    }
-
-    wxImage* ImageRepository::GetImage(const wxString& imageName) {
+    std::shared_ptr<wxImage> ImageRepository::GetImage(const wxString& imageName) {
         auto it = m_imageMap.find(imageName);
         if (it != m_imageMap.end()) {
             return it->second;
@@ -56,7 +47,7 @@ namespace wxstyle {
 
             wxImage* image = new wxImage(filePath);
             if (image != nullptr && image->IsOk()) {
-                m_imageMap[imageName] = image;
+                m_imageMap[imageName] = std::shared_ptr<wxImage>(image);
             } else {
                 return false;
             }

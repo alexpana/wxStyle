@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <wx/image.h>
+
 #include "style/draw/Anchor.h"
 #include "style/draw/DrawInstruction.h"
 
@@ -35,6 +37,12 @@ namespace wxstyle {
             Params& SetImageSize(const DimPoint& size);
 
             DimPoint GetImageSize() const;
+
+            Params& SetImage(const std::shared_ptr<wxImage>& image);
+
+            bool HasImage() const;
+
+            std::shared_ptr<wxImage> GetImage() const;
 
         private:
             struct ParamsImpl;
