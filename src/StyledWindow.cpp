@@ -40,18 +40,18 @@
 		std::vector<std::shared_ptr<SizeListener>> sizeListeners;
 
 	public:
-		void NotifyMouseMoved(wxMouseEvent& mouseEvent);
-		void NotifyMouseDown(wxMouseEvent& mouseEvent);
-		void NotifyMouseDoubleClick(wxMouseEvent& mouseEvent);
-		void NotifyMouseWheelMoved(wxMouseEvent& mouseEvent);
-		void NotifyMouseReleased(wxMouseEvent& mouseEvent);
-		void NotifyMouseLeaveWindow(wxMouseEvent& mouseEvent);
-		void NotifyMouseEnterWindow(wxMouseEvent& mouseEvent);
-		void NotifyKeyPressed(wxKeyEvent& keyEvent);
-		void NotifyKeyReleased(wxKeyEvent& keyEvent);
-		void NotifyFocusGained(wxFocusEvent& focusEvent);
-		void NotifyFocusLost(wxFocusEvent& focusEvent);
-		void NotifyResize(wxSizeEvent& resizeEvent);
+		void NotifyMouseMoved(const wxMouseEvent& mouseEvent);
+		void NotifyMouseDown(const wxMouseEvent& mouseEvent);
+		void NotifyMouseDoubleClick(const wxMouseEvent& mouseEvent);
+		void NotifyMouseWheelMoved(const wxMouseEvent& mouseEvent);
+		void NotifyMouseReleased(const wxMouseEvent& mouseEvent);
+		void NotifyMouseLeaveWindow(const wxMouseEvent& mouseEvent);
+		void NotifyMouseEnterWindow(const wxMouseEvent& mouseEvent);
+		void NotifyKeyPressed(const wxKeyEvent& keyEvent);
+		void NotifyKeyReleased(const wxKeyEvent& keyEvent);
+		void NotifyFocusGained(const wxFocusEvent& focusEvent);
+		void NotifyFocusLost(const wxFocusEvent& focusEvent);
+		void NotifyResize(const wxSizeEvent& resizeEvent);
 	};
 
 	StyledWindow::StyledWindow(wxWindow* parent, wxString text, wxStandardID id):
@@ -78,7 +78,7 @@
 
 	void StyledWindow::BindEventHandlers() {
 		this->Bind(wxEVT_MOTION, &StyledWindow::MouseMoved, this);
-		this->Bind(wxEVT_LEFT_DOWN, &StyledWindow::MouseDoubleClick, this);
+		this->Bind(wxEVT_LEFT_DOWN, &StyledWindow::MouseDown, this);
 		this->Bind(wxEVT_LEFT_DCLICK, &StyledWindow::MouseDoubleClick, this);
 		this->Bind(wxEVT_LEFT_UP, &StyledWindow::MouseReleased, this);
 		this->Bind(wxEVT_LEAVE_WINDOW, &StyledWindow::MouseLeaveWindow, this);
@@ -281,73 +281,73 @@
 		v.erase(std::remove(std::begin(v), std::end(v), listener), v.end());
 	}
 
-	void StyledWindow::Implementation::NotifyMouseMoved(wxMouseEvent& mouseEvent) {
+	void StyledWindow::Implementation::NotifyMouseMoved(const wxMouseEvent& mouseEvent) {
 		for (auto listener : mouseListeners) {
 			listener->MouseMoved(mouseEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyMouseDown(wxMouseEvent& mouseEvent) {
+	void StyledWindow::Implementation::NotifyMouseDown(const wxMouseEvent& mouseEvent) {
 		for (auto listener : mouseListeners) {
 			listener->MouseDown(mouseEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyMouseDoubleClick(wxMouseEvent& mouseEvent) {
+	void StyledWindow::Implementation::NotifyMouseDoubleClick(const wxMouseEvent& mouseEvent) {
 		for (auto listener : mouseListeners) {
 			listener->MouseDoubleClick(mouseEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyMouseWheelMoved(wxMouseEvent& mouseEvent) {
+	void StyledWindow::Implementation::NotifyMouseWheelMoved(const wxMouseEvent& mouseEvent) {
 		for (auto listener : mouseListeners) {
 			listener->MouseWheelMoved(mouseEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyMouseReleased(wxMouseEvent& mouseEvent) {
+	void StyledWindow::Implementation::NotifyMouseReleased(const wxMouseEvent& mouseEvent) {
 		for (auto listener : mouseListeners) {
 			listener->MouseReleased(mouseEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyMouseLeaveWindow(wxMouseEvent& mouseEvent) {
+	void StyledWindow::Implementation::NotifyMouseLeaveWindow(const wxMouseEvent& mouseEvent) {
 		for (auto listener : mouseListeners) {
 			listener->MouseLeaveWindow(mouseEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyMouseEnterWindow(wxMouseEvent& mouseEvent) {
+	void StyledWindow::Implementation::NotifyMouseEnterWindow(const wxMouseEvent& mouseEvent) {
 		for (auto listener : mouseListeners) {
 			listener->MouseEnterWindow(mouseEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyKeyPressed(wxKeyEvent& keyEvent) {
+	void StyledWindow::Implementation::NotifyKeyPressed(const wxKeyEvent& keyEvent) {
 		for (auto listener : keyboardListeners) {
 			listener->KeyPressed(keyEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyKeyReleased(wxKeyEvent& keyEvent) {
+	void StyledWindow::Implementation::NotifyKeyReleased(const wxKeyEvent& keyEvent) {
 		for (auto listener : keyboardListeners) {
 			listener->KeyReleased(keyEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyFocusGained(wxFocusEvent& focusEvent) {
+	void StyledWindow::Implementation::NotifyFocusGained(const wxFocusEvent& focusEvent) {
 		for (auto listener : focusListeners) {
 			listener->FocusGained(focusEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyFocusLost(wxFocusEvent& focusEvent) {
+	void StyledWindow::Implementation::NotifyFocusLost(const wxFocusEvent& focusEvent) {
 		for (auto listener : focusListeners) {
 			listener->FocusLost(focusEvent);
 		}
 	}
 
-	void StyledWindow::Implementation::NotifyResize(wxSizeEvent& resizeEvent) {
+	void StyledWindow::Implementation::NotifyResize(const wxSizeEvent& resizeEvent) {
 		for (auto listener : sizeListeners) {
 			listener->Resize(resizeEvent);
 		}

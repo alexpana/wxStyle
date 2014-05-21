@@ -32,31 +32,31 @@ namespace wxstyle {
 	public:
 		class MouseListener {
 		public:
-			virtual void MouseMoved(wxMouseEvent& mouseEvent) {}
-			virtual void MouseDown(wxMouseEvent& mouseEvent) {}
-			virtual void MouseDoubleClick(wxMouseEvent& mouseEvent) {}
-			virtual void MouseWheelMoved(wxMouseEvent& mouseEvent) {}
-			virtual void MouseReleased(wxMouseEvent& mouseEvent) {}
+			virtual void MouseMoved(const wxMouseEvent& mouseEvent) {}
+			virtual void MouseDown(const wxMouseEvent& mouseEvent) {}
+			virtual void MouseDoubleClick(const wxMouseEvent& mouseEvent) {}
+			virtual void MouseWheelMoved(const wxMouseEvent& mouseEvent) {}
+			virtual void MouseReleased(const wxMouseEvent& mouseEvent) {}
 
-			virtual void MouseLeaveWindow(wxMouseEvent& mouseEvent) {}
-			virtual void MouseEnterWindow(wxMouseEvent& mouseEvent) {}
+			virtual void MouseLeaveWindow(const wxMouseEvent& mouseEvent) {}
+			virtual void MouseEnterWindow(const wxMouseEvent& mouseEvent) {}
 		};
 
 		class KeyboardListener {
 		public:
-			virtual void KeyPressed(wxKeyEvent& keyEvent) {}
-			virtual void KeyReleased(wxKeyEvent& keyEvent) {}
+			virtual void KeyPressed(const wxKeyEvent& keyEvent) {}
+			virtual void KeyReleased(const wxKeyEvent& keyEvent) {}
 		};
 
 		class FocusListener {
 		public:
-			virtual void FocusGained(wxFocusEvent& focusEvent) {}
-			virtual void FocusLost(wxFocusEvent& focusEvent) {}
+			virtual void FocusGained(const wxFocusEvent& focusEvent) {}
+			virtual void FocusLost(const wxFocusEvent& focusEvent) {}
 		};
 
 		class SizeListener {
 		public:
-			virtual void Resize(wxSizeEvent& resizeEvent) {}
+			virtual void Resize(const wxSizeEvent& resizeEvent) {}
 		};
 
     public:
