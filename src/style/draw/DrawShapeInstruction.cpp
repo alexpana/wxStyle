@@ -39,6 +39,11 @@ namespace wxstyle {
         return *this;
     }
 
+    Params& Params::SetInsets(int left, int top, int right, int bottom) {
+        impl->rect = DimRect(left, top, Dimension(-left - right, 1), Dimension(-top - bottom, 1));
+        return *this;
+    }
+
     Params& Params::SetColor(const wxColor& color) {
         impl->brush = wxBrush(color);
         return *this;

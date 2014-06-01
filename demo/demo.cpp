@@ -1,5 +1,7 @@
 #include "demo.h"
 
+#include "time.h"
+
 using namespace wxstyle;
 
 class DemoApp : public wxApp {
@@ -40,6 +42,7 @@ public:
 
         styledButton = new wxstyle::StyledButton(contentPanel, "Styled Button");
 		styledButton->SetInsets(wxRect(12, 12, 12, 12));
+
 		styledButtonWithIcon = new wxstyle::StyledButton(contentPanel, "Styled Button");
 		styledButtonWithIcon->SetIcon(ImageRepository::GetInstance()->GetImage("icons/close.png"));
 
@@ -49,6 +52,10 @@ public:
 
         styledCheckBox = new StyledCheckBox(contentPanel, "Styled CheckBox");
         styledCheckBox->SetForegroundColour("#AFAFAF");
+
+        styledTextBox = new StyledTextBox(contentPanel, "");
+        styledTextBox->SetMinSize(wxSize(0, 100));
+        //styledTextBox->SetStyle(StyleUtils::MergeStyles(*(styledTextBox->GetStyle().get()), Style()));
 
         nativeButton = new wxButton(contentPanel, wxID_ANY, "Native Button");
 
@@ -76,6 +83,8 @@ public:
         sizer->Add(nativeCheckBox, flags);
         sizer->Add(styledCheckBox, flags);
 
+        sizer->Add(styledTextBox, flags);
+
         /* Not yet implemented */
         sizer->Add(nativeTextField, flags);
         sizer->Add(nativeComboBox, flags);
@@ -96,6 +105,7 @@ private:
     StyledButton *styledButtonWithIcon;
 	StyledLabel *styledLabel;
     StyledCheckBox *styledCheckBox;
+    StyledTextBox *styledTextBox;
 
     wxButton *nativeButton;
     wxStaticText *nativeLabel;

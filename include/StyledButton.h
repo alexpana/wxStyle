@@ -9,7 +9,6 @@ namespace wxstyle {
 
     class StyledButton : public StyledWindow {
     public:
-        StyledButton();
         StyledButton(wxWindow* parent, wxString text);
         virtual ~StyledButton();
 
@@ -21,10 +20,9 @@ namespace wxstyle {
 
 		wxSize GetMinSize() const override;
 
-		wxRect GetInsets() const;
-		void SetInsets(const wxRect& insets);
-
 		wxSize GetTextMetrics() const;
+
+        static Style GetDefaultStyle();
 
     protected:
         void OnMouseDown(wxMouseEvent& mouseEvent) override;

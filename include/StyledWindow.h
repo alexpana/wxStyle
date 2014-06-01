@@ -87,8 +87,6 @@ namespace wxstyle {
 		wxRect GetInsets() const;
 		void SetInsets(const wxRect& insets);
 
-		wxSize GetTextMetrics() const;
-
 		/** Focus **/
         bool IsFocused() const;
 
@@ -120,7 +118,7 @@ namespace wxstyle {
 
 		/** Style **/
         virtual void SetStyle(std::shared_ptr<Style> style);
-        virtual std::shared_ptr<Style> GetStyle();
+        virtual std::shared_ptr<Style> GetStyle() const;
 
 		/** MinSize **/
 		wxSize GetMinSize() const override;
@@ -138,6 +136,7 @@ namespace wxstyle {
         virtual void OnMouseEvents(wxMouseEvent& mouseEvent) { Refresh(); }
         virtual void OnKeyPressed(wxKeyEvent& keyEvent) { Refresh(); }
         virtual void OnKeyReleased(wxKeyEvent& keyEvent) { Refresh(); }
+        virtual void OnKeyChar(wxKeyEvent& keyEvent) { Refresh(); }
         virtual void OnFocusGained(wxFocusEvent& focusEvent) { Refresh(); }
         virtual void OnFocusLost(wxFocusEvent& focusEvent) { Refresh(); }
         virtual void OnPaint(wxPaintEvent& paintEvent);
@@ -157,6 +156,7 @@ namespace wxstyle {
         void MouseLeaveWindow(wxMouseEvent& mouseEvent);
         void KeyPressed(wxKeyEvent& keyEvent);
         void KeyReleased(wxKeyEvent& keyEvent);
+        void KeyChar(wxKeyEvent& keyEvent);
         void FocusGained(wxFocusEvent& focusEvent);
         void FocusLost(wxFocusEvent& focusEvent);
         void Resize(wxSizeEvent& resizeEvent);

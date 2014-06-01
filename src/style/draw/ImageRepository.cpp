@@ -52,7 +52,7 @@ namespace wxstyle {
             if (image != nullptr && image->IsOk()) {
                 m_imageMap[imageName] = std::shared_ptr<wxImage>(image);
             } else {
-                return false;
+                return false; 
             }
 
         } else {

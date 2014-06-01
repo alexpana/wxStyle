@@ -20,7 +20,9 @@
 
 #include "Dimension.h"
 #include "style/draw/ImageRepository.h"
+#include "style/StyleUtils.h"
 #include "StyledButton.h"
 #include "StyledCheckbox.h"
 #include "StyledFrame.h"
 #include "StyledLabel.h"
+#include "StyledTextBox.h"

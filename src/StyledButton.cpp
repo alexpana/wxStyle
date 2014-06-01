@@ -11,6 +11,7 @@
 #include "Dimension.h"
 #include "DimPoint.h"
 #include "DimRect.h"
+#include "FontMetrics.h"
 #include "style/draw/DrawImageInstruction.h"
 #include "style/draw/DrawEllipseInstruction.h"
 #include "style/draw/DrawRectangleInstruction.h"
@@ -22,9 +23,8 @@ namespace wxstyle {
 	struct StyledButton::StyledButtonImpl {
 	public:
 		bool isArmed;
-		wxRect insets;
 		std::shared_ptr<wxImage> icon;
-		StyledButtonImpl() : isArmed(false), insets(wxRect(5, 5, 5, 5)) {}
+		StyledButtonImpl() : isArmed(false) {}
 	};
 
 	class DefaultButtonRenderer : public IRenderer {
@@ -186,16 +186,23 @@ namespace wxstyle {
 		}
 	};
 
-	StyledButton::StyledButton() : StyledWindow(nullptr, ""),
-		pimpl(new StyledButtonImpl)
-	{
+    Style StyledButton::GetDefaultStyle() {
+        Style defaultStyle;
+        defaultStyle.backgroundColorDefinition = wxColour("#AFAFAF");
+        defaultStyle.foregroundColorDefinition = wxColour("#AFAFAF");
+        defaultStyle.opacityDefinition = true;
+        defaultStyle.fontDefinition = FontDefinition().SetFace("Tahoma").SetSize(9).SetStyle(wxFONTSTYLE_NORMAL).SetWeight(wxFONTWEIGHT_BOLD);
+        defaultStyle.shadowDefinition = ShadowDefinition().SetColor(wxTRANSPARENT).SetOffset(wxPoint(0, 0));
+        return defaultStyle;
 	}
 
 	StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(parent, text),
 		pimpl(new StyledButtonImpl)
 	{
+        SetInsets(wxRect(5, 5, 5, 5));
 		SetBackgroundColour(parent->GetBackgroundColour());
 		SetRenderer(std::make_shared<DefaultButtonRenderer>());
+        SetStyle(std::make_shared<Style>(StyledButton::GetDefaultStyle()));
 	}
 	
 	StyledButton::~StyledButton() {
@@ -208,15 +215,6 @@ namespace wxstyle {
 	void StyledButton::SetIcon(const std::shared_ptr<wxImage> icon) {
 		pimpl->icon = icon;
 	}
-
-	wxRect StyledButton::GetInsets() const {
-		return pimpl->insets;
-	}
-
-	void StyledButton::SetInsets(const wxRect& insets) {
-		pimpl->insets = insets;
-	}
-
 
 	bool StyledButton::IsArmed() {
 		return pimpl->isArmed;
@@ -232,6 +230,15 @@ namespace wxstyle {
 			iconWidth = GetIcon()->GetWidth();
 			iconHeight = GetIcon()->GetHeight();
 		}
+
+        TextMetrics textMetrics(const_cast<StyledButton*>(this));
+        wxSize textSize;
+
+        if (GetStyle() && GetStyle()->fontDefinition) {
+            textSize = textMetrics.GetTextSize(GetText(), GetStyle()->fontDefinition.get());
+        } else {
+            textSize = textMetrics.GetTextSize(GetText(), GetFont());
+        }
 
 		width += GetInsets().GetX() + GetInsets().GetWidth();
 		width += iconWidth;

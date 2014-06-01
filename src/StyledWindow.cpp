@@ -29,6 +29,8 @@
 
 		wxSize minSize;
 
+        wxRect insets;
+
 		std::shared_ptr<IRenderer> renderer;
 		std::shared_ptr<Style> style;
 
@@ -68,8 +70,9 @@
 		pimpl->isHovered = false;
 		pimpl->isPressed = false;
 		pimpl->isOpaque = true;
+        pimpl->minSize = wxSize(DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
 
-		SetMinSize(wxSize(DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT));
+		SetMinSize(pimpl->minSize);
 		SetBackgroundStyle(wxBG_STYLE_PAINT);
         SetAutoLayout(true);	
 
@@ -87,6 +90,7 @@
 
 		this->Bind(wxEVT_KEY_DOWN, &StyledWindow::KeyPressed, this);
 		this->Bind(wxEVT_KEY_UP, &StyledWindow::KeyReleased, this);
+        this->Bind(wxEVT_CHAR, &StyledWindow::KeyChar, this);
 
 		this->Bind(wxEVT_SET_FOCUS, &StyledWindow::FocusGained, this);
 		this->Bind(wxEVT_KILL_FOCUS, &StyledWindow::FocusLost, this);
@@ -121,7 +125,7 @@
 		pimpl->style = style;
 	}
 
-    std::shared_ptr<Style> StyledWindow::GetStyle() {
+    std::shared_ptr<Style> StyledWindow::GetStyle() const {
 		return pimpl->style;
 	}
 
@@ -140,6 +144,14 @@
 	std::shared_ptr<IRenderer> StyledWindow::GetRenderer() {
 		return pimpl->renderer;
 	}
+
+    wxRect StyledWindow::GetInsets() const {
+        return pimpl->insets;
+    }
+
+    void StyledWindow::SetInsets(const wxRect& insets) {
+        pimpl->insets = insets;
+    }
 
     void StyledWindow::SetOpaque(bool opaque) {
 		pimpl->isOpaque = opaque;
@@ -221,6 +233,10 @@
 		OnKeyReleased(keyEvent); 
 		pimpl->NotifyKeyReleased(keyEvent);
 	}
+
+    void StyledWindow::KeyChar(wxKeyEvent& keyEvent) {
+        OnKeyChar(keyEvent);
+    }
 
 	void StyledWindow::FocusGained(wxFocusEvent& focusEvent) { 
 		pimpl->isFocused = true;

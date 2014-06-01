@@ -22,6 +22,8 @@ namespace wxstyle {
 
             Params& SetRect(const DimRect& rect);
 
+            Params& SetInsets(int left, int top, int right, int bottom);
+
             DimRect GetRect() const;
 
             Params& SetColor(const wxColor& color);
