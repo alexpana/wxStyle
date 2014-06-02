@@ -15,6 +15,8 @@
 
 namespace wxstyle {
 
+    class Insets;
+
     /**
      *  Abstract Base Class for styled windows.
      *
@@ -84,8 +86,8 @@ namespace wxstyle {
         std::shared_ptr<IRenderer> GetRenderer();
 
 		/** Insets **/
-		wxRect GetInsets() const;
-		void SetInsets(const wxRect& insets);
+		Insets GetInsets() const;
+		void SetInsets(const Insets& insets);
 
 		/** Focus **/
         bool IsFocused() const;

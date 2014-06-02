@@ -12,6 +12,7 @@
 #include "DimPoint.h"
 #include "DimRect.h"
 #include "FontMetrics.h"
+#include "Insets.h"
 #include "style/draw/DrawImageInstruction.h"
 #include "style/draw/DrawEllipseInstruction.h"
 #include "style/draw/DrawRectangleInstruction.h"
@@ -199,7 +200,7 @@ namespace wxstyle {
 	StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(parent, text),
 		pimpl(new StyledButtonImpl)
 	{
-        SetInsets(wxRect(5, 5, 5, 5));
+        SetInsets(Insets(5, 5, 5, 5));
 		SetBackgroundColour(parent->GetBackgroundColour());
 		SetRenderer(std::make_shared<DefaultButtonRenderer>());
         SetStyle(std::make_shared<Style>(StyledButton::GetDefaultStyle()));
@@ -240,11 +241,11 @@ namespace wxstyle {
             textSize = textMetrics.GetTextSize(GetText(), GetFont());
         }
 
-		width += GetInsets().GetX() + GetInsets().GetWidth();
+		width += GetInsets().Width();
 		width += iconWidth;
 		width += GetTextMetrics().GetWidth();
 
-		height += GetInsets().GetY() + GetInsets().GetHeight();
+		height += GetInsets().Height();
 		height += std::max(iconHeight, GetTextMetrics().GetHeight());
 
 		wxSize userMinSize = StyledWindow::GetMinSize();

@@ -3,6 +3,7 @@
 #include <wx/graphics.h>
 #include <wx/dcbuffer.h>
 
+#include "Insets.h"
 #include "StyledWindow.h"
 
  namespace wxstyle {
@@ -29,7 +30,7 @@
 
 		wxSize minSize;
 
-        wxRect insets;
+        Insets insets;
 
 		std::shared_ptr<IRenderer> renderer;
 		std::shared_ptr<Style> style;
@@ -145,11 +146,11 @@
 		return pimpl->renderer;
 	}
 
-    wxRect StyledWindow::GetInsets() const {
+    Insets StyledWindow::GetInsets() const {
         return pimpl->insets;
     }
 
-    void StyledWindow::SetInsets(const wxRect& insets) {
+    void StyledWindow::SetInsets(const Insets& insets) {
         pimpl->insets = insets;
     }
 

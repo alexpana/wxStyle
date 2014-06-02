@@ -41,7 +41,7 @@ public:
         styledLabel->SetForegroundColour("#AFAFAF");
 
         styledButton = new wxstyle::StyledButton(contentPanel, "Styled Button");
-		styledButton->SetInsets(wxRect(12, 12, 12, 12));
+		styledButton->SetInsets(Insets(12, 12, 12, 12));
 
 		styledButtonWithIcon = new wxstyle::StyledButton(contentPanel, "Styled Button");
 		styledButtonWithIcon->SetIcon(ImageRepository::GetInstance()->GetImage("icons/close.png"));

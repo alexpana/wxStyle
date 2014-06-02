@@ -54,10 +54,10 @@ namespace wxstyle
 
         void DrawSelection(wxGraphicsContext* g, StyledTextBox* textBox) const {
             g->Clip(
-                textBox->GetInsets().GetLeft(), 
-                textBox->GetInsets().GetTop(), 
-                textBox->GetSize().GetWidth() - textBox->GetInsets().GetWidth() - textBox->GetInsets().GetLeft(), 
-                textBox->GetSize().GetHeight() - textBox->GetInsets().GetHeight() - textBox->GetInsets().GetTop());
+                textBox->GetInsets().Left(), 
+                textBox->GetInsets().Top(), 
+                textBox->GetSize().GetWidth() - textBox->GetInsets().Width(), 
+                textBox->GetSize().GetHeight() - textBox->GetInsets().Height());
 
             wxString prefixText = textBox->GetText().Mid(0, textBox->GetSelectionStart());
             wxString selectedText = textBox->GetSelectedText();
@@ -72,10 +72,10 @@ namespace wxstyle
                 selectedText,
                 textBox->GetStyle()->fontDefinition.get()).GetWidth();
 
-            int x = textSize.GetWidth() + textBox->GetInsets().GetLeft() + textBox->GetTextRenderOffset();
-            int y = textBox->GetInsets().GetTop();
+            int x = textSize.GetWidth() + textBox->GetInsets().Left() + textBox->GetTextRenderOffset();
+            int y = textBox->GetInsets().Top();
             int w = textWidth;
-            int h = textBox->GetSize().GetHeight() - (textBox->GetInsets().GetTop() + textBox->GetInsets().GetHeight());
+            int h = textBox->GetSize().GetHeight() - textBox->GetInsets().Height();
 
             DrawRectangleInstruction(DrawRectangleInstruction::Params()
                 .SetRect(DimRect(x, y, w, h))
@@ -88,10 +88,10 @@ namespace wxstyle
         void DrawText(wxGraphicsContext* g, StyledTextBox* textBox) const {
             // set clipping region
             g->Clip(
-                textBox->GetInsets().GetLeft(), 
-                textBox->GetInsets().GetTop(), 
-                textBox->GetSize().GetWidth() - textBox->GetInsets().GetWidth() - textBox->GetInsets().GetLeft(), 
-                textBox->GetSize().GetHeight() - textBox->GetInsets().GetHeight() - textBox->GetInsets().GetTop());
+                textBox->GetInsets().Left(), 
+                textBox->GetInsets().Top(), 
+                textBox->GetSize().GetWidth() - textBox->GetInsets().Width(), 
+                textBox->GetSize().GetHeight() - textBox->GetInsets().Height());
 
             DrawTextInstruction(DrawTextInstruction::Params()
                 .SetHorizontalAnchor(HA_LEFT)
@@ -107,10 +107,10 @@ namespace wxstyle
 
         void DrawCursor(wxGraphicsContext* g, StyledTextBox* textBox) const {
             if (textBox->IsFocused()) {
-                int x = textBox->FindCursorPointFromIndex() + textBox->GetInsets().GetLeft();
-                int y = textBox->GetInsets().GetTop();
+                int x = textBox->FindCursorPointFromIndex() + textBox->GetInsets().Left();
+                int y = textBox->GetInsets().Top();
                 int w = textBox->GetCursorWidth();
-                int h = textBox->GetSize().GetHeight() - (textBox->GetInsets().GetTop() + textBox->GetInsets().GetHeight());
+                int h = textBox->GetSize().GetHeight() - textBox->GetInsets().Height();
 
                 DrawRectangleInstruction(DrawRectangleInstruction::Params()
                     .SetRect(DimRect(x, y, w, h))
@@ -137,7 +137,7 @@ namespace wxstyle
 
         SetRenderer(std::make_shared<StyledTextBoxRenderer>());
         SetStyle(std::make_shared<Style>(StyledTextBox::GetDefaultStyle()));
-        SetInsets(wxRect(12, 12, 12, 12));
+        SetInsets(Insets(12, 12, 12, 12));
         SetWindowStyle(GetWindowStyle() | wxWANTS_CHARS);
         SetMinSize(wxSize(0, 22));
 
@@ -152,9 +152,9 @@ namespace wxstyle
 
         int fontHeight = textMetrics.GetFontMetrics().height;
 
-        width += GetInsets().GetX() + GetInsets().GetWidth();
+        width += GetInsets().Width();
 
-        height += GetInsets().GetY() + GetInsets().GetHeight();
+        height += GetInsets().Height();
         height += fontHeight;
 
         wxSize userMinSize = StyledWindow::GetMinSize();
@@ -283,7 +283,7 @@ namespace wxstyle
 
         for (auto c : GetText()) {
             currentString += c;
-            if (GetInsets().GetLeft() + metrics.GetTextSize(currentString, GetStyle()->fontDefinition.get()).GetWidth() > point)
+            if (GetInsets().Left() + metrics.GetTextSize(currentString, GetStyle().GetFont()).GetWidth() > point)
             {
                 break;
             }
@@ -421,6 +421,6 @@ namespace wxstyle
     }
 
     int StyledTextBox::GetTextAreaWidth() {
-        return GetSize().GetWidth() - GetInsets().GetLeft() - GetInsets().GetWidth();
+        return GetSize().GetWidth() - GetInsets().Width();
     }
 } // namespace wxstyle
