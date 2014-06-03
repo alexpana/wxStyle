@@ -54,8 +54,6 @@ public:
         styledCheckBox->SetForegroundColour("#AFAFAF");
 
         styledTextBox = new StyledTextBox(contentPanel, "");
-        styledTextBox->SetMinSize(wxSize(0, 100));
-        //styledTextBox->SetStyle(StyleUtils::MergeStyles(*(styledTextBox->GetStyle().get()), Style()));
 
         nativeButton = new wxButton(contentPanel, wxID_ANY, "Native Button");
 

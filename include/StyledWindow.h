@@ -119,12 +119,15 @@ namespace wxstyle {
         virtual wxString GetText() const;
 
 		/** Style **/
-        virtual void SetStyle(std::shared_ptr<Style> style);
-        virtual std::shared_ptr<Style> GetStyle() const;
+        virtual void SetStyle(const Style& style);
+        virtual Style GetStyle() const;
 
 		/** MinSize **/
 		wxSize GetMinSize() const override;
 		void SetMinSize(const wxSize& size) override;
+
+    public:
+        static Style GetDefaultStyle();
 
     protected:
         virtual void OnMouseMoved(wxMouseEvent& mouseEvent) { Refresh(); }

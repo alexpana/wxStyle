@@ -64,15 +64,20 @@ namespace wxstyle {
 		}
 	};
 
+    Style StyledCheckBox::GetDefaultStyle() {
+        return StyledWindow::GetDefaultStyle();
+    }
+
 	StyledCheckBox::StyledCheckBox(wxWindow *parent, wxString text) : 
-		StyledWindow(parent, text),
-		pimpl(new Implementation)
+		StyledWindow(parent, text), pimpl(new Implementation)
 	{ 
 		Init(); 
 	}
 
 	void StyledCheckBox::Init() {
 		SetRenderer(std::shared_ptr<DefaultCheckBoxRenderer>(new DefaultCheckBoxRenderer()));
+        SetStyle(StyledCheckBox::GetDefaultStyle());
+
 		SetMinSize(wxSize(DEFAULT_MIN_WIDTH, 14));
 		SetOpaque(false);
 		pimpl->checked = false;

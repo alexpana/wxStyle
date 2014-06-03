@@ -188,22 +188,14 @@ namespace wxstyle {
 	};
 
     Style StyledButton::GetDefaultStyle() {
-        Style defaultStyle;
-        defaultStyle.backgroundColorDefinition = wxColour("#AFAFAF");
-        defaultStyle.foregroundColorDefinition = wxColour("#AFAFAF");
-        defaultStyle.opacityDefinition = true;
-        defaultStyle.fontDefinition = FontDefinition().SetFace("Tahoma").SetSize(9).SetStyle(wxFONTSTYLE_NORMAL).SetWeight(wxFONTWEIGHT_BOLD);
-        defaultStyle.shadowDefinition = ShadowDefinition().SetColor(wxTRANSPARENT).SetOffset(wxPoint(0, 0));
-        return defaultStyle;
+        return StyledWindow::GetDefaultStyle().SetOpacity(false);
 	}
 
 	StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(parent, text),
 		pimpl(new StyledButtonImpl)
 	{
-        SetInsets(Insets(5, 5, 5, 5));
-		SetBackgroundColour(parent->GetBackgroundColour());
 		SetRenderer(std::make_shared<DefaultButtonRenderer>());
-        SetStyle(std::make_shared<Style>(StyledButton::GetDefaultStyle()));
+        SetStyle(StyledButton::GetDefaultStyle());
 	}
 	
 	StyledButton::~StyledButton() {
@@ -235,11 +227,7 @@ namespace wxstyle {
         TextMetrics textMetrics(const_cast<StyledButton*>(this));
         wxSize textSize;
 
-        if (GetStyle() && GetStyle()->fontDefinition) {
-            textSize = textMetrics.GetTextSize(GetText(), GetStyle()->fontDefinition.get());
-        } else {
-            textSize = textMetrics.GetTextSize(GetText(), GetFont());
-        }
+        textSize = textMetrics.GetTextSize(GetText(), GetStyle().GetFont());
 
 		width += GetInsets().Width();
 		width += iconWidth;

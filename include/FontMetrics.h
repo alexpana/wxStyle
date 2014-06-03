@@ -13,7 +13,7 @@ namespace wxstyle
         TextMetrics(StyledWindow* window)
             : m_dc(window)
         {
-            m_dc.SetFont(wxFont(window->GetStyle()->fontDefinition->CreateFontInfo()));
+            m_dc.SetFont(wxFont(window->GetStyle().GetFont().CreateFontInfo()));
         }
 
         wxSize GetTextSize(const wxString& text, const wxFont& font) {

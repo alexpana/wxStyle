@@ -6,6 +6,7 @@
 #include "DimPoint.h"
 #include "DimRect.h"
 #include "FontMetrics.h"
+#include "Insets.h"
 
 namespace wxstyle
 {
@@ -66,11 +67,11 @@ namespace wxstyle
 
             wxSize textSize = metrics.GetTextSize(
                 prefixText, 
-                textBox->GetStyle()->fontDefinition.get());
+                textBox->GetStyle().GetFont());
 
             int textWidth = metrics.GetTextSize(
                 selectedText,
-                textBox->GetStyle()->fontDefinition.get()).GetWidth();
+                textBox->GetStyle().GetFont()).GetWidth();
 
             int x = textSize.GetWidth() + textBox->GetInsets().Left() + textBox->GetTextRenderOffset();
             int y = textBox->GetInsets().Top();
@@ -96,10 +97,10 @@ namespace wxstyle
             DrawTextInstruction(DrawTextInstruction::Params()
                 .SetHorizontalAnchor(HA_LEFT)
                 .SetVerticalAnchor(VA_CENTER)
-                .SetTextPosition(DimPoint(textBox->GetInsets().GetLeft() + textBox->GetTextRenderOffset(), Dimension(0, 0.5)))
-                .SetFontDefinition(textBox->GetStyle()->fontDefinition.get())
+                .SetTextPosition(DimPoint(textBox->GetInsets().Left() + textBox->GetTextRenderOffset(), Dimension(0, 0.5)))
+                .SetFontDefinition(textBox->GetStyle().GetFont())
                 .SetText(textBox->GetText())
-                .SetTextColor(textBox->GetStyle()->foregroundColorDefinition.get().value.get()))
+                .SetTextColor(textBox->GetStyle().GetForegroundColor()))
                 .Draw(g, textBox->GetSize());
 
             g->ResetClip();
@@ -121,27 +122,20 @@ namespace wxstyle
     };
 
     Style StyledTextBox::GetDefaultStyle() {
-        Style defaultStyle;
-        defaultStyle.backgroundColorDefinition = wxColour("#AFAFAF");
-        defaultStyle.foregroundColorDefinition = wxColour("#AFAFAF");
-        defaultStyle.opacityDefinition = true;
-        defaultStyle.fontDefinition = FontDefinition().SetFace("Tahoma").SetSize(40).SetStyle(wxFONTSTYLE_NORMAL).SetWeight(wxFONTWEIGHT_BOLD);
-        defaultStyle.shadowDefinition = ShadowDefinition().SetColor(wxTRANSPARENT).SetOffset(wxPoint(0, 0));
-        return defaultStyle;
+        return StyledWindow::GetDefaultStyle();
     }
 
     StyledTextBox::StyledTextBox(wxWindow* parent, wxString text, wxStandardID id)
         : StyledWindow(parent, text ,id)
     {
         pimpl = std::make_shared<StyledTextBoxImpl>();
+        SetWindowStyle(GetWindowStyle() | wxWANTS_CHARS);
 
         SetRenderer(std::make_shared<StyledTextBoxRenderer>());
-        SetStyle(std::make_shared<Style>(StyledTextBox::GetDefaultStyle()));
-        SetInsets(Insets(12, 12, 12, 12));
-        SetWindowStyle(GetWindowStyle() | wxWANTS_CHARS);
-        SetMinSize(wxSize(0, 22));
+        SetStyle(StyledTextBox::GetDefaultStyle());
 
-        SetText("Hello World!aaa");
+        SetInsets(Insets(3, 3, 3, 3));
+        SetMinSize(wxSize(0, 22));
     }
 
     wxSize StyledTextBox::GetMinSize() const {
@@ -413,7 +407,7 @@ namespace wxstyle
 
     int StyledTextBox::FindCursorPointFromIndex() {
         TextMetrics textMetrics = TextMetrics(const_cast<StyledTextBox*>(this));
-        return textMetrics.GetTextSize(GetText().SubString(0, GetCursorPosition() - 1), GetStyle()->fontDefinition.get()).GetWidth() + pimpl->textOffset;
+        return textMetrics.GetTextSize(GetText().SubString(0, GetCursorPosition() - 1), GetStyle().GetFont()).GetWidth() + pimpl->textOffset;
     }
 
     int StyledTextBox::GetTextRenderOffset() {

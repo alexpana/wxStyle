@@ -11,19 +11,10 @@ namespace wxstyle {
 
         ~StyledLabel() {};
 
-        void SetTextAlignment(wxAlignment alignment) {
-            m_textAlignment = alignment;
-        }
-
-        wxAlignment GetTextAlignment() const {
-            return m_textAlignment;
-        }
+        static Style GetDefaultStyle();
 
     private:
         void Init();
-
-    private:
-        wxAlignment m_textAlignment;
     };
 
 }

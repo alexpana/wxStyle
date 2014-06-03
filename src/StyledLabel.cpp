@@ -36,14 +36,19 @@ namespace wxstyle {
 		}
 	};
 
+    Style StyledLabel::GetDefaultStyle() {
+        return StyledWindow::GetDefaultStyle().SetTextAlignment(wxALIGN_CENTER_VERTICAL);
+    }
+
 	StyledLabel::StyledLabel(wxWindow *parent) : StyledWindow(parent) {
 		Init();
 	}
 
 	void StyledLabel::Init() {
 		SetOpaque(false);
-		SetTextAlignment(wxALIGN_CENTER_VERTICAL);
+
 		SetRenderer(std::shared_ptr<DefaultLabelRenderer>(new DefaultLabelRenderer()));
+        SetStyle(StyledLabel::GetDefaultStyle());
 	}
 
 } // namespace wxstyle

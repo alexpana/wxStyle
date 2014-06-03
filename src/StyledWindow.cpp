@@ -16,7 +16,7 @@
 		}
 	};
 
-	/** Implementation structure containing all private members. **/
+    /** Implementation structure containing all private members. **/
 	class StyledWindow::Implementation {
 	public:
 		bool isFocused;
@@ -33,7 +33,7 @@
         Insets insets;
 
 		std::shared_ptr<IRenderer> renderer;
-		std::shared_ptr<Style> style;
+		Style style;
 
 		std::unordered_map<wxString, wxString, wxStringHash> propertyMap;
 
@@ -57,6 +57,16 @@
 		void NotifyResize(const wxSizeEvent& resizeEvent);
 	};
 
+    Style StyledWindow::GetDefaultStyle() {
+        Style defaultStyle;
+        defaultStyle.SetBackgroundColor("#2B2A2A");
+        defaultStyle.SetForegroundColor("#AFAFAF");
+        defaultStyle.SetOpacity(true);
+        defaultStyle.SetFont(FontDefinition().SetFace("Tahoma").SetSize(9).SetStyle(wxFONTSTYLE_NORMAL).SetWeight(wxFONTWEIGHT_BOLD));
+        defaultStyle.SetShadow(ShadowDefinition().SetColor(wxTRANSPARENT).SetOffset(wxPoint(0, 0)));
+        return defaultStyle;
+    }
+
 	StyledWindow::StyledWindow(wxWindow* parent, wxString text, wxStandardID id):
 		wxWindow(parent, id)
 	{
@@ -72,6 +82,8 @@
 		pimpl->isPressed = false;
 		pimpl->isOpaque = true;
         pimpl->minSize = wxSize(DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
+
+        SetStyle(StyledWindow::GetDefaultStyle());
 
 		SetMinSize(pimpl->minSize);
 		SetBackgroundStyle(wxBG_STYLE_PAINT);
@@ -122,11 +134,11 @@
 		return pimpl->text;
 	}
 
-    void StyledWindow::SetStyle(std::shared_ptr<Style> style) {
+    void StyledWindow::SetStyle(const Style& style) {
 		pimpl->style = style;
 	}
 
-    std::shared_ptr<Style> StyledWindow::GetStyle() const {
+    Style StyledWindow::GetStyle() const {
 		return pimpl->style;
 	}
 
