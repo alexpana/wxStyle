@@ -21,7 +21,6 @@
 #include "Dimension.h"
 #include "Insets.h"
 #include "style/draw/ImageRepository.h"
-#include "style/StyleUtils.h"
 #include "StyledButton.h"
 #include "StyledCheckbox.h"
 #include "StyledFrame.h"

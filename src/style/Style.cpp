@@ -56,6 +56,10 @@ namespace wxstyle {
         return opacityDefinition.get().value.get();
     }
 
+    Insets Style::GetInsets() const {
+        return insetsDefinition.get().value.get();
+    }
+
     std::vector<DrawInstruction*> Style::GetDrawInstructions() const {
         return drawInstructions.get().value.get();
     }
@@ -86,6 +90,10 @@ namespace wxstyle {
 
     bool Style::HasOpacityDefinition() const {
         return opacityDefinition;
+    }
+
+    bool Style::HasInsetsDefinition() const {
+        return insetsDefinition;
     }
 
     bool Style::HasDrawInstructions() const {
@@ -127,6 +135,11 @@ namespace wxstyle {
         return *this;
     }
 
+    Style& Style::SetInsets(const Insets& insets) {
+        insetsDefinition = insets;
+        return *this;
+    }
+
     Style& Style::SetDrawInstructions(std::vector<DrawInstruction*> drawInstructions) {
         this->drawInstructions = drawInstructions;
         return *this;
@@ -141,6 +154,7 @@ namespace wxstyle {
         computedStyle.backgroundColorDefinition = MergeDefinitions(lhs.backgroundColorDefinition, rhs.backgroundColorDefinition);
         computedStyle.foregroundColorDefinition = MergeDefinitions(lhs.foregroundColorDefinition, rhs.foregroundColorDefinition);
         computedStyle.opacityDefinition = MergeDefinitions(lhs.opacityDefinition, rhs.opacityDefinition);
+        computedStyle.insetsDefinition = MergeDefinitions(lhs.insetsDefinition, rhs.insetsDefinition);
         computedStyle.drawInstructions = MergeDefinitions(lhs.drawInstructions, rhs.drawInstructions);
         return computedStyle;
     }

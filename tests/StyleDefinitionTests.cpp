@@ -7,7 +7,6 @@
 #include <string>
 
 #include "style/StyleDefinitions.h"
-#include "style/StyleUtils.h"
 
 BOOST_AUTO_TEST_SUITE(style_definition_suite)
 

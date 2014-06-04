@@ -2,10 +2,13 @@
 
 #include <vector>
 
+#include "Insets.h"
 #include "style/draw/DrawInstruction.h"
 #include "style/StyleDefinitions.h"
 
 namespace wxstyle {
+
+    class Insets;
 
     /**
      *  Style data structure.
@@ -14,6 +17,10 @@ namespace wxstyle {
      *  properties of a component.
      */
     class Style {
+    public:
+
+        static Style Merge(const Style& lhs, const Style& rhs);
+
     public:
 
         bool HasTextShadowDefinition() const;
@@ -44,11 +51,13 @@ namespace wxstyle {
 
         bool IsOpaque() const;
 
+        bool HasInsetsDefinition() const;
+
+        Insets GetInsets() const;
+
         bool HasDrawInstructions() const;
 
         std::vector<DrawInstruction*> GetDrawInstructions() const;
-
-        static Style Merge(const Style& lhs, const Style& rhs);
 
         // Mutation methods
 
@@ -66,6 +75,8 @@ namespace wxstyle {
 
         Style& SetOpacity(bool opacityDefinition);
 
+        Style& SetInsets(const Insets& insets);
+
         Style& SetDrawInstructions(std::vector<DrawInstruction*> drawInstructions);
 
     private:
@@ -76,6 +87,7 @@ namespace wxstyle {
         boost::optional<ValueDefinition<wxColor>> backgroundColorDefinition;
         boost::optional<ValueDefinition<wxColor>> foregroundColorDefinition;
         boost::optional<ValueDefinition<bool>> opacityDefinition;
+        boost::optional<ValueDefinition<Insets>> insetsDefinition;
         boost::optional<ValueDefinition<std::vector<DrawInstruction*>>> drawInstructions;
     };
 
