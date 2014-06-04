@@ -26,10 +26,10 @@ namespace wxstyle {
             .Draw(g.get(), window->GetSize());
 
             DrawTextInstruction(DrawTextInstruction::Params()
-                .SetFontDefinition(FontDefinition().SetSize(9).SetFace("Tahoma").SetWeight(wxFONTWEIGHT_BOLD))
-                .SetShadowDefinition(ShadowDefinition().SetColor("#505050").SetOffset(wxPoint(0, 1)))
+                .SetFontDefinition(window->GetStyle().GetFont())
+                .SetShadowDefinition(window->GetStyle().GetTextShadow())
                 .SetText(window->GetText())
-                .SetTextColor("#202020")
+                .SetTextColor(window->GetStyle().GetForegroundColor())
                 .SetHorizontalAnchor(HA_LEFT)
                 .SetTextPosition(DimPoint(0, Dimension(0, 0.5f))))
             .Draw(g.get(), window->GetSize());
@@ -37,7 +37,10 @@ namespace wxstyle {
 	};
 
     Style StyledLabel::GetDefaultStyle() {
-        return StyledWindow::GetDefaultStyle().SetTextAlignment(wxALIGN_CENTER_VERTICAL);
+        return StyledWindow::GetDefaultStyle()
+            .SetTextAlignment(wxALIGN_CENTER_VERTICAL)
+            .SetFont(FontDefinition().SetSize(9).SetFace("Tahoma").SetWeight(wxFONTWEIGHT_NORMAL))
+            .SetForegroundColor("#929395");
     }
 
 	StyledLabel::StyledLabel(wxWindow *parent) : StyledWindow(parent) {
