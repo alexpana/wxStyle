@@ -21,6 +21,8 @@ namespace wxstyle {
 
 		wxRect GetValue(const wxRect& referenceRect) const;
 		wxRect GetValue(const wxSize& referenceSize) const;
+
+        static DimRect ValueOf(const char* stringValue);
 	};
 
 	std::ostream& operator<<(std::ostream& lhs, const DimRect& rhs);

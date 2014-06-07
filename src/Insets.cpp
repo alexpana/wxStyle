@@ -1,32 +1,49 @@
 #include "Insets.h"
 
+#include <vector>
+
+#include "boost/lexical_cast.hpp"
+#include "boost/algorithm/string/split.hpp"
+#include "boost/algorithm/string/classification.hpp"
+
 namespace wxstyle {
+
+    Insets Insets::ValueOf(const char* stringValue) {
+        std::vector<std::string> points;
+        boost::split(points, std::string(stringValue), boost::is_any_of(", "), boost::token_compress_on);
+
+        return Insets(
+            boost::lexical_cast<int>(points[0]),
+            boost::lexical_cast<int>(points[1]),
+            boost::lexical_cast<int>(points[2]),
+            boost::lexical_cast<int>(points[3]));
+    }
 
     Insets::Insets() : left(0), top(0), right(0), bottom(0) {}
 
     Insets::Insets(int left, int top, int right, int bottom) :
         left(left), top(top), right(right), bottom(bottom) {}
 
-    int Insets::Left() {
+    int Insets::Left() const {
         return left;
     }
 
-    int Insets::Top() {
+    int Insets::Top() const {
         return top;
     }
 
-    int Insets::Right() {
+    int Insets::Right() const {
         return right;
     }
 
-    int Insets::Bottom() {
+    int Insets::Bottom() const {
         return bottom;
     }
 
-    int Insets::Width() {
+    int Insets::Width() const {
         return left + right;
     }
-    int Insets::Height() {
+    int Insets::Height() const {
         return top + bottom;
     }
 

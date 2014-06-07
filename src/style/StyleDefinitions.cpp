@@ -58,4 +58,9 @@ namespace wxstyle {
 		return *this;
 	}
 
+    IconDefinition& IconDefinition::SetIconName(const wxString& name) {
+        iconName= name;
+        return *this;
+    }
+
 } // namespace wxstyle

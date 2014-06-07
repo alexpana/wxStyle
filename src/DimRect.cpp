@@ -1,6 +1,22 @@
 #include "DimRect.h"
 
+#include <vector>
+
+#include "boost/algorithm/string/split.hpp"
+#include "boost/algorithm/string/classification.hpp"
+
 namespace wxstyle {
+
+    DimRect DimRect::ValueOf(const char* stringValue) {
+        std::vector<std::string> points;
+        boost::split(points, std::string(stringValue), boost::is_any_of(", "), boost::token_compress_on);
+
+        return DimRect(
+            Dimension::ValueOf(points[0]).get(),
+            Dimension::ValueOf(points[1]).get(),
+            Dimension::ValueOf(points[2]).get(),
+            Dimension::ValueOf(points[3]).get());
+    }
 
 	wxRect DimRect::GetValue(const wxRect& referenceRect) const {
 		return wxRect(

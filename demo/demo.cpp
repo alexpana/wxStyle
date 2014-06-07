@@ -30,6 +30,11 @@ public:
 
     void InitComponents() 
     {
+        XMLStylesheetLoader loader;
+        Stylesheet testStylesheet = loader.Load("test.xml");
+
+        Style defaultLabelStyle = testStylesheet.GetStyle("default.label");
+
         mainFrame = new StyledFrame("Demo Board");
         mainFrame->Show(true);
         mainFrame->SetMinSize(wxSize(200, 200));
@@ -37,8 +42,9 @@ public:
         wxPanel *contentPanel = mainFrame->GetContentPanel();
 
         styledLabel = new StyledLabel(contentPanel);
-        styledLabel->SetText("Styled Label");
+        styledLabel->SetText("You have unread mail!!!!");
         styledLabel->SetForegroundColour("#AFAFAF");
+        styledLabel->SetStyle(defaultLabelStyle);
 
         styledButton = new wxstyle::StyledButton(contentPanel, "Styled Button");
 		styledButton->SetInsets(Insets(12, 12, 12, 12));

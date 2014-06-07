@@ -7,13 +7,15 @@ namespace wxstyle {
         Insets();
         Insets(int left, int top, int right, int bottom);
 
-        int Left();
-        int Top();
-        int Right();
-        int Bottom();
+        int Left() const;
+        int Top() const;
+        int Right() const;
+        int Bottom() const;
 
-        int Width();
-        int Height();
+        int Width() const;
+        int Height() const;
+
+        static Insets ValueOf(const char* stringValue);
 
     private:
         int left, top, right, bottom;

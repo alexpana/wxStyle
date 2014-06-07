@@ -24,6 +24,8 @@ namespace wxstyle {
 			return wxSize(m_x.GetValue(referenceSize.GetWidth()),
 				m_y.GetValue(referenceSize.GetHeight()));
 		}
+
+        static DimPoint ValueOf(const char* stringValue);
 	};
 
     bool operator==(const DimPoint& lhs, const DimPoint& rhs);

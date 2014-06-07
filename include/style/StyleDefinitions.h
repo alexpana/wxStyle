@@ -95,6 +95,8 @@ namespace wxstyle {
     public:
 		boost::optional<wxString> iconName;
 
+        IconDefinition& SetIconName(const wxString& name);
+
 		IconDefinition& Merge(const IconDefinition& other) {
             return *this;
         }

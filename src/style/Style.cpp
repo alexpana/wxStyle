@@ -1,162 +1,41 @@
 #include "style/Style.h"
 
+#include <map>
+
 namespace wxstyle {
 
-    /**
-    *  Merges two optional definitions.
-    */
-    template<typename D>
-    static boost::optional<D> MergeDefinitions(const boost::optional<D>& lhs, const boost::optional<D>& rhs) {
-        if (lhs && rhs) {
-            return MergeDefinitions(lhs.get(), rhs.get());
-        } else if (lhs) {
-            return lhs.get();
-        } else if (rhs) {
-            return rhs.get();
-        }
-        return boost::optional<D>();
-    }
-
-    /**
-    *  Merge two StyleDefinitions.
-    *  The merging is done via the Merge method that must be implemented by every
-    *  style definition.
-    */
-    template<typename D>
-    static D MergeDefinitions(const D& lhs, const D& rhs) {
-        D result = lhs;
-        return result.Merge(rhs);
-    }
-
-    ShadowDefinition Style::GetTextShadow() const {
-        return shadowDefinition.get();
-    }
-
-    IconDefinition Style::GetIcon() const {
-        return iconDefinition.get();
-    }
-
-    FontDefinition Style::GetFont() const {
-        return fontDefinition.get();
-    }
-
-    wxAlignment Style::GetTextAlignment() const {
-        return textAlignmentDefinition.get().value.get();
-    }
-
-    wxColor Style::GetBackgroundColor() const {
-        return backgroundColorDefinition.get().value.get();
-    }
-
-    wxColor Style::GetForegroundColor() const {
-        return foregroundColorDefinition.get().value.get();
-    }
-
-    bool Style::IsOpaque() const {
-        return opacityDefinition.get().value.get();
-    }
-
-    Insets Style::GetInsets() const {
-        return insetsDefinition.get().value.get();
-    }
-
-    std::vector<DrawInstruction*> Style::GetDrawInstructions() const {
-        return drawInstructions.get().value.get();
-    }
-
-    bool Style::HasTextShadowDefinition() const {
-        return shadowDefinition;
-    }
-
-    bool Style::HasIconDefinition() const {
-        return iconDefinition;
-    }
-
-    bool Style::HasFontDefinition() const {
-        return fontDefinition;
-    }
-
-    bool Style::HasTextAlignmentDefinition() const {
-        return  textAlignmentDefinition;
-    }
-
-    bool Style::HasBackgroundColorDefinition() const {
-        return backgroundColorDefinition;
-    }
-
-    bool Style::HasForegroundColorDefinition() const {
-        return foregroundColorDefinition;
-    }
-
-    bool Style::HasOpacityDefinition() const {
-        return opacityDefinition;
-    }
-
-    bool Style::HasInsetsDefinition() const {
-        return insetsDefinition;
-    }
-
-    bool Style::HasDrawInstructions() const {
-        return drawInstructions;
-    }
-
-    Style& Style::SetShadow(const ShadowDefinition& shadowDefinition) {
-        this->shadowDefinition = shadowDefinition;
-        return *this;
-    }
-
-    Style& Style::SetIcon(const IconDefinition& iconDefinition) {
-        this->iconDefinition = iconDefinition;
-        return *this;
-    }
-
-    Style& Style::SetFont(const FontDefinition& fontDefinition) {
-        this->fontDefinition = fontDefinition;
-        return *this;
-    }
-
-    Style& Style::SetTextAlignment(const wxAlignment& textAlignmentDefinition) {
-        this->textAlignmentDefinition = textAlignmentDefinition;
-        return *this;
-    }
-
-    Style& Style::SetBackgroundColor(const wxColor& backgroundColorDefinition) {
-        this->backgroundColorDefinition = backgroundColorDefinition;
-        return *this;
-    }
-
-    Style& Style::SetForegroundColor(const wxColor& foregroundColorDefinition) {
-        this->foregroundColorDefinition = foregroundColorDefinition;
-        return *this;
-    }
-
-    Style& Style::SetOpacity(bool opacityDefinition) {
-        this->opacityDefinition = opacityDefinition;
-        return *this;
-    }
-
-    Style& Style::SetInsets(const Insets& insets) {
-        insetsDefinition = insets;
-        return *this;
-    }
-
-    Style& Style::SetDrawInstructions(std::vector<DrawInstruction*> drawInstructions) {
-        this->drawInstructions = drawInstructions;
-        return *this;
-    }
+    struct Style::Implementation {
+        std::map<Category, DefinitionBundle> definitionBundleMap;
+    };
 
     Style Style::Merge(const Style& lhs, const Style& rhs) {
-        Style computedStyle;
-        computedStyle.shadowDefinition = MergeDefinitions(lhs.shadowDefinition, rhs.shadowDefinition);
-        computedStyle.fontDefinition = MergeDefinitions(lhs.fontDefinition, rhs.fontDefinition);
-        computedStyle.iconDefinition = MergeDefinitions(lhs.iconDefinition, rhs.iconDefinition);
-        computedStyle.textAlignmentDefinition = MergeDefinitions(lhs.textAlignmentDefinition, rhs.textAlignmentDefinition);
-        computedStyle.backgroundColorDefinition = MergeDefinitions(lhs.backgroundColorDefinition, rhs.backgroundColorDefinition);
-        computedStyle.foregroundColorDefinition = MergeDefinitions(lhs.foregroundColorDefinition, rhs.foregroundColorDefinition);
-        computedStyle.opacityDefinition = MergeDefinitions(lhs.opacityDefinition, rhs.opacityDefinition);
-        computedStyle.insetsDefinition = MergeDefinitions(lhs.insetsDefinition, rhs.insetsDefinition);
-        computedStyle.drawInstructions = MergeDefinitions(lhs.drawInstructions, rhs.drawInstructions);
-        return computedStyle;
+        Style result;
+        
+        result.AddBundle(CAT_DEFAULT, DefinitionBundle::Merge(lhs.GetBundle(CAT_DEFAULT), rhs.GetBundle(CAT_DEFAULT)));
+        result.AddBundle(CAT_DISABLED, DefinitionBundle::Merge(lhs.GetBundle(CAT_DISABLED), rhs.GetBundle(CAT_DISABLED)));
+        result.AddBundle(CAT_FOCUSED, DefinitionBundle::Merge(lhs.GetBundle(CAT_FOCUSED), rhs.GetBundle(CAT_FOCUSED)));
+        result.AddBundle(CAT_HOVERED, DefinitionBundle::Merge(lhs.GetBundle(CAT_HOVERED), rhs.GetBundle(CAT_HOVERED)));
+        result.AddBundle(CAT_PRESSED, DefinitionBundle::Merge(lhs.GetBundle(CAT_PRESSED), rhs.GetBundle(CAT_PRESSED)));
+
+        return result;
+    }
+
+    Style::Style() {
+        pimpl = std::make_shared<Style::Implementation>();
+    }
+
+    DefinitionBundle Style::GetBundle(Category category) const {
+        // TODO: What happens when there is no default bundle ?
+        if (pimpl->definitionBundleMap.find(category) != pimpl->definitionBundleMap.end()) {
+            return pimpl->definitionBundleMap[category];
+        } else {
+            return pimpl->definitionBundleMap[CAT_DEFAULT];
+        }
+    }
+
+    Style& Style::AddBundle(Category category, DefinitionBundle bundle) {
+        pimpl->definitionBundleMap[category] = bundle;
+        return *this;
     }
 
 } // namespace wxstyle

@@ -12,6 +12,7 @@ class wxBrush;
 namespace wxstyle { 
 
     class DimRect;
+    class Insets;
 
     class DrawShapeInstruction : public DrawInstruction {
     public:
@@ -23,6 +24,8 @@ namespace wxstyle {
             Params& SetRect(const DimRect& rect);
 
             Params& SetInsets(int left, int top, int right, int bottom);
+
+            Params& SetInsets(const Insets& insets);
 
             DimRect GetRect() const;
 

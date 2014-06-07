@@ -23,6 +23,7 @@
 		bool isHovered;
 		bool isPressed;
 		bool isOpaque;
+        bool isDisabled;
 
 		wxColor backgroundColor;
 
@@ -58,13 +59,13 @@
 	};
 
     Style StyledWindow::GetDefaultStyle() {
-        Style defaultStyle;
-        defaultStyle.SetBackgroundColor("#2B2A2A");
-        defaultStyle.SetForegroundColor("#AFAFAF");
-        defaultStyle.SetOpacity(true);
-        defaultStyle.SetFont(FontDefinition().SetFace("Tahoma").SetSize(9).SetStyle(wxFONTSTYLE_NORMAL).SetWeight(wxFONTWEIGHT_BOLD));
-        defaultStyle.SetShadow(ShadowDefinition().SetColor(wxTRANSPARENT).SetOffset(wxPoint(0, 0)));
-        return defaultStyle;
+        DefinitionBundle defaultBundle;
+        defaultBundle.SetBackgroundColor("#2B2A2A");
+        defaultBundle.SetForegroundColor("#AFAFAF");
+        defaultBundle.SetOpacity(true);
+        defaultBundle.SetFont(FontDefinition().SetFace("Tahoma").SetSize(9).SetStyle(wxFONTSTYLE_NORMAL).SetWeight(wxFONTWEIGHT_BOLD));
+        defaultBundle.SetShadow(ShadowDefinition().SetColor(wxTRANSPARENT).SetOffset(wxPoint(0, 0)));
+        return Style().AddBundle(Style::CAT_DEFAULT, defaultBundle);
     }
 
 	StyledWindow::StyledWindow(wxWindow* parent, wxString text, wxStandardID id):
@@ -139,7 +140,19 @@
 	}
 
     Style StyledWindow::GetStyle() const {
-		return pimpl->style;
+        return pimpl->style;
+    }
+
+    DefinitionBundle StyledWindow::GetDefinitionBundle() const {
+        DefinitionBundle defaultBundle = GetStyle().GetBundle(Style::CAT_DEFAULT);
+        DefinitionBundle modifierBundle;
+
+        if (IsFocused()) modifierBundle = GetStyle().GetBundle(Style::CAT_FOCUSED);
+        if (IsPressed()) modifierBundle = GetStyle().GetBundle(Style::CAT_PRESSED);
+        if (IsHovered()) modifierBundle = GetStyle().GetBundle(Style::CAT_HOVERED);
+        if (IsDisabled()) modifierBundle = GetStyle().GetBundle(Style::CAT_DISABLED);
+
+		return pimpl->style.GetBundle(Style::CAT_DEFAULT);
 	}
 
 	void StyledWindow::SetMinSize(const wxSize& size) {
@@ -185,6 +198,14 @@
 	bool StyledWindow::IsPressed() const {
 		return pimpl->isPressed;
 	}
+
+    void StyledWindow::SetDisabled(bool disabled) {
+        pimpl->isDisabled = disabled;
+    }
+
+    bool StyledWindow::IsDisabled() const {
+        return pimpl->isDisabled;
+    }
 
 	void StyledWindow::OnPaint(wxPaintEvent& paintEvent) {
 		pimpl->renderer->Render(this);

@@ -188,7 +188,9 @@ namespace wxstyle {
 	};
 
     Style StyledButton::GetDefaultStyle() {
-        return StyledWindow::GetDefaultStyle().SetOpacity(false);
+        DefinitionBundle defaultBundle = StyledWindow::GetDefaultStyle().GetBundle(Style::CAT_DEFAULT);
+        defaultBundle.SetOpacity(false);
+        return Style().AddBundle(Style::CAT_DEFAULT, defaultBundle);
 	}
 
 	StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(parent, text),
@@ -227,7 +229,7 @@ namespace wxstyle {
         TextMetrics textMetrics(const_cast<StyledButton*>(this));
         wxSize textSize;
 
-        textSize = textMetrics.GetTextSize(GetText(), GetStyle().GetFont());
+        textSize = textMetrics.GetTextSize(GetText(), GetDefinitionBundle().GetFont());
 
 		width += GetInsets().Width();
 		width += iconWidth;

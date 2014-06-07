@@ -10,6 +10,8 @@
 
 namespace wxstyle {
 
+class Style;
+
 class StyleProperty {
 public:
 	StyleProperty() : m_value(0) {}
@@ -51,32 +53,25 @@ private:
 
 class Stylesheet {
 public:
-	boost::optional<StyleProperty> GetProperty(std::string name) {
-		auto mapValue = m_properties.find(name);
-		if (mapValue != m_properties.end()) {
-			return boost::optional<StyleProperty>(mapValue->second);
-		} else {
-			return boost::optional<StyleProperty>();
-		}
-	}
+    Stylesheet();
 
-	void SetProperty(std::string name, StyleProperty val) {
-		m_properties[name] = val;
-	}
+	boost::optional<StyleProperty> GetProperty(std::string name);
 
-	bool HasProperty(std::string name) {
-		return m_properties.find(name) != m_properties.end();
-	}
+	void SetProperty(std::string name, StyleProperty val);
 
-	bool UnsetProperty(std::string name) {
-		return m_properties.erase(name) > 0;
-	}
+	bool HasProperty(std::string name);
+
+	bool UnsetProperty(std::string name);
+
+    void AddStyle(const std::string& name, const Style& style);
+
+    Style GetStyle(const std::string& name) const;
+
+    void SetClassDefaultStyle(const std::string& className, const std::string& styleName);
 
 private:
-	typedef std::unordered_map<std::string, StyleProperty> PropertValueMap;
-
-private:
-	PropertValueMap m_properties;
+    struct Implementation;
+    std::shared_ptr<Implementation> pimpl;
 };
 
 } // namespace wxstyle

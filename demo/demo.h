@@ -26,3 +26,5 @@
 #include "StyledFrame.h"
 #include "StyledLabel.h"
 #include "StyledTextBox.h"
+#include "style/Stylesheet.h"
+#include "style/XMLStylesheetLoader.h"

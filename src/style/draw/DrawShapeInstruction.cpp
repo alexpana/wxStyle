@@ -5,6 +5,7 @@
 
 #include "style/draw/Anchor.h"
 #include "DimRect.h"
+#include "Insets.h"
 
 namespace wxstyle {
 
@@ -41,6 +42,11 @@ namespace wxstyle {
 
     Params& Params::SetInsets(int left, int top, int right, int bottom) {
         impl->rect = DimRect(left, top, Dimension(-left - right, 1), Dimension(-top - bottom, 1));
+        return *this;
+    }
+
+    Params& Params::SetInsets(const Insets& insets) {
+        SetInsets(insets.Left(), insets.Top(), insets.Right(), insets.Bottom());
         return *this;
     }
 

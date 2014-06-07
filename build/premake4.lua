@@ -51,11 +51,13 @@ solution "wxstyle"
 
 		files {
 			ROOT_DIR.."/include/**.h",
-			ROOT_DIR.."/src/**.cpp"
+			ROOT_DIR.."/src/**.cpp",
+			ROOT_DIR.."/src/pugxml/*",
 		}
 		
 		includedirs {
 			ROOT_DIR.."/include",
+			ROOT_DIR.."/src",
 			SYSTEM_LIBS.."/include",
 			BOOST_LIBS
 		}

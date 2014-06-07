@@ -98,6 +98,9 @@ namespace wxstyle {
 		/** Press state **/
 		bool IsPressed() const;
 
+        void SetDisabled(bool disabled);
+        bool IsDisabled() const;
+
 		/** Mouse Listeners **/
 		void RegisterMouseListener(const std::shared_ptr<MouseListener>& listener);
 		void UnregisterMouseListener(const std::shared_ptr<MouseListener>& listener);
@@ -121,6 +124,7 @@ namespace wxstyle {
 		/** Style **/
         virtual void SetStyle(const Style& style);
         virtual Style GetStyle() const;
+        virtual DefinitionBundle GetDefinitionBundle() const;
 
 		/** MinSize **/
 		wxSize GetMinSize() const override;

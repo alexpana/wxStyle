@@ -67,11 +67,11 @@ namespace wxstyle
 
             wxSize textSize = metrics.GetTextSize(
                 prefixText, 
-                textBox->GetStyle().GetFont());
+                textBox->GetDefinitionBundle().GetFont());
 
             int textWidth = metrics.GetTextSize(
                 selectedText,
-                textBox->GetStyle().GetFont()).GetWidth();
+                textBox->GetDefinitionBundle().GetFont()).GetWidth();
 
             int x = textSize.GetWidth() + textBox->GetInsets().Left() + textBox->GetTextRenderOffset();
             int y = textBox->GetInsets().Top();
@@ -98,9 +98,9 @@ namespace wxstyle
                 .SetHorizontalAnchor(HA_LEFT)
                 .SetVerticalAnchor(VA_CENTER)
                 .SetTextPosition(DimPoint(textBox->GetInsets().Left() + textBox->GetTextRenderOffset(), Dimension(0, 0.5)))
-                .SetFontDefinition(textBox->GetStyle().GetFont())
+                .SetFontDefinition(textBox->GetDefinitionBundle().GetFont())
                 .SetText(textBox->GetText())
-                .SetTextColor(textBox->GetStyle().GetForegroundColor()))
+                .SetTextColor(textBox->GetDefinitionBundle().GetForegroundColor()))
                 .Draw(g, textBox->GetSize());
 
             g->ResetClip();
@@ -277,7 +277,7 @@ namespace wxstyle
 
         for (auto c : GetText()) {
             currentString += c;
-            if (GetInsets().Left() + metrics.GetTextSize(currentString, GetStyle().GetFont()).GetWidth() > point)
+            if (GetInsets().Left() + metrics.GetTextSize(currentString, GetDefinitionBundle().GetFont()).GetWidth() > point)
             {
                 break;
             }
@@ -400,14 +400,14 @@ namespace wxstyle
     }
 
     void StyledTextBox::SetSelectionEnd(int end) {
-        if (end >= 0 && end <= GetText().Length()) {
+        if (end >= 0 && (unsigned) end <= GetText().Length()) {
             pimpl->selectionEndIndex = end;
         }
     }
 
     int StyledTextBox::FindCursorPointFromIndex() {
         TextMetrics textMetrics = TextMetrics(const_cast<StyledTextBox*>(this));
-        return textMetrics.GetTextSize(GetText().SubString(0, GetCursorPosition() - 1), GetStyle().GetFont()).GetWidth() + pimpl->textOffset;
+        return textMetrics.GetTextSize(GetText().SubString(0, GetCursorPosition() - 1), GetDefinitionBundle().GetFont()).GetWidth() + pimpl->textOffset;
     }
 
     int StyledTextBox::GetTextRenderOffset() {
