@@ -57,13 +57,13 @@ namespace wxstyle {
 
             int GetCornerRadius() const;
 
-            Params& SetHorizontalAnchor(HorizontalAnchor horizontalAnchor);
+            Params& SetHorizontalAnchor(HorizontalAlignment horizontalAnchor);
 
-            HorizontalAnchor GetHorizontalAnchor() const;
+            HorizontalAlignment GetHorizontalAnchor() const;
 
-            Params& SetVerticalAnchor(VerticalAnchor verticalAnchor);
+            Params& SetVerticalAnchor(VerticalAlignment verticalAnchor);
 
-            VerticalAnchor GetVerticalAnchor() const;
+            VerticalAlignment GetVerticalAnchor() const;
 
         private:
             struct ParamsImpl;

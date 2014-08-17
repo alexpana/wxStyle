@@ -40,8 +40,8 @@ namespace wxstyle {
         return fontDefinition.get();
     }
 
-    wxAlignment DefinitionBundle::GetTextAlignment() const {
-        return textAlignmentDefinition.get().value.get();
+    AlignmentDefinition DefinitionBundle::GetTextAlignment() const {
+        return textAlignmentDefinition.get();
     }
 
     wxColor DefinitionBundle::GetBackgroundColor() const {
@@ -115,7 +115,7 @@ namespace wxstyle {
         return *this;
     }
 
-    DefinitionBundle& DefinitionBundle::SetTextAlignment(const wxAlignment& textAlignmentDefinition) {
+    DefinitionBundle& DefinitionBundle::SetTextAlignment(const AlignmentDefinition& textAlignmentDefinition) {
         this->textAlignmentDefinition = textAlignmentDefinition;
         return *this;
     }

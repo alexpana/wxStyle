@@ -31,9 +31,7 @@ public:
     void InitComponents() 
     {
         XMLStylesheetLoader loader;
-        Stylesheet testStylesheet = loader.Load("test.xml");
-
-        Style defaultLabelStyle = testStylesheet.GetStyle("default.label");
+        Stylesheet stylesheet = loader.Load("test.xml");
 
         mainFrame = new StyledFrame("Demo Board");
         mainFrame->Show(true);
@@ -42,15 +40,16 @@ public:
         wxPanel *contentPanel = mainFrame->GetContentPanel();
 
         styledLabel = new StyledLabel(contentPanel);
-        styledLabel->SetText("You have unread mail!!!!");
+        styledLabel->SetText("You have unread mail!");
         styledLabel->SetForegroundColour("#AFAFAF");
-        styledLabel->SetStyle(defaultLabelStyle);
+        styledLabel->SetStyle(stylesheet.GetStyle("label.default"));
 
-        styledButton = new wxstyle::StyledButton(contentPanel, "Styled Button");
-		styledButton->SetInsets(Insets(12, 12, 12, 12));
+//      styledButton = new wxstyle::StyledButton(contentPanel, "Styled Button");
+// 		styledButton->SetInsets(Insets(12, 12, 12, 12));
 
 		styledButtonWithIcon = new wxstyle::StyledButton(contentPanel, "Styled Button");
-		styledButtonWithIcon->SetIcon(ImageRepository::GetInstance()->GetImage("icons/close.png"));
+		styledButtonWithIcon->SetIcon(ImageRepository::GetInstance()->GetImage("icons/music_babcc0_16.png"));
+        styledButtonWithIcon->SetInsets(Insets(12, 12, 12, 12));
 
         nativeLabel = new wxStaticText(contentPanel, wxID_ANY, "");
         nativeLabel->SetLabelText("Native Label");
@@ -58,6 +57,7 @@ public:
 
         styledCheckBox = new StyledCheckBox(contentPanel, "Styled CheckBox");
         styledCheckBox->SetForegroundColour("#AFAFAF");
+        styledCheckBox->SetStyle(stylesheet.GetStyle("checkbox.default"));
 
         styledTextBox = new StyledTextBox(contentPanel, "");
 
@@ -67,9 +67,9 @@ public:
 
         nativeTextField = new wxTextCtrl(contentPanel, wxID_ANY);
 
-        nativeComboBox = new wxComboBox(contentPanel, wxID_ANY);
-        wxString options[] = {"luffy", "sanji", "zoro", "nami"};
-        nativeComboBox->Set(wxArrayString(4, options));
+//         nativeComboBox = new wxComboBox(contentPanel, wxID_ANY);
+//         wxString options[] = {"luffy", "sanji", "zoro", "nami"};
+//         nativeComboBox->Set(wxArrayString(4, options));
     }
 
     void InitLayout() 
@@ -81,17 +81,18 @@ public:
 
         sizer->Add(nativeLabel, flags);
         sizer->Add(styledLabel, flags);
+
         sizer->Add(nativeButton, flags);
-        sizer->Add(styledButton, flags);
+        //sizer->Add(styledButton, flags);
 		sizer->Add(styledButtonWithIcon, flags);
+
         sizer->Add(nativeCheckBox, flags);
         sizer->Add(styledCheckBox, flags);
 
         sizer->Add(styledTextBox, flags);
-
-        /* Not yet implemented */
         sizer->Add(nativeTextField, flags);
-        sizer->Add(nativeComboBox, flags);
+
+        //sizer->Add(nativeComboBox, flags);
 
         mainFrame->Fit();
         mainFrame->SetSize(mainFrame->GetSize() + wxSize(60, 0));

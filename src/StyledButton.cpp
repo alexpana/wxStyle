@@ -29,7 +29,7 @@ namespace wxstyle {
 	};
 
 	class DefaultButtonRenderer : public IRenderer {
-    public:
+	public:
 		virtual void Render(StyledWindow* window) const {
 			StyledButton* button = (StyledButton*) window;
 
@@ -38,14 +38,14 @@ namespace wxstyle {
 
 			ClearBackground(g.get(), button);
 
- 			RenderBackground(g.get(), button);
+			RenderBackground(g.get(), button);
 
 			RenderIcon(g.get(), button);
 
 			RenderText(g.get(), button);
-        }
+		}
 
-    private:
+	private:
 		void RenderBackground(wxGraphicsContext *g, StyledButton *button) const {
 			RenderPhotoshopImpl(g, button);
 		}
@@ -53,16 +53,16 @@ namespace wxstyle {
 		void RenderIcon(wxGraphicsContext* g, StyledButton *button) const {
 			auto icon = button->GetIcon();
 
-            if (icon) {
-			    wxRect textSize = button->GetTextMetrics();
+			if (icon) {
+				wxRect textSize = button->GetTextMetrics();
 
-			    DrawImageInstruction(DrawImageInstruction::Params()
-				    .SetImage(icon)
-				    .SetImageSize(DimPoint(Dimension(0, 1), Dimension(0, 1)))
-				    .SetPosition(DimPoint(Dimension(- textSize.GetWidth() / 2, 0.5), Dimension(0, 0.5)))
-				    .SetVerticalAnchor(VA_CENTER)
-				    .SetHorizontalAnchor(HA_CENTER))
-			    .Draw(g, button->GetSize());
+				DrawImageInstruction(DrawImageInstruction::Params()
+					.SetImage(icon)
+					.SetImageSize(DimPoint(Dimension(0, 1), Dimension(0, 1)))
+					.SetPosition(DimPoint(Dimension(- textSize.GetWidth() / 2 - 3, 0.5), Dimension(0, 0.5)))
+					.SetVerticalAnchor(VA_CENTER)
+					.SetHorizontalAnchor(HA_CENTER))
+				.Draw(g, button->GetSize());
 			}
 		}
 
@@ -74,130 +74,130 @@ namespace wxstyle {
 				.SetFontDefinition(FontDefinition().SetSize(10).SetFace("Tahoma").SetWeight(wxFONTWEIGHT_BOLD))
 				.SetTextColor("#BABCC0")
 				.SetShadowDefinition(ShadowDefinition().SetColor("#323232").SetOffset(wxPoint(0, 1)))
-				.SetTextPosition(DimPoint(Dimension( iconWidth / 2, 0.5), Dimension(-2, 0.5))))
+				.SetTextPosition(DimPoint(Dimension( iconWidth / 2 + 3, 0.5), Dimension(-2, 0.5))))
 				.Draw(g, button->GetSize());
 		}
 
-        void RenderPhotoshopImpl(wxGraphicsContext *g, StyledButton *button) const {
-            static const int radius = 0;
-            static const wxColour borderColor = "#2c2c2c";
-            static const wxColour bottomHighlight = "#46474B";
-            static const wxColour topHighlight = "#606268";
-            static const wxColour pressedColor = "#35363A";
+		void RenderPhotoshopImpl(wxGraphicsContext *g, StyledButton *button) const {
+			static const int radius = 0;
+			static const wxColour borderColor = "#2c2c2c";
+			static const wxColour bottomHighlight = "#46474B";
+			static const wxColour topHighlight = "#606268";
+			static const wxColour pressedColor = "#35363A";
 
-            const int w = button->GetSize().GetWidth();
-            const int h = button->GetSize().GetHeight();
+			const int w = button->GetSize().GetWidth();
+			const int h = button->GetSize().GetHeight();
 
-            DrawRectangleInstruction bottomHighlightInstruction(DrawShapeInstruction::Params()
-                .SetColor(bottomHighlight)
-                .SetCornerRadius(radius)
-                .SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(0, 1.0))));
+			DrawRectangleInstruction bottomHighlightInstruction(DrawShapeInstruction::Params()
+				.SetColor(bottomHighlight)
+				.SetCornerRadius(radius)
+				.SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(0, 1.0))));
 
-            DrawRectangleInstruction borderInstruction = DrawRectangleInstruction(DrawShapeInstruction::Params()
-                .SetColor(borderColor)
-                .SetCornerRadius(radius)
-                .SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(-1, 1.0))));
+			DrawRectangleInstruction borderInstruction = DrawRectangleInstruction(DrawShapeInstruction::Params()
+				.SetColor(borderColor)
+				.SetCornerRadius(radius)
+				.SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(-1, 1.0))));
 
-            DrawRectangleInstruction topHighlightInstruction = DrawRectangleInstruction(DrawShapeInstruction::Params()
-                .SetColor(topHighlight)
-                .SetCornerRadius(radius)
-                .SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-3, 1.0))));
+			DrawRectangleInstruction topHighlightInstruction = DrawRectangleInstruction(DrawShapeInstruction::Params()
+				.SetColor(topHighlight)
+				.SetCornerRadius(radius)
+				.SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-3, 1.0))));
 
-            GradientDefinitionPtr gradient = std::make_shared<LinearGradientDefinition>(LinearGradientDefinition::Direction::VERTICAL);
-            gradient->AddColorStop(0, "#505156");
-            gradient->AddColorStop(1, "#404146");
+			GradientDefinitionPtr gradient = std::make_shared<LinearGradientDefinition>(LinearGradientDefinition::Direction::VERTICAL);
+			gradient->AddColorStop(0, "#505156");
+			gradient->AddColorStop(1, "#404146");
 
-            DrawRectangleInstruction backgroundColorInstruction(DrawShapeInstruction::Params()
-                .SetGradientDefinition(gradient)
-                .SetCornerRadius(radius)
-                .SetRect(DimRect(1, 2, Dimension(-2, 1.0), Dimension(-4, 1.0))));
+			DrawRectangleInstruction backgroundColorInstruction(DrawShapeInstruction::Params()
+				.SetGradientDefinition(gradient)
+				.SetCornerRadius(radius)
+				.SetRect(DimRect(1, 2, Dimension(-2, 1.0), Dimension(-4, 1.0))));
 
-            DrawRectangleInstruction pressedBackgroundInstruction(DrawShapeInstruction::Params()
-                .SetColor(pressedColor)
-                .SetCornerRadius(radius)
-                .SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-3, 1.0))));
+			DrawRectangleInstruction pressedBackgroundInstruction(DrawShapeInstruction::Params()
+				.SetColor(pressedColor)
+				.SetCornerRadius(radius)
+				.SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-3, 1.0))));
 
-            bottomHighlightInstruction.Draw(g, button->GetSize());
-            borderInstruction.Draw(g, button->GetSize());
+			bottomHighlightInstruction.Draw(g, button->GetSize());
+			borderInstruction.Draw(g, button->GetSize());
 
-            if (button->IsArmed() && button->IsHovered()) {
-                pressedBackgroundInstruction.Draw(g, button->GetSize());
-            } else {
-                topHighlightInstruction.Draw(g, button->GetSize());
-                backgroundColorInstruction.Draw(g, button->GetSize());
-            }
-        }
+			if (button->IsArmed() && button->IsHovered()) {
+				pressedBackgroundInstruction.Draw(g, button->GetSize());
+			} else {
+				topHighlightInstruction.Draw(g, button->GetSize());
+				backgroundColorInstruction.Draw(g, button->GetSize());
+			}
+		}
 
-        void RenderGradientImpl(StyledButton *button) const {
-            static const int radius = 0;
-            static const wxColor bottomHighlight = "#454545";
-            static const wxColor borderColor = "#1c1617";
-            static const wxColor startColor = "#302D2D";
-            static const wxColor endColor = "#404040";
-            static const wxColor highlight = "#a5D5B5B";
+		void RenderGradientImpl(StyledButton *button) const {
+			static const int radius = 0;
+			static const wxColor bottomHighlight = "#454545";
+			static const wxColor borderColor = "#1c1617";
+			static const wxColor startColor = "#302D2D";
+			static const wxColor endColor = "#404040";
+			static const wxColor highlight = "#a5D5B5B";
 
-            const int w = button->GetSize().GetWidth();
-            const int h = button->GetSize().GetHeight();
+			const int w = button->GetSize().GetWidth();
+			const int h = button->GetSize().GetHeight();
 
-            wxAutoBufferedPaintDC deviceContext(button);
+			wxAutoBufferedPaintDC deviceContext(button);
 			auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
 
 			ClearBackground(g.get(), button);
 
 			// bottom highlight
-            DrawRectangleInstruction(DrawShapeInstruction::Params()
-                .SetColor(bottomHighlight)
-                .SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(0, 1.0))))
-                .Draw(g.get(), button->GetSize());
+			DrawRectangleInstruction(DrawShapeInstruction::Params()
+				.SetColor(bottomHighlight)
+				.SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(0, 1.0))))
+				.Draw(g.get(), button->GetSize());
 
 			// border
-            DrawRectangleInstruction(DrawShapeInstruction::Params()
-                .SetColor(borderColor)
-                .SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(-1, 1.0))))
-            .Draw(g.get(), button->GetSize());
+			DrawRectangleInstruction(DrawShapeInstruction::Params()
+				.SetColor(borderColor)
+				.SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(-1, 1.0))))
+			.Draw(g.get(), button->GetSize());
 
 			// top highlight
-            DrawRectangleInstruction(DrawShapeInstruction::Params()
-                .SetColor(highlight)
-                .SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-2, 1.0))))
-                .Draw(g.get(), button->GetSize());
+			DrawRectangleInstruction(DrawShapeInstruction::Params()
+				.SetColor(highlight)
+				.SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-2, 1.0))))
+				.Draw(g.get(), button->GetSize());
 
-            GradientDefinitionPtr gradient = std::make_shared<LinearGradientDefinition>(LinearGradientDefinition::Direction::VERTICAL);
+			GradientDefinitionPtr gradient = std::make_shared<LinearGradientDefinition>(LinearGradientDefinition::Direction::VERTICAL);
 			if (button->IsArmed()) {
-                gradient->AddColorStop(1, startColor);
-                gradient->AddColorStop(0.9f, endColor);
-                gradient->AddColorStop(0, endColor);
+				gradient->AddColorStop(1, startColor);
+				gradient->AddColorStop(0.9f, endColor);
+				gradient->AddColorStop(0, endColor);
 			} else {
-                gradient->AddColorStop(0, startColor);
-                gradient->AddColorStop(0.1f, endColor);
-                gradient->AddColorStop(1, endColor);
+				gradient->AddColorStop(0, startColor);
+				gradient->AddColorStop(0.1f, endColor);
+				gradient->AddColorStop(1, endColor);
 			}
 
-            DrawRectangleInstruction(DrawShapeInstruction::Params()
-                .SetGradientDefinition(gradient)
-                .SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-3, 1.0))))
-            .Draw(g.get(), button->GetSize());
+			DrawRectangleInstruction(DrawShapeInstruction::Params()
+				.SetGradientDefinition(gradient)
+				.SetRect(DimRect(1, 1, Dimension(-2, 1.0), Dimension(-3, 1.0))))
+			.Draw(g.get(), button->GetSize());
 		}
 
 		void ClearBackground(wxGraphicsContext *g, StyledWindow *window) const {
-            DrawRectangleInstruction(DrawShapeInstruction::Params()
-                .SetColor(window->GetBackgroundColour())
-                .SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(0, 1.0))))
-            .Draw(g, window->GetSize());
+			DrawRectangleInstruction(DrawShapeInstruction::Params()
+				.SetColor(window->GetBackgroundColour())
+				.SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(0, 1.0))))
+			.Draw(g, window->GetSize());
 		}
 	};
 
-    Style StyledButton::GetDefaultStyle() {
-        DefinitionBundle defaultBundle = StyledWindow::GetDefaultStyle().GetBundle(Style::CAT_DEFAULT);
-        defaultBundle.SetOpacity(false);
-        return Style().AddBundle(Style::CAT_DEFAULT, defaultBundle);
+	Style StyledButton::GetDefaultStyle() {
+		DefinitionBundle defaultBundle = StyledWindow::GetDefaultStyle().GetBundle(Style::CAT_DEFAULT);
+		defaultBundle.SetOpacity(false);
+		return Style().AddBundle(Style::CAT_DEFAULT, defaultBundle);
 	}
 
 	StyledButton::StyledButton(wxWindow* parent, wxString text) : StyledWindow(parent, text),
 		pimpl(new StyledButtonImpl)
 	{
 		SetRenderer(std::make_shared<DefaultButtonRenderer>());
-        SetStyle(StyledButton::GetDefaultStyle());
+		SetStyle(StyledButton::GetDefaultStyle());
 	}
 	
 	StyledButton::~StyledButton() {
@@ -226,10 +226,10 @@ namespace wxstyle {
 			iconHeight = GetIcon()->GetHeight();
 		}
 
-        TextMetrics textMetrics(const_cast<StyledButton*>(this));
-        wxSize textSize;
+		TextMetrics textMetrics(const_cast<StyledButton*>(this));
+		wxSize textSize;
 
-        textSize = textMetrics.GetTextSize(GetText(), GetDefinitionBundle().GetFont());
+		textSize = textMetrics.GetTextSize(GetText(), GetDefinitionBundle().GetFont());
 
 		width += GetInsets().Width();
 		width += iconWidth;

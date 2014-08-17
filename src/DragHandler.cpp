@@ -6,28 +6,28 @@
 
 namespace wxstyle {
 
-    class DragHandlerMouseListener : public StyledWindow::MouseListener {
-    public:
-        DragHandlerMouseListener(DragHandler& dragHandler) 
-            : handler(dragHandler)
-        {
-        }
+	class DragHandlerMouseListener : public StyledWindow::MouseListener {
+	public:
+		DragHandlerMouseListener(DragHandler& dragHandler) 
+			: handler(dragHandler)
+		{
+		}
 
-        void MouseDown(const wxMouseEvent& mouseEvent) override {
-            handler.Start(mouseEvent);
-        }
+		void MouseDown(const wxMouseEvent& mouseEvent) override {
+			handler.Start(mouseEvent);
+		}
 
-        void MouseReleased(const wxMouseEvent& mouseEvent) override {
-            handler.Stop(mouseEvent);
-        }
+		void MouseReleased(const wxMouseEvent& mouseEvent) override {
+			handler.Stop(mouseEvent);
+		}
 
-        virtual void MouseMoved(const wxMouseEvent& mouseEvent) override {
-            handler.Update(mouseEvent);
-        }
+		virtual void MouseMoved(const wxMouseEvent& mouseEvent) override {
+			handler.Update(mouseEvent);
+		}
 
-    private:
-        DragHandler& handler;
-    };
+	private:
+		DragHandler& handler;
+	};
 
 	DragHandler::DragHandler(wxWindow *const window) : 
 		m_handledWindow(window),
@@ -37,7 +37,7 @@ namespace wxstyle {
 	}
 
 	void DragHandler::Install(StyledWindow *window) {
-        window->RegisterMouseListener(std::make_shared<DragHandlerMouseListener>(*this));
+		window->RegisterMouseListener(std::make_shared<DragHandlerMouseListener>(*this));
 	}
 
 	void DragHandler::Start(const wxMouseEvent& mouseEvent) {

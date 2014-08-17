@@ -82,6 +82,7 @@
 		pimpl->isHovered = false;
 		pimpl->isPressed = false;
 		pimpl->isOpaque = true;
+        pimpl->isDisabled = false;
         pimpl->minSize = wxSize(DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
 
         SetStyle(StyledWindow::GetDefaultStyle());
@@ -152,7 +153,7 @@
         if (IsHovered()) modifierBundle = GetStyle().GetBundle(Style::CAT_HOVERED);
         if (IsDisabled()) modifierBundle = GetStyle().GetBundle(Style::CAT_DISABLED);
 
-		return pimpl->style.GetBundle(Style::CAT_DEFAULT);
+		return DefinitionBundle::Merge(defaultBundle, modifierBundle);
 	}
 
 	void StyledWindow::SetMinSize(const wxSize& size) {

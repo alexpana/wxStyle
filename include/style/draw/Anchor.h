@@ -1,29 +1,30 @@
 #pragma once
 
 #include <wx/gdicmn.h>
+#include <cstdint>
 
 namespace wxstyle {
 
-    enum HorizontalAnchor {
+    enum HorizontalAlignment {
         HA_LEFT,
         HA_CENTER,
         HA_RIGHT
     };
 
-    enum VerticalAnchor {
+    enum VerticalAlignment {
         VA_TOP,
         VA_CENTER,
         VA_BOTTOM
     };
 
-    wxPoint ComputeOffset(double w, double h, HorizontalAnchor ha, VerticalAnchor va);
+    wxPoint ComputeOffset(double w, double h, HorizontalAlignment ha, VerticalAlignment va);
 
-    wxPoint ComputeOffset(const wxSize& referenceSize, HorizontalAnchor ha, VerticalAnchor va);
+    wxPoint ComputeOffset(const wxSize& referenceSize, HorizontalAlignment ha, VerticalAlignment va);
 
-    wxPoint ComputeOffset(const wxPoint& referencePoint, HorizontalAnchor ha, VerticalAnchor va);
+    wxPoint ComputeOffset(const wxPoint& referencePoint, HorizontalAlignment ha, VerticalAlignment va);
 
-    double ComputeOffset(double w, HorizontalAnchor ha);
+    double ComputeOffset(double w, HorizontalAlignment ha);
 
-    double ComputeOffset(double h, VerticalAnchor va);
+    double ComputeOffset(double h, VerticalAlignment va);
 
 } // namespace wxstyle

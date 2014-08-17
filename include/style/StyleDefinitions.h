@@ -5,13 +5,15 @@
 #include <wx/gdicmn.h>
 
 #include <boost/optional.hpp>
+#include <cstdint>
 
+#include "style/draw/Anchor.h"
 
 namespace wxstyle {
 
     template<typename T>
     std::ostream& operator<<(std::ostream& lhs, const boost::optional<T>& rhs) {
-        static std::string empty = "<>";
+        static std::string empty = "empty";
         if (rhs) {
             lhs << "[" << rhs.get() << "]";
         } else {
@@ -105,17 +107,40 @@ namespace wxstyle {
     /**
      *  Definition for the text alignment property.
      */
-    class TextAlignmentDefinition {
+    class AlignmentDefinition {
     public:
-		enum Alignment {
-			LEFT, CENTER, RIGHT
-		};
+        boost::optional<int> verticalAlignment;
+        boost::optional<int> horizontalAlignment;
 
-        /// The alignment of the text, as made possible by the wxAlignment enum
-        boost::optional<Alignment> textAlignment;
+        AlignmentDefinition& Vertical(VerticalAlignment vertical) {
+            verticalAlignment = vertical;
+            return *this;
+        }
 
-        TextAlignmentDefinition& Merge(const TextAlignmentDefinition& other) {
-            if (other.textAlignment) this->textAlignment = other.textAlignment;
+        AlignmentDefinition& Horizontal(HorizontalAlignment horizontal) {
+            horizontalAlignment = horizontal;
+            return *this;
+        }
+
+        VerticalAlignment GetVertical() {
+            if (verticalAlignment) {
+                return static_cast<VerticalAlignment>(verticalAlignment.get());
+            } else {
+                return VA_CENTER;
+            }
+        }
+
+        HorizontalAlignment GetHorizontal() {
+            if (horizontalAlignment) {
+                return static_cast<HorizontalAlignment>(horizontalAlignment.get());
+            } else {
+                return HA_CENTER;
+            }
+        }
+
+        AlignmentDefinition& Merge(const AlignmentDefinition& other) {
+            if (other.verticalAlignment) this->verticalAlignment = other.verticalAlignment;
+            if (other.horizontalAlignment) this->horizontalAlignment = other.horizontalAlignment;
             return *this;
         }
     };

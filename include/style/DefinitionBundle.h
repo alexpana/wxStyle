@@ -37,7 +37,7 @@ namespace wxstyle {
 
         bool HasTextAlignmentDefinition() const;
 
-        wxAlignment GetTextAlignment() const;
+        AlignmentDefinition GetTextAlignment() const;
 
         bool HasBackgroundColorDefinition() const;
 
@@ -67,7 +67,7 @@ namespace wxstyle {
 
         DefinitionBundle& SetFont(const FontDefinition& fontDefinition);
 
-        DefinitionBundle& SetTextAlignment(const wxAlignment& textAlignmentDefinition);
+        DefinitionBundle& SetTextAlignment(const AlignmentDefinition& textAlignmentDefinition);
 
         DefinitionBundle& SetBackgroundColor(const wxColor& backgroundColorDefinition);
 
@@ -83,7 +83,7 @@ namespace wxstyle {
         boost::optional<ShadowDefinition> shadowDefinition;
         boost::optional<IconDefinition> iconDefinition;
         boost::optional<FontDefinition> fontDefinition;
-        boost::optional<ValueDefinition<wxAlignment>> textAlignmentDefinition;
+        boost::optional<AlignmentDefinition> textAlignmentDefinition;
         boost::optional<ValueDefinition<wxColor>> backgroundColorDefinition;
         boost::optional<ValueDefinition<wxColor>> foregroundColorDefinition;
         boost::optional<ValueDefinition<bool>> opacityDefinition;

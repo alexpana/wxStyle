@@ -1,5 +1,7 @@
 #include "StyledTextBox.h"
 
+#include <wx/clipbrd.h>
+
 #include "style\draw\DrawRectangleInstruction.h"
 #include "style\draw\DrawTextInstruction.h"
 
@@ -17,7 +19,12 @@ namespace wxstyle
         size_t cursorPosition;
         int cursorWidth;
 
-        StyledTextBoxImpl() : selectionStartIndex(0), selectionEndIndex(0), textOffset(0), cursorPosition(0), cursorWidth(1)
+        StyledTextBoxImpl() : 
+            selectionStartIndex(0), 
+            selectionEndIndex(0), 
+            textOffset(0), 
+            cursorPosition(0), 
+            cursorWidth(1)
         {
         }
     };
@@ -186,8 +193,49 @@ namespace wxstyle
         int keycode = keyEvent.GetKeyCode();
         int originalCursorPosition = GetCursorPosition();
 
+        // Used to indicate there was a cursor navigation event
+        bool navigationEvent = false;
+
         if (keyEvent.GetModifiers() & wxMOD_SHIFT) {
             EnsureSelectionStarted();
+        }
+
+        // Select All
+        if (keyEvent.ControlDown() && keycode == 'A') {
+            SetCursorPosition(GetText().Length());
+            SetSelection(0, 0);
+            SetSelectionEnd(GetCursorPosition());
+            eventHandled = true;
+        }
+
+        // Copy
+        if (keyEvent.ControlDown() && keycode == 'C') {
+            if (wxTheClipboard->Open())
+            {
+                wxTheClipboard->SetData(new wxTextDataObject(GetSelectedText()));
+                wxTheClipboard->Close();
+            }
+            eventHandled = true;
+        }
+
+        // Paste
+        if (keyEvent.ControlDown() && keycode == 'V') {
+            if (wxTheClipboard->Open())
+            {
+                if (wxTheClipboard->IsSupported(wxDF_TEXT))
+                {
+                    wxTextDataObject data;
+                    wxTheClipboard->GetData(data);
+                    if (HasSelectedText()) {
+                        RemoveSelectedText();
+                    }
+                    auto text = GetText();
+                    text.insert(GetCursorPosition(), data.GetText());
+                    SetText(text);
+                    SetCursorPosition(GetCursorPosition() + data.GetText().Length());
+                }
+                wxTheClipboard->Close();
+            }
         }
 
         if (keycode == WXK_BACK) {
@@ -205,6 +253,7 @@ namespace wxstyle
                 SetCursorPosition(GetCursorPosition() - 1);
             }
             eventHandled = true;
+            navigationEvent = true;
         }
 
         if (keycode == WXK_DELETE) {
@@ -227,6 +276,7 @@ namespace wxstyle
                 SetCursorPosition(GetCursorPosition() - 1);
             }
             eventHandled = true;
+            navigationEvent = true;
         }
 
         if (keycode == WXK_RIGHT) {
@@ -234,22 +284,25 @@ namespace wxstyle
                 SetCursorPosition(GetCursorPosition() + 1);
             }
             eventHandled = true;
+            navigationEvent = true;
         }
 
         if (keycode == WXK_END) {
             SetCursorPosition(GetText().Length());
             eventHandled = true;
+            navigationEvent = true;
         }
 
         if (keycode == WXK_HOME) {
             SetCursorPosition(0);
             eventHandled = true;
+            navigationEvent = true;
         }
 
         if (keyEvent.GetModifiers() & wxMOD_SHIFT) {
             SetSelectionEnd(GetCursorPosition());
         } else {
-            if (originalCursorPosition != GetCursorPosition()) {
+            if (navigationEvent) {
                 ClearSelection();
             }
         }
@@ -354,7 +407,9 @@ namespace wxstyle
     }
 
     void StyledTextBox::ClearSelection() {
-        SetSelection(0, 0);
+        pimpl->selectionStartIndex = 0;
+        pimpl->selectionEndIndex = 0;
+        Refresh();
     }
 
     void StyledTextBox::RemoveSelectedText() {

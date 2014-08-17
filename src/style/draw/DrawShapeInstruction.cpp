@@ -18,8 +18,8 @@ namespace wxstyle {
         wxColour penColor;
         wxPenStyle penStyle;
         int cornerRadius;
-        HorizontalAnchor horizontalAnchor;
-        VerticalAnchor verticalAnchor;
+        HorizontalAlignment horizontalAnchor;
+        VerticalAlignment verticalAnchor;
         boost::optional<GradientDefinitionPtr> gradientDefinition;
     };
 
@@ -31,8 +31,8 @@ namespace wxstyle {
         impl->penColor = *wxBLACK;
         impl->penStyle = wxPENSTYLE_SOLID;
         impl->cornerRadius = 0;
-        impl->horizontalAnchor = HA_LEFT;
-        impl->verticalAnchor = VA_TOP;
+        impl->horizontalAnchor = HorizontalAlignment::HA_LEFT;
+        impl->verticalAnchor = VerticalAlignment::VA_TOP;
     }
 
     Params& Params::SetRect(const DimRect& rect) {
@@ -85,12 +85,12 @@ namespace wxstyle {
         return *this;
     }
 
-    Params& Params::SetHorizontalAnchor(HorizontalAnchor horizontalAnchor) {
+    Params& Params::SetHorizontalAnchor(HorizontalAlignment horizontalAnchor) {
         impl->horizontalAnchor = horizontalAnchor;
         return *this;
     }
 
-    Params& Params::SetVerticalAnchor(VerticalAnchor verticalAnchor) {
+    Params& Params::SetVerticalAnchor(VerticalAlignment verticalAnchor) {
         impl->verticalAnchor = verticalAnchor;
         return *this;
     }
@@ -127,11 +127,11 @@ namespace wxstyle {
         return impl->cornerRadius;
     }
 
-    HorizontalAnchor Params::GetHorizontalAnchor() const {
+    HorizontalAlignment Params::GetHorizontalAnchor() const {
         return impl->horizontalAnchor;
     }
 
-    VerticalAnchor Params::GetVerticalAnchor() const {
+    VerticalAlignment Params::GetVerticalAnchor() const {
         return impl->verticalAnchor;
     }
 

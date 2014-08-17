@@ -103,19 +103,19 @@ namespace wxstyle {
     }
 
     template <>
-    HorizontalAnchor Convert(const char *stringValue) {
-        if (strcmp(stringValue, "left") == 0) return HorizontalAnchor::HA_LEFT;
-        if (strcmp(stringValue, "center") == 0) return HorizontalAnchor::HA_CENTER;
-        if (strcmp(stringValue, "right") == 0) return HorizontalAnchor::HA_RIGHT;
-        return HorizontalAnchor::HA_CENTER;
+    HorizontalAlignment Convert(const char *stringValue) {
+        if (strcmp(stringValue, "left") == 0) return HorizontalAlignment::HA_LEFT;
+        if (strcmp(stringValue, "center") == 0) return HorizontalAlignment::HA_CENTER;
+        if (strcmp(stringValue, "right") == 0) return HorizontalAlignment::HA_RIGHT;
+        return HorizontalAlignment::HA_CENTER;
     }
 
     template <>
-    VerticalAnchor Convert(const char *stringValue) {
-        if (strcmp(stringValue, "top") == 0) return VerticalAnchor::VA_TOP;
-        if (strcmp(stringValue, "center") == 0) return VerticalAnchor::VA_CENTER;
-        if (strcmp(stringValue, "bottom") == 0) return VerticalAnchor::VA_BOTTOM;
-        return VerticalAnchor::VA_CENTER;
+    VerticalAlignment Convert(const char *stringValue) {
+        if (strcmp(stringValue, "top") == 0) return VerticalAlignment::VA_TOP;
+        if (strcmp(stringValue, "center") == 0) return VerticalAlignment::VA_CENTER;
+        if (strcmp(stringValue, "bottom") == 0) return VerticalAlignment::VA_BOTTOM;
+        return VerticalAlignment::VA_CENTER;
     }
 
     template <>
@@ -186,21 +186,24 @@ namespace wxstyle {
         return Convert<Insets>(node.attribute("rect").as_string());
     }
 
-    int ParseAlignmentDefinition(const xml_node& node) {
+    template <>
+    AlignmentDefinition ParseDefinition(const xml_node& node) {
+        AlignmentDefinition;
+
+        AlignmentDefinition result;
+
         std::string vertical = node.attribute("vertical").as_string("center");
         std::string horizontal = node.attribute("horizontal").as_string("center");
-        
-        int value = 0;
 
-        if (vertical == "top") value = wxALIGN_TOP;
-        if (vertical == "center") value = wxALIGN_CENTER;
-        if (vertical == "bottom") value = wxALIGN_BOTTOM;
+        if (vertical == "top") result.verticalAlignment = VerticalAlignment::VA_TOP;
+        if (vertical == "center") result.verticalAlignment = VerticalAlignment::VA_CENTER;
+        if (vertical == "bottom") result.verticalAlignment = VerticalAlignment::VA_BOTTOM;
 
-        if (horizontal == "left") value += wxALIGN_LEFT;
-        if (horizontal == "center") value += wxALIGN_CENTER;
-        if (horizontal == "right") value += wxALIGN_RIGHT;
+        if (horizontal == "left") result.horizontalAlignment = HorizontalAlignment::HA_LEFT;
+        if (horizontal == "center") result.horizontalAlignment = HorizontalAlignment::HA_CENTER;
+        if (horizontal == "right") result.horizontalAlignment = HorizontalAlignment::HA_RIGHT;
 
-        return value;
+        return result;
     }
 
     template <>
@@ -221,8 +224,8 @@ namespace wxstyle {
             if (Name(param, "pen-size")) params.SetPenSize(Convert<int>(param));
             if (Name(param, "pen-color")) params.SetPenColor(Convert<wxColor>(param));
             if (Name(param, "pen-style")) params.SetPenStyle(Convert<wxPenStyle>(param));
-            if (Name(param, "h-anchor")) params.SetHorizontalAnchor(Convert<HorizontalAnchor>(param));
-            if (Name(param, "v-anchor")) params.SetVerticalAnchor(Convert<VerticalAnchor>(param));
+            if (Name(param, "h-anchor")) params.SetHorizontalAnchor(Convert<HorizontalAlignment>(param));
+            if (Name(param, "v-anchor")) params.SetVerticalAnchor(Convert<VerticalAlignment>(param));
         }
 
         return new DrawRectangleInstruction(params);
@@ -241,8 +244,8 @@ namespace wxstyle {
             if (Name(param, "pen-size")) params.SetPenSize(Convert<int>(param));
             if (Name(param, "pen-color")) params.SetPenColor(Convert<wxColor>(param));
             if (Name(param, "pen-style")) params.SetPenStyle(Convert<wxPenStyle>(param));
-            if (Name(param, "h-anchor")) params.SetHorizontalAnchor(Convert<HorizontalAnchor>(param));
-            if (Name(param, "v-anchor")) params.SetVerticalAnchor(Convert<VerticalAnchor>(param));
+            if (Name(param, "h-anchor")) params.SetHorizontalAnchor(Convert<HorizontalAlignment>(param));
+            if (Name(param, "v-anchor")) params.SetVerticalAnchor(Convert<VerticalAlignment>(param));
         }
 
         return new DrawEllipseInstruction(params);
@@ -256,8 +259,8 @@ namespace wxstyle {
             if (Name(param, "image-path")) params.SetImagePath(Convert<std::string>(param));
             if (Name(param, "position")) params.SetPosition(Convert<DimPoint>(param));
             if (Name(param, "size")) params.SetImageSize(Convert<DimPoint>(param));
-            if (Name(param, "h-anchor")) params.SetHorizontalAnchor(Convert<HorizontalAnchor>(param));
-            if (Name(param, "v-anchor")) params.SetVerticalAnchor(Convert<VerticalAnchor>(param));
+            if (Name(param, "h-anchor")) params.SetHorizontalAnchor(Convert<HorizontalAlignment>(param));
+            if (Name(param, "v-anchor")) params.SetVerticalAnchor(Convert<VerticalAlignment>(param));
         }
 
         return new DrawImageInstruction(params);
@@ -278,8 +281,8 @@ namespace wxstyle {
             if (Name(param, "font-weight")) font.SetWeight(Convert<wxFontWeight>(param));
             if (Name(param, "font-style")) font.SetStyle(Convert<wxFontStyle>(param));
             if (Name(param, "color")) params.SetTextColor(Convert<wxColor>(param));
-            if (Name(param, "h-anchor")) params.SetHorizontalAnchor(Convert<HorizontalAnchor>(param));
-            if (Name(param, "v-anchor")) params.SetVerticalAnchor(Convert<VerticalAnchor>(param));
+            if (Name(param, "h-anchor")) params.SetHorizontalAnchor(Convert<HorizontalAlignment>(param));
+            if (Name(param, "v-anchor")) params.SetVerticalAnchor(Convert<VerticalAlignment>(param));
             if (Name(param, "position")) params.SetTextPosition(Convert<DimPoint>(param));
         }
 
@@ -327,8 +330,7 @@ namespace wxstyle {
                     bundle.SetIcon(ParseDefinition<IconDefinition>(definition));
                 }
                 else if (Name(definition, "alignment")) {
-                    // TODO: Change style alignment definition
-                    //style.SetTextAlignment(ParseAlignmentDefinition(definition));
+                    bundle.SetTextAlignment(ParseDefinition<AlignmentDefinition>(definition));
                 }
                 else if (Name(definition, "background")) {
                     bundle.SetBackgroundColor(ParseDefinition<wxColor>(definition));

@@ -18,15 +18,15 @@ namespace wxstyle {
         ShadowDefinition shadowDefinition;
         FontDefinition fontDefinition;
         wxColour color;
-        HorizontalAnchor horizontalAnchor;
-        VerticalAnchor verticalAnchor;
+        HorizontalAlignment horizontalAnchor;
+        VerticalAlignment verticalAnchor;
         DimPoint position;
     };
 
     Params::Params() {
         impl = std::make_shared<ParamsImpl>();
-        impl->verticalAnchor = VA_CENTER;
-        impl->horizontalAnchor = HA_CENTER;
+        impl->verticalAnchor = VerticalAlignment::VA_CENTER;
+        impl->horizontalAnchor = HorizontalAlignment::HA_CENTER;
     }
 
 	Params& Params::SetText(const wxString& text) {
@@ -49,12 +49,12 @@ namespace wxstyle {
 		return *this;
 	}
 
-	Params& Params::SetHorizontalAnchor(const HorizontalAnchor horizontalAnchor) {
+	Params& Params::SetHorizontalAnchor(const HorizontalAlignment horizontalAnchor) {
 		impl->horizontalAnchor = horizontalAnchor;
 		return *this;
 	}
 
-	Params& Params::SetVerticalAnchor(const VerticalAnchor verticalAnchor) {
+	Params& Params::SetVerticalAnchor(const VerticalAlignment verticalAnchor) {
 		impl->verticalAnchor = verticalAnchor;
 		return *this;
 	}
@@ -80,11 +80,11 @@ namespace wxstyle {
         return impl->color;
     }
 
-    HorizontalAnchor Params::GetHorizontalAnchor() const {
+    HorizontalAlignment Params::GetHorizontalAnchor() const {
         return impl->horizontalAnchor;
     }
 
-    VerticalAnchor Params::GetVerticalAnchor() const {
+    VerticalAlignment Params::GetVerticalAnchor() const {
         return impl->verticalAnchor;
     }
 

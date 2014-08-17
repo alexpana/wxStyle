@@ -40,13 +40,13 @@ namespace wxstyle {
 
             wxColour GetColor() const;
 
-            Params& SetHorizontalAnchor(const HorizontalAnchor horizontalAnchor);
+            Params& SetHorizontalAnchor(const HorizontalAlignment horizontalAnchor);
 
-            HorizontalAnchor GetHorizontalAnchor() const;
+            HorizontalAlignment GetHorizontalAnchor() const;
 
-            Params& SetVerticalAnchor(const VerticalAnchor verticalAnchor);
+            Params& SetVerticalAnchor(const VerticalAlignment verticalAnchor);
 
-            VerticalAnchor GetVerticalAnchor() const;
+            VerticalAlignment GetVerticalAnchor() const;
 
             Params& SetTextPosition(const DimPoint& position);
 
