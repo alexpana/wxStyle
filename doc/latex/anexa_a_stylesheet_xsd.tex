@@ -1,0 +1,265 @@
+\appendix
+\chapter{Stylesheet XSD}
+\pagestyle{headings}
+
+\lstset{frame=none}
+
+\begin{lstlisting}[language=XML]
+
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Color Type -->
+    <xs:simpleType name="t:color">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="#[0-9A-Fa-f]{6}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+  <!-- Font Weight Type -->
+    <xs:simpleType name="t:fontWeight">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="normal"/>
+        <xs:enumeration value="bold"/>
+        <xs:enumeration value="light"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+  <!-- Font Style Type -->
+    <xs:simpleType name="t:fontStyle">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="normal"/>
+        <xs:enumeration value="italic"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+  <!-- Insets Type -->
+    <xs:simpleType name="t:insets">
+      <xs:list itemType="xs:integer">
+        <xs:length value="4"/>
+      </xs:list>
+    </xs:simpleType>
+
+    <!-- 2D Point Type -->
+    <xs:simpleType name="t:point">
+      <xs:list itemType="xs:integer">
+        <xs:length value="2"/>
+      </xs:list>
+    </xs:simpleType>
+
+  <!-- Unified Dimension Type -->
+    <xs:simpleType name="t:unifiedDimension">
+      <xs:documentation>
+      The rules for pattern-matching a unified dimension are fairly 
+      complex, and are ommited here. A unified dimension point matches 
+      a string containing a relative and absolute componente separated 
+      by a '%' character. Either the absolute or the relative component 
+      might be ommited, but not both. Examples:
+
+      1. 50%+3 - relative component of 0.5 and a absolute component of 3
+      2. -200% - relative component of -2 and no absolute component
+      3. +43 - absolute component of 43 and no relative component
+      </xs:documentation>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+  <!-- Unified Dimension Point Type -->
+    <xs:simpleType name="t:unifiedPoint">
+      <xs:list itemType="unifiedDimension">
+        <xs:length value="2"/>
+      </xs:list>
+    </xs:simpleType>
+
+  <!-- Unified Dimension Rectangle Type -->
+    <xs:simpleType name="t:unifiedRectangle">
+      <xs:list itemType="unifiedDimension">
+        <xs:length value="4"/>
+      </xs:list>
+    </xs:simpleType>
+
+  <!-- Horizontal Anchor Type -->
+  <xs:simpleType name="t:hAnchor">
+      <xs:restriction base="xs:string">
+      <xs:enumeration value="left"/>
+      <xs:enumeration value="center"/>
+      <xs:enumeration value="right"/>
+      </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Vertical Anchor Type -->
+  <xs:simpleType name="t:vAnchor">
+      <xs:restriction base="xs:string">
+      <xs:enumeration value="top"/>
+      <xs:enumeration value="center"/>
+      <xs:enumeration value="bottom"/>
+      </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Boolean Type -->
+  <xs:simpleType name="t:bool">
+      <xs:restriction base="xs:string">
+      <xs:enumeration value="true"/>
+      <xs:enumeration value="false"/>
+      </xs:restriction>
+  </xs:simpleType>  
+
+  <!-- Pen Style Type -->
+  <xs:simpleType name="t:penStyle">
+      <xs:restriction base="xs:string">
+      <xs:enumeration value="solid"/>
+      <xs:enumeration value="dot"/>
+      </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Font Definition -->
+  <xs:complexType name="e:font">
+    <xs:attribute name="face" type="xs:string" use="optional"/>
+    <xs:attribute name="size" type="xs:integer" use="optional"/>
+    <xs:attribute name="weight" type="t:fontWeight" use="optional"/>
+    <xs:attribute name="style" type="t:fontStyle" use="optional"/>
+  </xs:complexType>
+
+  <!-- Shadow Definition -->
+  <xs:complexType name="e:shadow">
+    <xs:attribute name="offset" type="t:point" use="optional"/>
+    <xs:attribute name="color" type="t:color" use="optional"/>
+  </xs:complexType>
+
+  <!-- Insets Definition -->
+  <xs:complexType name="e:insets">
+    <xs:attribute name="rect" type="t:insets" use="optional"/>
+  </xs:complexType>
+
+  <!-- Background Color Definition -->
+  <xs:complexType name="e:background">
+    <xs:attribute name="color" type="t:color" use="optional"/>
+  </xs:complexType>
+
+  <!-- Foreground Color Definition -->
+  <xs:complexType name="e:foreground">
+    <xs:attribute name="color" type="t:color" use="optional"/>
+  </xs:complexType>
+
+  <!-- Foreground Color Definition -->
+  <xs:complexType name="e:opacity">
+    <xs:attribute name="value" type="t:bool" use="optional"/>
+  </xs:complexType>
+
+  <!-- Icon Definition -->
+  <xs:complexType name="e:icon">
+    <xs:attribute name="name" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <!-- Alignment Definition -->
+  <xs:complexType name="e:alignment">
+    <xs:attribute name="horizontal" type="t:hAnchor" use="optional"/>
+    <xs:attribute name="vertical" type="t:vAnchor" use="optional"/>
+  </xs:complexType>
+
+  <!-- Draw Text Instruction -->
+  <xs:complexType name="e:drawText">
+    <xs:attribute name="message" type="xs:string" use="optional"/>
+    <xs:attribute name="shadow-offset" type="t:point" use="optional"/>
+    <xs:attribute name="shadow-color" type="t:color" use="optional"/>
+    <xs:attribute name="font-face" type="xs:string" use="optional"/>
+    <xs:attribute name="font-size" type="xs:integer" use="optional"/>
+    <xs:attribute name="font-weight" type="t:fontWeight" use="optional"/>
+    <xs:attribute name="font-style" type="t:fotnStyle" use="optional"/>
+    <xs:attribute name="color" type="t:color" use="optional"/>
+    <xs:attribute name="h-anchor" type="t:hAnchor" use="optional"/>
+    <xs:attribute name="v-anchor" type="t:vAnchor" use="optional"/>
+    <xs:attribute name="position" type="t:unifiedPoint" use="optional"/>
+  </xs:complexType>
+
+  <!-- Draw Shape Instruction -->
+  <xs:complexType name="e:drawShape">
+    <xs:attribute name="rect" type="t:unifiedRectangle" use="optional"/>
+    <xs:attribute name="insets" type="t:insets" use="optional"/>
+    <xs:attribute name="color" type="t:color" use="optional"/>
+    <xs:attribute name="pen-size" type="xs:intege" use="optional"/>
+    <xs:attribute name="pen-color" type="t:color" use="optional"/>
+    <xs:attribute name="pen-style" type="t:penStyle" use="optional"/>
+    <xs:attribute name="h-anchor" type="t:hAnchor" use="optional"/>
+    <xs:attribute name="v-anchor" type="t:vAnchor" use="optional"/>
+  </xs:complexType>
+
+  <!-- Draw Image Instruction -->
+  <xs:complexType name="e:drawImage">
+    <xs:attribute name="image-path" type="xs:string" use="optional"/>
+    <xs:attribute name="position" type="t:unifiedPoint" use="optional"/>
+    <xs:attribute name="h-anchor" type="t:hAnchor" use="optional"/>
+    <xs:attribute name="v-anchor" type="t:vAnchor" use="optional"/>
+    <xs:attribute name="size" type="t:unifiedPoint" use="optional"/>
+  </xs:complexType>
+
+  <!-- Paint Definition -->
+  <xs:complexType name="e:paint">
+    <xs:sequence>
+      <xs:element name="rect" type="e:drawShape">
+      <xs:element name="ellipse" type="e:drawShape"/>
+      <xs:element name="text" type="e:drawText"/>
+      <xs:element name="image" type="e:drawImage"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Definition Bundle -->
+  <xs:complexType name="e:definitionBundle">
+    <xs:sequence>
+      <xs:element name="font" type="e:font"/>
+      <xs:element name="shadow" type="e:shadow"/>
+      <xs:element name="opacity" type="e:opacity"/>
+      <xs:element name="insets" type="e:insets"/>
+      <xs:element name="background" type="e:background"/>
+      <xs:element name="foreground" type="e:foreground"/>
+      <xs:element name="icon" type="e:icon"/>
+      <xs:element name="alignment" type="e:alignment"/>
+      <xs:element name="paint" type="e:paint"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Style -->
+  <xs:complexType name="e:style">
+    <xs:attribute name="name" type="xs:string" use="optional"/>
+    <xs:attribute name="parent" type="xs:string" use="optional"/>
+    <xs:sequence>
+      <xs:element name="default" type="e:definitionBundle"/>
+      <xs:element name="pressed" type="e:definitionBundle"/>
+      <xs:element name="hovered" type="e:definitionBundle"/>
+      <xs:element name="focused" type="e:definitionBundle"/>
+      <xs:element name="disabled" type="e:definitionBundle"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Style List -->
+  <xs:complexType name="e:styleList">
+    <xs:sequence>
+      <xs:element name="style" type="e:style"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Map Entry -->
+  <xs:complexType name="e:mapEntry">
+    <xs:attribute name="class" type="xs:string" use="required"/>
+    <xs:attribute name="style" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <!-- Object to Style Map -->
+  <xs:complexType name="e:map">
+    <xs:sequence>
+      <xs:element name="item" tyle="e:mapEntry"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Stylesheet -->
+  <xs:element name="stylesheet">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" use="optional"/>
+      <xs:sequence>
+        <xs:element name="styles" type="e:styleList"/>
+        <xs:element name="map" type="e:map" min_occurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
+\end{lstlisting}

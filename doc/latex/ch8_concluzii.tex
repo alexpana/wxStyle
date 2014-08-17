@@ -1,0 +1,76 @@
+\chapter{Concluzii}
+\pagestyle{headings}
+
+\section{Contribu'tia personal'a}
+
+De'si no'tiunile de interfa't'a vizuala, tehnici de interac'tiune, prezentatori 'si metode de stilizare nu sunt deloc noi, proiectul de fa't'a adreseaz'a o problem'a practic'a 'si foarte specific'a: accea a lipsei de suport pentru obiecte de interfa't'a stilizabile incorporate 'intr-o bibliotec'a C++. 'In acest sens, contribu'tia mea a fost aceea de a utiliza tehnologii moderne (C++11, biblioteca boost, limbajul XML), no'tiuni abstracte (fi'siere de stil, liste de instruc'tiuni) 'si componente de infrastructur'a dovedite fiabile prin utilizarea lor 'in arhitecturi si biblioteci de succes (Unified Dimension) pentru a construi un set variat de obiecte de interfa't'a ce pot fi controlate deplin 'in ceea ce prive'ste prezentarea acestora.
+
+\medskip
+
+Ad'augarea suportului pentru stilizare, utiliz{\ia}nd fi'siere de stil, uneia dintre cele mai largi, portabile, open source 'si mature biblioteci de obiecte de interfa't'a pentru C++ este contribu'tia pe care acest proiect o aduce comunit'a'tii de dezvoltatori de aplica'tii vizuale.
+
+\section{Analiza rezultatelor}
+
+Biblioteca wxStyle a reu'sit s'a ating'a scopurile propuse 'in capitolul 2, mai exact:
+\begin{enumerate}
+\item Implementarea obiectelor de interfa't'a: \emph{fereastr'a}, \emph{label}, \emph{buton}, \emph{checkbox} 'si \emph{textbox}.
+\item Stilizarea obiectelor de interfa't'a utiliz{\ia}nd proceduri de prezentare.
+\item Stilizarea obiectelor de interfa't'a utiliz{\ia}nd fi'siere de stiluri.
+\end{enumerate}
+
+Din nefericire, exist'a unele probleme greu de rezolvat datorate bibliotecii wxWidgets, cum ar fi suportul incomplet 'si imprecis pentru calculul metricilor de text, lipsa de acurate'te a gradientelor, desenarea gre'sit'a a dreptunghiurilor rotunjite cu raza col'tului mic'a, etc. Aceste defecte pot fi corectate fie utiliz{\ia}nd o alt'a bibliotec'a pentru desenarea si analiza font-urilor, fie prin 'imbun'at'a'tirea bibliotecii wxWidgets.
+
+Interfa't'a bibliotecii este inconsecvent'a pe alocuri, datorit'a deciziilor de design la nivel de implementare ce s-au schimbat pe parcursul proiectului. Acest lucru demonstreaz'a o lips'a de planificare ini'tial'a, care ar fi trebuit s'a descrie interfa't'a bibliotecii 'inaintea implement'arii acesteia.
+
+\section{Dezvolt'ari ulterioare}
+
+Distingem trei categorii de dezvolt'ari ulterioare pentru biblioteca wxStyle. Prima categorie presupune dezvoltarea bibliotecii 'intr-o direc'tie bine stabilit'a pentru a atinge un scop final. A doua categorie presupune dezvoltarea de tr'as'aturi 'si unelte auxiliare care ar putea face utilizarea libr'ariei mai u'soar'a, sau care pot m'ari avengura libr'ariei. O ultim'a categorie trateaz'a aplica'tii care ar beneficia 'in mod deosebit de contribu'tiile libr'ariei.
+
+\subsection{Dezvoltarea planificat'a a bibliotecii}
+
+Implementarea curent'a a bibliotecii wxStyle este doar un prim pas 'in direc'tia pe care a pornit. Scopul final al bibliotecii, care ar determina terminarea etapei de produc'tie a proiectului 'si intrarea 'in etapa de 'intre'tinere este portarea 'intregii libr'arii wxWidgets deasupra obiectelor de interfa't'a oferite de wxStyle. P{\ia}n'a a ajunge acolo 'ins'a, r'am{\ia}n foarte multe aspecte de acoperit. Dintre acestea, cele mai relevante sunt:
+
+\begin{itemize}
+\item Extinderea setului de obiecte de interfa't'a. Acest aspect presupune implementarea tuturor obiectelor de interfa't'a oferite de biblioteca wxWidgets \footnote{http://docs.wxwidgets.org/3.0/classwx\_window.html}. Acestea sunt 'in num'ar de aproximativ 30 'si includ: ferestre, meniuri, liste, arbori, obiecte de tip scrollbar, etc. De'si numeroase, obiectele de interfa't'a utilizate in mod frecvent sunt mai reduse. Implementarea stilizat'a a acestora este vital'a atingerii scopului final al bibliotecii wxStyle.
+\item 'Imbun'at'a'tirea calit'a'tii 'si extinderea func'tionalit'a'tii obiectelor de interfa't'a curent implementate. Dintre aceste 'imbun'at'a'tiri, cele mai important'e sunt prezentate in figura \ref{fig0801}.
+\item Fixarea problemelor introduse de biblioteca wxWidgets precum erorile de m'asurare a dimensiunilor textului. Aceast'a problem'a poate fi rezolvat'a prin utilizarea unei biblioteci specializate de desenare 'si procesare a textului precum \emph{FreeType} \footnote{http://freetype.org/}
+\item Realizarea scopului original al bibliotecii printr-o implementare oficial'a a unei port'ari pentru biblioteca wxWidgets. A'sa cum se poate vedea 'in figura \ref{ch2_arhitectura_bloc}, blocul cel mai 'inalt corespunde unei extinderi a bibliotecii wxWidgets. Acest lucru ar face posibil'a utilizarea de componente stilizabile de c'atre aplica'tii care nu au fost original concepute s'a func'tioneze utiliz{\ia}nd biblioteca wxStyle.
+\end{itemize}
+
+\begin{center}
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{ |p{14cm}| }
+        \hline
+        \textbf{StyledFrame} \\
+        Suport pentru redimensionare 'in toate cele 8 direc'tii \\
+        Ad'augare de suport pentru icoan'a la nivelul titlului \\
+        \hline
+		\textbf{StyledTextBox} \\
+        Suport pentru opera'tii de tip \emph{undo} 'si \emph{redo} \\
+        Suport pentru mesaje ascunse (exemplu: c'asu'te text pentru parole) \\
+		Suport pentru filtrarea de caractere acceptate (exemplu: casu'te numerice) \\
+        \hline
+    \end{tabular}
+    \caption{Tr'as'aturi esen'tiale pentru dezvoltarea ulterioar'a a obiectelor de interfa't'a}
+    \label{fig0801}
+\end{figure}
+\end{center}
+
+\subsection{Dezvoltarea de unelte 'si tr'as'aturi auxiliare}
+
+Alte tr'as'aturi de interes pentru biblioteca wxStyle care nu conduc dezvoltarea bibliotecii spre scopul original, dar ar 'imbun'at'a'ti semnificativ biblioteca sunt urm'atoarele:
+
+\begin{itemize}
+\item Ad'augarea de defini'tii pentru icoane construite prin font-uri iconografice. Font-uri precum \emph{Font Awesome}\footnote{http://fortawesome.github.io/Font-Awesome/}, \emph{Entypo}\footnote{http://www.entypo.com/} 'si altele ofer'a o gam'a foarte larg'a 'si variat'a de icoane. Ele sunt utilizate cu mult succes 'si popularitate 'in cadrul paginilor web. Introducerea lor 'in cadrul bibliotecii wxStyle ar 'insemna integrarea bibliotecii \emph{FreeType} pentru desenarea de caractere utiliz{\ia}nd font-uri 'inc'arcate in memorie. Avantajul acestui mecanism este posibilitatea gener'arii de icoane de orice dimensiuni, culori, asupra c'arora putem aplica orice efecte de rasterizare.
+\item Extinderea fi'sierelor de stiluri cu suport pentru propriet'a'ti globale. Aceast'a tr'as'atura este deja par'tial implementat'a la nivel de cod dar nu a ajuns 'in specifica'tia fi'sierelor de stil. Ea const'a 'in posibilitatea definirii unei mape de propriet'a'ti globale pentru intregul fi'sier de stil. 'In prezen'ta acestei liste, defini'tiile de stil pot folosi ca valori pentru atribute nume de propriet'a'ti din mapa global'a. Se poate extrage astfel o tem'a universal'a la nivel de stylesheet. Acest lucru este posibil 'in momentul de fa't'a folosind no'tinuea de stiluri p'arinte.
+\item Posibilitatea stiliz'arii p'ar'tilor componente ale unui obiect de interfa't'a. Obiectele de interfa't'a sunt 'in general compuse din mai multe p'ar'ti. De exemplu, un \emph{checkbox} este alc'atuit din c'asu'ta de bifat 'si textul descriptiv. Un alt exemplu mai concret este o list'a de elemente ce este format'a din: elementele listei, cutia 'in care sunt 'incadrate elementele 'si bara de navigare (scrollbar). Ar fi de preferat ca aceste componente s'a fie stilizate diferit. Deocamdat'a nu exist'a o descriere concret'a a cerin'tei pentru aceast'a tr'as'atur'a, deoarece este necesar'a o analiz'a mai detaliat'a a problemei, dar tr'as'atura 'in sine este foarte atr'ag'atoare pentru scopul bibliotecii.
+\item Testarea automat'a a func'tionalit'a'tii obiectelor de interfa't'a. 'In urma analizei efectuate 'in capitolul 6, testarea la nivel de bibliotec'a se realizeaz'a 'in momentul de fa't'a 'in mod manual utiliz{\ia}nd aplica'tia demonstrativ'a. De'si exista avantaje la testarea manual'a, este de preferat o suit'a de teste automate care s'a garanteze corectitudinea func'tional'a a tuturor obiectelor de interfa't'a. Aceast'a suit'a de teste poate fi rulat'a periodic pentru a asigura consisten'ta calit'a'tii. Testarea automat'a la nivel de bibliotec'a poate fi realizat'a doar cu ajutorul unui framework de testare specific bibliotecii wxWidgets 'si a componentelor wxStyle. Un astfel de framework nu exist'a 'in momentul de fa't'a, dar biblioteca wxWidgets ofer'a un simulator de evenimente numit \emph{wxUIActionSimulator}. 'Incep{\ia}nd cu acest simulator, se poate construi un framework de testare specializat pentru obiectele de interfa't'a implementate 'in wxStyle.
+\end{itemize}
+
+\subsection{Aplica'tii cu senzor de contrast}
+De'si orice aplica'tie poate beneficia 'in mod gratuit (f'ar'a efort) de tr'as'aturile libr'ariei wxStyle, unele nu ar putea fi construite utiliz{\ia}nd doar biblioteca wxWidgets. Consider c'a printre aceste aplica'tii se num'ar'a 'si aplica'tiile care ar utiliza patentul de'tinut de Apple numit \emph{"User interface contrast filter"} \cite{uicontrast}. 
+
+\medskip
+
+Astfel de aplica'tii pot reac'tiona la un senzor de lumin'a pentru a-'si schimba dinamic contrastul. Schibarea contrast-ului la nivel de aplica'tie necesit'a control granular asupra obiectelor de interfa't'a, lucru imposibil de realizat utiliz{\ia}nd doar biblioteca wxWidgets. Utiliz{\ia}nd 'in schimb biblioteca wxStyle, se pot scrie componente de prezentare specializate care s'a adjusteze culorile stilului 'inainte de a prezenta un obiect de interfa't'a. Pentru procesul efectiv de prezentare se poate folosi prezentatorul implicit, scopul prezentatorului specializat fiind doar adjustarea defini'tiilor incluse 'in stilul obiectului de interfa't'a.
