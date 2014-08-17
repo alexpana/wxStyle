@@ -6,3 +6,17 @@ lib/
 doc/diagrams/
 doc/templates/
 doc/vision/
+doc/doxygen
+**.tex.bak
+**.aux
+**.bak
+**.aui
+**.log
+doc/latex/thesis.bbl
+doc/latex/thesis.bcf
+doc/latex/thesis.blg
+doc/latex/thesis.dvi
+doc/latex/thesis.lof
+doc/latex/thesis.run.xml
+doc/latex/thesis.synctex.gz
+doc/latex/thesis.toc
