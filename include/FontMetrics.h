@@ -1,8 +1,8 @@
 #pragma once
 
-#include <wx/window.h>
 #include <wx/dcclient.h>
 
+#include "StyledWindow.h"
 #include "style/StyleDefinitions.h"
 
 namespace wxstyle

@@ -40,7 +40,7 @@ public:
         wxPanel *contentPanel = mainFrame->GetContentPanel();
 
         styledLabel = new StyledLabel(contentPanel);
-        styledLabel->SetText("You have unread mail!");
+        styledLabel->SetText("Styled Label");
         styledLabel->SetForegroundColour("#AFAFAF");
         styledLabel->SetStyle(stylesheet.GetStyle("label.default"));
 

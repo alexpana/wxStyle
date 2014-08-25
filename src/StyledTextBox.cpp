@@ -9,6 +9,7 @@
 #include "DimRect.h"
 #include "FontMetrics.h"
 #include "Insets.h"
+#include "StylesheetRenderer.h"
 
 namespace wxstyle
 {
@@ -29,36 +30,38 @@ namespace wxstyle
         }
     };
 
-    class StyledTextBoxRenderer : public IRenderer {
+    class StyledTextBoxRenderer : public StylesheetRenderer {
         virtual void Render(StyledWindow* window) const {
             wxAutoBufferedPaintDC deviceContext(window);
 
             auto textBox = static_cast<StyledTextBox*>(window);
             auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
 
-            DrawBackground(g.get(), textBox);
-            DrawSelection(g.get(), textBox);
-            DrawText(g.get(), textBox);
-            DrawCursor(g.get(), textBox);
+            auto context = g.get();
+
+            DrawBackground(context, textBox);
+            DrawSelection(context, textBox);
+            DrawText(context, textBox);
+            DrawCursor(context, textBox);
         }
 
-        void DrawBackground(wxGraphicsContext* g, StyledTextBox* textBox) const {
-            DrawRectangleInstruction(DrawRectangleInstruction::Params()
-                .SetRect(DimRect(0, 0, Dimension(0, 1), Dimension(0, 1)))
-                .SetColor("#4e4c4c"))
-                .Draw(g, textBox->GetSize());
-
-            DrawRectangleInstruction(DrawRectangleInstruction::Params()
-                .SetInsets(0, 0, 0, 1)
-                .SetColor("#1c1617")
-                .SetColor(textBox->IsFocused() ? "#007acc" : "#1c1617"))
-                .Draw(g, textBox->GetSize());
-
-            DrawRectangleInstruction(DrawRectangleInstruction::Params()
-                .SetInsets(1, 1, 1, 2)
-                .SetColor("#2b2a2a"))
-                .Draw(g, textBox->GetSize());
-        }
+//         void DrawBackground(wxGraphicsContext* g, StyledTextBox* textBox) const {
+//             DrawRectangleInstruction(DrawRectangleInstruction::Params()
+//                 .SetRect(DimRect(0, 0, Dimension(0, 1), Dimension(0, 1)))
+//                 .SetColor("#4e4c4c"))
+//                 .Draw(g, textBox->GetSize());
+// 
+//             DrawRectangleInstruction(DrawRectangleInstruction::Params()
+//                 .SetInsets(0, 0, 0, 1)
+//                 .SetColor("#1c1617")
+//                 .SetColor(textBox->IsFocused() ? "#007acc" : "#1c1617"))
+//                 .Draw(g, textBox->GetSize());
+// 
+//             DrawRectangleInstruction(DrawRectangleInstruction::Params()
+//                 .SetInsets(1, 1, 1, 2)
+//                 .SetColor("#2b2a2a"))
+//                 .Draw(g, textBox->GetSize());
+//         }
 
         void DrawSelection(wxGraphicsContext* g, StyledTextBox* textBox) const {
             g->Clip(
@@ -129,7 +132,56 @@ namespace wxstyle
     };
 
     Style StyledTextBox::GetDefaultStyle() {
-        return StyledWindow::GetDefaultStyle();
+        Style result = StyledWindow::GetDefaultStyle();
+
+        // DEFAULT
+        DefinitionBundle defaultBundle = result.GetBundle(Style::CAT_DEFAULT);
+
+        std::vector<DrawInstruction*> defaultDrawInstructions;
+
+        defaultDrawInstructions.push_back(
+            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
+                .SetRect(DimRect(0, 0, Dimension(0, 1), Dimension(0, 1)))
+                .SetColor("#4e4c4c")));
+
+        defaultDrawInstructions.push_back(
+            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
+            .SetInsets(0, 0, 0, 1)
+            .SetColor("#1c1617")));
+
+        defaultDrawInstructions.push_back(
+            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
+                .SetInsets(1, 1, 1, 2)
+                .SetColor("#2b2a2a")));
+
+        defaultBundle.SetDrawInstructions(defaultDrawInstructions);
+
+        // FOCUSED
+        DefinitionBundle focusedBundle = result.GetBundle(Style::CAT_FOCUSED);
+
+        std::vector<DrawInstruction*> focusedDrawInstructions;
+
+        focusedDrawInstructions.push_back(
+            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
+            .SetRect(DimRect(0, 0, Dimension(0, 1), Dimension(0, 1)))
+            .SetColor("#4e4c4c")));
+
+        focusedDrawInstructions.push_back(
+            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
+            .SetInsets(0, 0, 0, 1)
+            .SetColor("#007acc")));
+
+        focusedDrawInstructions.push_back(
+            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
+            .SetInsets(1, 1, 1, 2)
+            .SetColor("#2b2a2a")));
+
+        focusedBundle.SetDrawInstructions(focusedDrawInstructions);
+
+        result.AddBundle(Style::CAT_DEFAULT, defaultBundle);
+        result.AddBundle(Style::CAT_FOCUSED, focusedBundle);
+
+        return result;
     }
 
     StyledTextBox::StyledTextBox(wxWindow* parent, wxString text, wxStandardID id)

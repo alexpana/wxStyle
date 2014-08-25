@@ -145,15 +145,22 @@
     }
 
     DefinitionBundle StyledWindow::GetDefinitionBundle() const {
-        DefinitionBundle defaultBundle = GetStyle().GetBundle(Style::CAT_DEFAULT);
+        DefinitionBundle resultBundle = GetStyle().GetBundle(Style::CAT_DEFAULT);
         DefinitionBundle modifierBundle;
 
-        if (IsFocused()) modifierBundle = GetStyle().GetBundle(Style::CAT_FOCUSED);
-        if (IsPressed()) modifierBundle = GetStyle().GetBundle(Style::CAT_PRESSED);
-        if (IsHovered()) modifierBundle = GetStyle().GetBundle(Style::CAT_HOVERED);
-        if (IsDisabled()) modifierBundle = GetStyle().GetBundle(Style::CAT_DISABLED);
+        if (IsFocused()) 
+            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle().GetBundle(Style::CAT_FOCUSED));
 
-		return DefinitionBundle::Merge(defaultBundle, modifierBundle);
+        if (IsPressed())
+            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle().GetBundle(Style::CAT_PRESSED));
+
+        if (IsHovered())
+            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle().GetBundle(Style::CAT_HOVERED));
+
+        if (IsDisabled())
+            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle().GetBundle(Style::CAT_DISABLED));
+
+		return resultBundle;
 	}
 
 	void StyledWindow::SetMinSize(const wxSize& size) {

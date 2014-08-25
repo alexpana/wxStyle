@@ -10,6 +10,7 @@
 
 #include "Algorithms.h"
 #include "FontMetrics.h"
+#include "StylesheetRenderer.h"
 #include "style/draw/DrawTextInstruction.h"
 #include "style/draw/DrawRectangleInstruction.h"
 #include "style/draw/DrawImageInstruction.h"
@@ -17,7 +18,7 @@
 
 namespace wxstyle {
 
-	class DefaultLabelRenderer : public IRenderer {
+	class DefaultLabelRenderer : public StylesheetRenderer {
 	public:
 		static const int ICON_TEXT_GAP = 8;
 
@@ -30,7 +31,7 @@ namespace wxstyle {
 			wxAutoBufferedPaintDC deviceContext(label);
 			auto g = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(deviceContext));
 
-			ClearBackground(g.get(), label);
+			DrawBackground(g.get(), label);
 
 			RenderIcon(g.get(), label);
 
@@ -69,66 +70,6 @@ namespace wxstyle {
 				.SetShadowDefinition(bundle.GetTextShadow())
 				.SetTextPosition(DimPoint(contentPosition.x + GetIconSize(label).GetWidth() + GetIconTextGap(label), contentPosition.y)))
 				.Draw(g, label->GetSize());
-		}
-
-		void ClearBackground(wxGraphicsContext *g, StyledLabel *label) const {
-			DefinitionBundle bundle = label->GetDefinitionBundle();
-			wxColor backgroundColor;
-
-			if (bundle.HasOpacityDefinition() && !bundle.IsOpaque()) {
-				// Transparent
-				backgroundColor = label->GetInheritedBackgroundColor();
-			} else {
-				// Opaque
-				if (bundle.HasBackgroundColorDefinition()) {
-					backgroundColor = bundle.GetBackgroundColor();
-				} else {
-					backgroundColor = label->GetBackgroundColour();
-				}
-			}
-
-			DrawRectangleInstruction(DrawShapeInstruction::Params()
-				.SetColor(backgroundColor)
-				.SetRect(DimRect(0, 0, Dimension(0, 1.0), Dimension(0, 1.0))))
-				.Draw(g, label->GetSize());
-		}
-
-		wxSize GetIconSize(StyledLabel* label) const {
-			DefinitionBundle bundle = label->GetDefinitionBundle();
-
-			if (bundle.HasIconDefinition()) {
-				auto icon = ImageRepository::GetInstance()->GetImage(bundle.GetIcon().iconName.get());
-				return icon->GetSize();
-			} else {
-				return wxSize(0, 0);
-			}
-		}
-
-		wxSize GetTextSize(StyledLabel* label) const {
-			DefinitionBundle bundle = label->GetDefinitionBundle();
-			return TextMetrics(label).GetTextSize(label->GetText(), bundle.GetFont());
-		}
-
-		int GetIconTextGap(StyledLabel *label) const {
-			DefinitionBundle bundle = label->GetDefinitionBundle();
-			if (bundle.HasIconDefinition() && label->GetText().Length() > 0) {
-				return ICON_TEXT_GAP;
-			} else {
-				return 0;
-			}
-		}
-
-		wxPoint GetContentGroupPosition(StyledLabel *label) const {
-			DefinitionBundle bundle = label->GetDefinitionBundle();
-
-			wxSize contentSize(0, 0);
-
-			contentSize.SetWidth(GetIconSize(label).GetWidth() + GetIconTextGap(label) + GetTextSize(label).GetWidth());
-			contentSize.SetHeight(std::max(GetIconSize(label).GetHeight(), GetTextSize(label).GetHeight()));
-
-			wxPoint position = wxstyle::Align(label->GetSize(), contentSize, bundle.GetTextAlignment());
-
-			return position;
 		}
 	};
 
