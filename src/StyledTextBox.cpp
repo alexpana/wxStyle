@@ -45,24 +45,6 @@ namespace wxstyle
             DrawCursor(context, textBox);
         }
 
-//         void DrawBackground(wxGraphicsContext* g, StyledTextBox* textBox) const {
-//             DrawRectangleInstruction(DrawRectangleInstruction::Params()
-//                 .SetRect(DimRect(0, 0, Dimension(0, 1), Dimension(0, 1)))
-//                 .SetColor("#4e4c4c"))
-//                 .Draw(g, textBox->GetSize());
-// 
-//             DrawRectangleInstruction(DrawRectangleInstruction::Params()
-//                 .SetInsets(0, 0, 0, 1)
-//                 .SetColor("#1c1617")
-//                 .SetColor(textBox->IsFocused() ? "#007acc" : "#1c1617"))
-//                 .Draw(g, textBox->GetSize());
-// 
-//             DrawRectangleInstruction(DrawRectangleInstruction::Params()
-//                 .SetInsets(1, 1, 1, 2)
-//                 .SetColor("#2b2a2a"))
-//                 .Draw(g, textBox->GetSize());
-//         }
-
         void DrawSelection(wxGraphicsContext* g, StyledTextBox* textBox) const {
             g->Clip(
                 textBox->GetInsets().Left(), 
@@ -132,7 +114,7 @@ namespace wxstyle
     };
 
     Style StyledTextBox::GetDefaultStyle() {
-        Style result = StyledWindow::GetDefaultStyle();
+        Style result = GetStyle();
 
         // DEFAULT
         DefinitionBundle defaultBundle = result.GetBundle(Style::CAT_DEFAULT);

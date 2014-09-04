@@ -17,9 +17,11 @@
 #include <functional>
 #include <debugapi.h>
 #include <string>
+#include <vector>
 
 #include "Dimension.h"
 #include "Insets.h"
+#include "LookAndFeel.h"
 #include "style/draw/ImageRepository.h"
 #include "StyledButton.h"
 #include "StyledCheckbox.h"

@@ -6,7 +6,7 @@
 #include "Insets.h"
 #include "StyledWindow.h"
 
- namespace wxstyle {
+namespace wxstyle {
 
 	/** Hash function for wxString objects. **/
 	struct wxStringHash {
@@ -33,15 +33,24 @@
 
         Insets insets;
 
+		// Style and rendering information
 		std::shared_ptr<IRenderer> renderer;
-		Style style;
+		std::shared_ptr<Style> style;
 
-		std::unordered_map<wxString, wxString, wxStringHash> propertyMap;
+		void SetRenderer(std::shared_ptr<IRenderer> renderer);
+		void UnsetRenderer();
 
+		void SetStyle(std::shared_ptr<Style> style);
+		void UnsetStyle();
+
+		// Event listeners
 		std::vector<std::shared_ptr<MouseListener>> mouseListeners;
 		std::vector<std::shared_ptr<KeyboardListener>> keyboardListeners;
 		std::vector<std::shared_ptr<FocusListener>> focusListeners;
 		std::vector<std::shared_ptr<SizeListener>> sizeListeners;
+
+		// Default constructor
+		Implementation();
 
 	public:
 		void NotifyMouseMoved(const wxMouseEvent& mouseEvent);
@@ -58,15 +67,37 @@
 		void NotifyResize(const wxSizeEvent& resizeEvent);
 	};
 
-    Style StyledWindow::GetDefaultStyle() {
-        DefinitionBundle defaultBundle;
-        defaultBundle.SetBackgroundColor("#2B2A2A");
-        defaultBundle.SetForegroundColor("#AFAFAF");
-        defaultBundle.SetOpacity(true);
-        defaultBundle.SetFont(FontDefinition().SetFace("Tahoma").SetSize(9).SetStyle(wxFONTSTYLE_NORMAL).SetWeight(wxFONTWEIGHT_BOLD));
-        defaultBundle.SetShadow(ShadowDefinition().SetColor(wxTRANSPARENT).SetOffset(wxPoint(0, 0)));
-        return Style().AddBundle(Style::CAT_DEFAULT, defaultBundle);
-    }
+	void StyledWindow::Implementation::SetRenderer(std::shared_ptr<IRenderer> renderer) {
+		this->renderer = renderer;
+	}
+
+	void StyledWindow::Implementation::SetStyle(std::shared_ptr<Style> style) {
+		this->style = style;
+	}
+
+	void StyledWindow::Implementation::UnsetRenderer() {
+		this->renderer = nullptr;
+	}
+
+	void StyledWindow::Implementation::UnsetStyle() {
+		this->style = nullptr;
+	}
+
+	StyledWindow::Implementation::Implementation() {
+		this->isFocused = false;
+		this->isHovered = false;
+		this->isPressed = false;
+		this->isOpaque = true;
+		this->isDisabled = false;
+		this->minSize = wxSize(DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
+
+		//style.AddBundle(Style::CAT_DEFAULT, DefinitionBundle()
+		//	.SetBackgroundColor("#2B2A2A")
+		//	.SetForegroundColor("#AFAFAF")
+		//	.SetOpacity(true)
+		//	.SetFont(FontDefinition().SetFace("Tahoma").SetSize(9).SetStyle(wxFONTSTYLE_NORMAL).SetWeight(wxFONTWEIGHT_BOLD))
+		//	.SetShadow(ShadowDefinition().SetColor(wxTRANSPARENT).SetOffset(wxPoint(0, 0))));
+	}
 
 	StyledWindow::StyledWindow(wxWindow* parent, wxString text, wxStandardID id):
 		wxWindow(parent, id)
@@ -78,18 +109,9 @@
 	}
 
 	void StyledWindow::Init() {
-		pimpl->isFocused = false;
-		pimpl->isHovered = false;
-		pimpl->isPressed = false;
-		pimpl->isOpaque = true;
-        pimpl->isDisabled = false;
-        pimpl->minSize = wxSize(DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
-
-        SetStyle(StyledWindow::GetDefaultStyle());
-
 		SetMinSize(pimpl->minSize);
 		SetBackgroundStyle(wxBG_STYLE_PAINT);
-        SetAutoLayout(true);	
+        SetAutoLayout(true);
 
 		BindEventHandlers();
 	}
@@ -136,29 +158,29 @@
 		return pimpl->text;
 	}
 
-    void StyledWindow::SetStyle(const Style& style) {
-		pimpl->style = style;
+    void StyledWindow::SetStyle(std::shared_ptr<Style> style) {
+		pimpl->SetStyle(style);
 	}
 
-    Style StyledWindow::GetStyle() const {
+    std::shared_ptr<Style> StyledWindow::GetStyle() const {
         return pimpl->style;
     }
 
     DefinitionBundle StyledWindow::GetDefinitionBundle() const {
-        DefinitionBundle resultBundle = GetStyle().GetBundle(Style::CAT_DEFAULT);
+        DefinitionBundle resultBundle = GetStyle()->GetBundle(Style::CAT_DEFAULT);
         DefinitionBundle modifierBundle;
 
         if (IsFocused()) 
-            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle().GetBundle(Style::CAT_FOCUSED));
+            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle()->GetBundle(Style::CAT_FOCUSED));
 
         if (IsPressed())
-            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle().GetBundle(Style::CAT_PRESSED));
+            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle()->GetBundle(Style::CAT_PRESSED));
 
         if (IsHovered())
-            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle().GetBundle(Style::CAT_HOVERED));
+            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle()->GetBundle(Style::CAT_HOVERED));
 
         if (IsDisabled())
-            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle().GetBundle(Style::CAT_DISABLED));
+            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle()->GetBundle(Style::CAT_DISABLED));
 
 		return resultBundle;
 	}
@@ -172,7 +194,7 @@
 	}
 
     void StyledWindow::SetRenderer(std::shared_ptr<IRenderer> renderer) {
-		pimpl->renderer = renderer;
+		pimpl->SetRenderer(renderer);
 	}
 
 	std::shared_ptr<IRenderer> StyledWindow::GetRenderer() {
