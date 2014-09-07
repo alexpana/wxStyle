@@ -294,26 +294,26 @@ namespace wxstyle {
         std::vector<DrawInstruction*> drawInstructions;
 
         for (auto instruction : node.children()) {
-            if (Name(node, "rect")) {
-                drawInstructions.push_back(ParseDefinition<DrawRectangleInstruction*>(node));
+            if (Name(instruction, "rect")) {
+                drawInstructions.push_back(ParseDefinition<DrawRectangleInstruction*>(instruction));
             }
-            if (Name(node, "ellipse")) {
-                drawInstructions.push_back(ParseDefinition<DrawEllipseInstruction*>(node));
+            if (Name(instruction, "ellipse")) {
+                drawInstructions.push_back(ParseDefinition<DrawEllipseInstruction*>(instruction));
             }
-            if (Name(node, "image")) {
-                drawInstructions.push_back(ParseDefinition<DrawImageInstruction*>(node));
+            if (Name(instruction, "image")) {
+                drawInstructions.push_back(ParseDefinition<DrawImageInstruction*>(instruction));
             }
-            if (Name(node, "text")) {
-                drawInstructions.push_back(ParseDefinition<DrawTextInstruction*>(node));
+            if (Name(instruction, "text")) {
+                drawInstructions.push_back(ParseDefinition<DrawTextInstruction*>(instruction));
             }
         }
 
         return drawInstructions;
     }
 
-    Style ParseStyleNode(const xml_node& node) {
+    std::shared_ptr<Style> ParseStyleNode(const xml_node& node) {
         // TODO: Handle property links
-        Style style;
+        auto style = std::make_shared<Style>();
 
         for (auto category : node.children()) {
             DefinitionBundle bundle;
@@ -349,7 +349,7 @@ namespace wxstyle {
                 }
             }
 
-            style.AddBundle(Convert<Style::Category>(category.name()), bundle);
+            style->AddBundle(Convert<Style::Category>(category.name()), bundle);
         }
 
         return style;
@@ -367,11 +367,11 @@ namespace wxstyle {
         auto styles = document.first_child().child("styles");
         for (auto node : styles.children("style")) {
             std::string name = node.attribute("name").as_string();
-            Style style = ParseStyleNode(node);
+            std::shared_ptr<Style> style = ParseStyleNode(node);
 
             xml_attribute parent = node.attribute("parent");
             if (!parent.empty()) {
-                style = Style::Merge(stylesheet.GetStyle(Convert<std::string>(parent)), style);
+                style = std::make_shared<Style>(Style::Merge(*stylesheet.GetStyle(Convert<std::string>(parent)), *style));
             }
 
             stylesheet.AddStyle(name, style);

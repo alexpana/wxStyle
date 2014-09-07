@@ -5,6 +5,7 @@
 
 #include "Insets.h"
 #include "StyledWindow.h"
+#include "LookAndFeel.h"
 
 namespace wxstyle {
 
@@ -163,7 +164,7 @@ namespace wxstyle {
 	}
 
     std::shared_ptr<Style> StyledWindow::GetStyle() const {
-        return pimpl->style;
+        return pimpl->style ? pimpl->style : LookAndFeel::GetStyle(GetType());
     }
 
     DefinitionBundle StyledWindow::GetDefinitionBundle() const {
@@ -173,11 +174,11 @@ namespace wxstyle {
         if (IsFocused()) 
             resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle()->GetBundle(Style::CAT_FOCUSED));
 
-        if (IsPressed())
-            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle()->GetBundle(Style::CAT_PRESSED));
-
         if (IsHovered())
             resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle()->GetBundle(Style::CAT_HOVERED));
+
+        if (IsPressed())
+            resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle()->GetBundle(Style::CAT_PRESSED));
 
         if (IsDisabled())
             resultBundle = DefinitionBundle::Merge(resultBundle, GetStyle()->GetBundle(Style::CAT_DISABLED));
@@ -432,4 +433,8 @@ namespace wxstyle {
 			listener->Resize(resizeEvent);
 		}
 	}
+
+    ClassInfo StyledWindow::GetType() const {
+        return ClassInfo::UNKNOWN;
+    }
 } // namespace wxstyle

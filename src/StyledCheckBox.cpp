@@ -3,6 +3,7 @@
 #include "DimRect.h"
 #include "StyledCheckBox.h"
 #include "style/draw/DrawRectangleInstruction.h"
+#include "style/StylesheetRenderer.h"
 
 namespace wxstyle {
 
@@ -11,7 +12,7 @@ namespace wxstyle {
 		bool checked;
 	};
 
-	class DefaultCheckBoxRenderer : public IRenderer {
+	class DefaultCheckBoxRenderer : public StylesheetRenderer {
 	public:
 		virtual void Render(StyledWindow *window) const {
 			wxAutoBufferedPaintDC deviceContext(window);
@@ -93,10 +94,6 @@ namespace wxstyle {
 
 	};
 
-	Style StyledCheckBox::GetDefaultStyle() {
-		return StyledWindow::GetDefaultStyle();
-	}
-
 	StyledCheckBox::StyledCheckBox(wxWindow *parent, wxString text) : 
 		StyledWindow(parent, text), pimpl(new Implementation)
 	{ 
@@ -105,7 +102,6 @@ namespace wxstyle {
 
 	void StyledCheckBox::Init() {
 		SetRenderer(std::shared_ptr<DefaultCheckBoxRenderer>(new DefaultCheckBoxRenderer()));
-		SetStyle(StyledCheckBox::GetDefaultStyle());
 
 		SetMinSize(wxSize(DEFAULT_MIN_WIDTH, 14));
 		SetOpaque(false);

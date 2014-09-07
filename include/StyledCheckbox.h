@@ -14,8 +14,7 @@ namespace wxstyle {
         bool IsChecked();
         void ToggleChecked();
 
-    public:
-        static Style GetDefaultStyle();
+        ClassInfo GetType() const override { return ClassInfo::CHECKBOX; }
 
     protected:
         void OnMouseDown(wxMouseEvent& mouseEvent) override;

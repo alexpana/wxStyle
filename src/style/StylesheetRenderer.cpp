@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StylesheetRenderer.h"
+#include "style/StylesheetRenderer.h"
 
 #include "Algorithms.h"
 #include "DimRect.h"

@@ -63,11 +63,13 @@ public:
 
 	bool UnsetProperty(std::string name);
 
-    void AddStyle(const std::string& name, const Style& style);
+    void AddStyle(const std::string& name, const std::shared_ptr<Style> style);
 
-    Style GetStyle(const std::string& name) const;
+    std::shared_ptr<Style> GetStyle(const std::string& name) const;
 
     void SetClassDefaultStyle(const std::string& className, const std::string& styleName);
+
+    std::shared_ptr<Style> GetClassDefaultStyle(const std::string& className);
 
 private:
     struct Implementation;

@@ -2,14 +2,14 @@
 
 #include <wx/clipbrd.h>
 
-#include "style\draw\DrawRectangleInstruction.h"
-#include "style\draw\DrawTextInstruction.h"
+#include "style/draw/DrawRectangleInstruction.h"
+#include "style/draw/DrawTextInstruction.h"
+#include "style/StylesheetRenderer.h"
 
 #include "DimPoint.h"
 #include "DimRect.h"
 #include "FontMetrics.h"
 #include "Insets.h"
-#include "StylesheetRenderer.h"
 
 namespace wxstyle
 {
@@ -113,59 +113,6 @@ namespace wxstyle
         }
     };
 
-    Style StyledTextBox::GetDefaultStyle() {
-        Style result = GetStyle();
-
-        // DEFAULT
-        DefinitionBundle defaultBundle = result.GetBundle(Style::CAT_DEFAULT);
-
-        std::vector<DrawInstruction*> defaultDrawInstructions;
-
-        defaultDrawInstructions.push_back(
-            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
-                .SetRect(DimRect(0, 0, Dimension(0, 1), Dimension(0, 1)))
-                .SetColor("#4e4c4c")));
-
-        defaultDrawInstructions.push_back(
-            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
-            .SetInsets(0, 0, 0, 1)
-            .SetColor("#1c1617")));
-
-        defaultDrawInstructions.push_back(
-            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
-                .SetInsets(1, 1, 1, 2)
-                .SetColor("#2b2a2a")));
-
-        defaultBundle.SetDrawInstructions(defaultDrawInstructions);
-
-        // FOCUSED
-        DefinitionBundle focusedBundle = result.GetBundle(Style::CAT_FOCUSED);
-
-        std::vector<DrawInstruction*> focusedDrawInstructions;
-
-        focusedDrawInstructions.push_back(
-            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
-            .SetRect(DimRect(0, 0, Dimension(0, 1), Dimension(0, 1)))
-            .SetColor("#4e4c4c")));
-
-        focusedDrawInstructions.push_back(
-            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
-            .SetInsets(0, 0, 0, 1)
-            .SetColor("#007acc")));
-
-        focusedDrawInstructions.push_back(
-            new DrawRectangleInstruction(DrawRectangleInstruction::Params()
-            .SetInsets(1, 1, 1, 2)
-            .SetColor("#2b2a2a")));
-
-        focusedBundle.SetDrawInstructions(focusedDrawInstructions);
-
-        result.AddBundle(Style::CAT_DEFAULT, defaultBundle);
-        result.AddBundle(Style::CAT_FOCUSED, focusedBundle);
-
-        return result;
-    }
-
     StyledTextBox::StyledTextBox(wxWindow* parent, wxString text, wxStandardID id)
         : StyledWindow(parent, text ,id)
     {
@@ -173,7 +120,6 @@ namespace wxstyle
         SetWindowStyle(GetWindowStyle() | wxWANTS_CHARS);
 
         SetRenderer(std::make_shared<StyledTextBoxRenderer>());
-        SetStyle(StyledTextBox::GetDefaultStyle());
 
         SetInsets(Insets(3, 3, 3, 3));
         SetMinSize(wxSize(0, 22));

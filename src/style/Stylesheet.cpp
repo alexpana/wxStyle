@@ -15,7 +15,7 @@ namespace wxstyle
 
         PropertValueMap properties;
         std::string name;
-        std::map<std::string, Style> styles;
+        std::map<std::string, std::shared_ptr<Style>> styles;
         std::map<std::string, std::string> classDefaultStyles;
     };
 
@@ -23,16 +23,20 @@ namespace wxstyle
         pimpl = std::make_shared<Stylesheet::Implementation>();
     }
 
-    void Stylesheet::AddStyle(const std::string& name, const Style& style) {
+    void Stylesheet::AddStyle(const std::string& name, const std::shared_ptr<Style> style) {
         pimpl->styles[name] = style;
     }
 
-    Style Stylesheet::GetStyle(const std::string& name) const {
+    std::shared_ptr<Style> Stylesheet::GetStyle(const std::string& name) const {
         return pimpl->styles[name];
     }
 
     void Stylesheet::SetClassDefaultStyle(const std::string& className, const std::string& styleName) {
         pimpl->classDefaultStyles[className] = styleName;
+    }
+
+    std::shared_ptr<Style> Stylesheet::GetClassDefaultStyle(const std::string& className) {
+        return GetStyle(pimpl->classDefaultStyles[className]);
     }
 
     boost::optional<StyleProperty> Stylesheet::GetProperty(std::string name) {

@@ -9,8 +9,8 @@
 #include <wx/sizer.h>
 #include <wx/colour.h>
 
-
 #include "Renderer.h"
+#include "ClassInfo.h"
 #include "style/Style.h"
 
 namespace wxstyle {
@@ -129,6 +129,8 @@ namespace wxstyle {
 		/** MinSize **/
 		wxSize GetMinSize() const override;
 		void SetMinSize(const wxSize& size) override;
+
+        virtual ClassInfo GetType() const;
 
     protected:
         virtual void OnMouseMoved(wxMouseEvent& mouseEvent) { Refresh(); }

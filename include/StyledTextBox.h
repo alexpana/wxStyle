@@ -49,6 +49,8 @@ namespace wxstyle
 
         bool HasSelectedText();
 
+        ClassInfo GetType() const override { return ClassInfo::TEXTBOX; }
+
     private:
         std::string GetStdText();
 

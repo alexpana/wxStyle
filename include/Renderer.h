@@ -14,13 +14,13 @@ namespace wxstyle {
      *  delegated.
      */
     class IRenderer {
-    private:
-
     public:
         /**
          *  This method takes care of drawing a StyledWindow.
          */
         virtual void Render(StyledWindow* window) const = 0;
+
+        virtual ~IRenderer() {};
     };
 
 } // namespace wxstyle

@@ -12,7 +12,7 @@ namespace wxstyle
     class StylesheetRenderer : public IRenderer
     {
     public:
-        virtual ~StylesheetRenderer() {};
+        ~StylesheetRenderer() override {};
 
     protected:
         // Generic method used for clearing the background based on the opacity

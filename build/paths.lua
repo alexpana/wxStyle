@@ -3,7 +3,7 @@
 ROOT_DIR = "../"
 
 -- System libraries directory
-SYSTEM_LIBS = "d:/libs"
+SYSTEM_LIBS = "e:/libs"
 
 -- Boost libraries directory
-BOOST_LIBS = "d:/libs/boost_1_55_0"
+BOOST_LIBS = "e:/libs/boost_1_55_0"

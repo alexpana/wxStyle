@@ -32,6 +32,7 @@ public:
     {
         XMLStylesheetLoader loader;
         Stylesheet stylesheet = loader.Load("test.xml");
+        LookAndFeel::SetStylesheet(stylesheet);
 
         mainFrame = new StyledFrame("Demo Board");
         mainFrame->Show(true);
@@ -42,7 +43,7 @@ public:
         styledLabel = new StyledLabel(contentPanel);
         styledLabel->SetText("Styled Label");
         styledLabel->SetForegroundColour("#AFAFAF");
-        styledLabel->SetStyle(stylesheet.GetStyle("label.default"));
+        //styledLabel->SetStyle(stylesheet.GetStyle("label.default"));
 
 //      styledButton = new wxstyle::StyledButton(contentPanel, "Styled Button");
 // 		styledButton->SetInsets(Insets(12, 12, 12, 12));
@@ -57,7 +58,7 @@ public:
 
         styledCheckBox = new StyledCheckBox(contentPanel, "Styled CheckBox");
         styledCheckBox->SetForegroundColour("#AFAFAF");
-        styledCheckBox->SetStyle(stylesheet.GetStyle("checkbox.default"));
+        //styledCheckBox->SetStyle(stylesheet.GetStyle("checkbox.default"));
 
         styledTextBox = new StyledTextBox(contentPanel, "");
 

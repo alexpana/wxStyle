@@ -26,7 +26,6 @@ namespace wxstyle {
 
     DefinitionBundle Style::GetBundle(Category category) const {
         // TODO: What happens when there is no default bundle ?
-
         if (pimpl->definitionBundleMap.find(category) != pimpl->definitionBundleMap.end()) {
             return pimpl->definitionBundleMap[category];
         } else {

@@ -10,7 +10,7 @@
 
 #include "Algorithms.h"
 #include "FontMetrics.h"
-#include "StylesheetRenderer.h"
+#include "style/StylesheetRenderer.h"
 #include "style/draw/DrawTextInstruction.h"
 #include "style/draw/DrawRectangleInstruction.h"
 #include "style/draw/DrawImageInstruction.h"
@@ -73,26 +73,13 @@ namespace wxstyle {
 		}
 	};
 
-
-	Style StyledLabel::GetDefaultStyle() {
-		DefinitionBundle defaultBundle = StyledWindow::GetDefaultStyle().GetBundle(Style::CAT_DEFAULT);
-		defaultBundle
-			.SetTextAlignment(AlignmentDefinition().Horizontal(HA_CENTER).Vertical(VA_CENTER))
-			.SetFont(FontDefinition().SetSize(9).SetFace("Tahoma").SetWeight(wxFONTWEIGHT_NORMAL))
-			.SetForegroundColor("#929395");
-
-		return Style().AddBundle(Style::CAT_DEFAULT, defaultBundle);
-	}
-
 	StyledLabel::StyledLabel(wxWindow *parent) : StyledWindow(parent) {
 		Init();
 	}
 
 	void StyledLabel::Init() {
 		SetOpaque(false);
-
 		SetRenderer(std::shared_ptr<DefaultLabelRenderer>(new DefaultLabelRenderer()));
-		SetStyle(StyledLabel::GetDefaultStyle());
 	}
 
 } // namespace wxstyle

@@ -22,7 +22,7 @@ namespace wxstyle {
 
 		wxSize GetTextMetrics() const;
 
-        static Style GetDefaultStyle();
+        ClassInfo GetType() const override { return ClassInfo::BUTTON; }
 
     protected:
         void OnMouseDown(wxMouseEvent& mouseEvent) override;

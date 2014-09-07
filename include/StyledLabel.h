@@ -11,7 +11,7 @@ namespace wxstyle {
 
         ~StyledLabel() {};
 
-        static Style GetDefaultStyle();
+        ClassInfo GetType() const override { return ClassInfo::LABEL; }
 
     private:
         void Init();
