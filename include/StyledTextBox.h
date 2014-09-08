@@ -31,7 +31,6 @@ namespace wxstyle
 
         void SetCursorPosition(size_t position);
 
-        static Style GetDefaultStyle();
 
         // Selection methods
 

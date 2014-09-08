@@ -1,17 +1,6 @@
 \chapter{Analiz'a Teoretic'a}
-%\pagestyle{headings}
-%
+
 \section{Introducere}
-%
-%\begin{center}
-%\begin{figure}[h]
-%    \centering
-%    \includegraphics[scale=0.9]{img/ch4_seq_event_processing.png}
-%    \label{fig0401}
-%    \caption{UML Class Diagram pentru Renderer}
-%\end{figure}
-%\end{center}
-%
 
 Pentru a asigura o bun'a desf'a'surare a activit'a'tii de dezvoltare 'si 'intre'tinere a oric'arui proiect, pentru a asigura flexibilitate la schimb'ari 'in domeniul cerin'telor 'si pentru a preveni hazarduri ulterioare, este necesar'a o analiz'a profund'a 'si am'anun'tit'a a proiectului 'si a componentelor sale 'inainte de 'inceperea implement'arii.
 
@@ -26,8 +15,6 @@ Acest capitol descrie cerin'tele proiectului sub forma unor cazuri de utilizare,
 
 \item {\bf Descrierea componentelor} Proiectul final va fi compus din mai multe componente, fiecare av{\ia}nd rolul de a rezolva o anumit'a problem'a. Existen'ta 'si scopul acestor componente este dictat'a de cerin'tele proiectului 'si modul de implementare al acestuia. Prin descrierea compontelor urm'arim atingerea scopurilor bibliotecii enun'tate 'in cadrul cazurilor de utilizare.
 
-%\item {\bf Prezentarea arhitecturii finale} Componentele descrise anterior trebuie s'a comunice 'intre ele pentru a putea func'tiona. Aceast'a comunicare determin'a dependin'tele dintre componente si arhitectura final'a a proiectului.
-
 \end{itemize}
 
 \clearpage
@@ -39,13 +26,9 @@ Pentru a modela cerin'tele proiectului, prezent'am urm'atoarele cazuri de utiliz
 \begin{figure}[H]
 	\centering 
 	\includegraphics{img/use_case.pdf}
-	\label{fig0402}
+	\label{fig0401}
     \caption{Diagrama UML a cazurilor de utilizare}
 \end{figure}
-
-%Cazurile de utilizare prezentate 'in figura \ref{fig0402} acoper'a 
-
-%\clearpage
 
 \subsection{Crearea unui obiect de interfa't'a}
 \textbf{Precondi'tie:} Utilizatorul a configurat un mediu de dezvoltare care are acces la bibliotecile wxWidgets 'si wxStyle.
@@ -239,7 +222,14 @@ Pentru a putea fi utilizate 'in mod identic obiectelor de interfa't'a native wxW
 \subsubsection{Procesare evenimentelor}
 Motivul pentru implementarea unui alt mecanism de procesare al evenimentelor este de a oferi posibilitatea mai multor obiecte sa raspunda la evenimente. In momentul in care o rutina de procesare al evenimentului este legat'a de un anumit tip de eveniment si un anumit obiect, evenimentele de acel tip produse de acel obiect nu vor mai putea fi procesate de alta rutin'a. Acest lucru ingreuneaz'a biblioteca wxStyle, deoarece obiecte precum ResizeHandler 'si DragHandler trebuie sa poata intercepta evenimentele produse de dispozitiv-ul mouse f'ar'a a intrerupe propagarea acestora c'atre obiectul c'arora le este destinat. Dac'a aceste evenimente nu ar ajunge la obiectul destinatar, acesta nu ar putea s'a-'si actualizeze starea sau s'a genereze evenimente abstracte specifice obiectului precum ap'asarea unui buton sau mutarea indicatorului de text 'in interiorul unui obiect de interfa't'a pentru introducerea de text.
 
-\medskip
+\begin{center}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.9]{img/seq_event_processing.pdf}
+    \label{fig0402}
+    \caption{Procesarea evenimentelor}
+\end{figure}
+\end{center}
 
 Cel mai popular mecanism de distribuire a unui eveniment este cel bazat pe sablonul Observer. Acest mecanism presupune prezen'ta a dou'a componente: un produc'ator de evenimente 'si mai mul'ti 'ascult'atori de evenimente. Ascult'atorii se pot 'inregistra la produc'ator pentru a fi notifica'ti 'in cazul 'in care un nou eveniment este produs. La orice moment, un ascult'ator se poate deinregistra de la produc'ator. Produc'ator men'tine o list'a de ascult'atori. Ac'tiunile de inregistrare si deinregistrare se traduc 'in ac'tiuni de manipulare a listei precum ad'augarea unui noi observator sau 'stergerea unuia deja existent. Notificarea observatorilor presupune apelarea unei metode a obiectului observator. Aceste metode sunt predefinite de interfa't'a observatorului. Fiecare produc'ator accept'a doar un anumit tip de observator, pentru a asigura prezen'ta metodelor de procesare. 'In momentul gener'arii unui nou eveniment, produc'atorul notific'a toti observatorii. Utiliz{\ia}nd acest mecanism, putem procesa acela'si eveniment din locuri multiple.
 
@@ -254,8 +244,6 @@ O problem'a la mecanismul de observator pentru procesarea evenimentelor este ord
 \end{enumerate}
 
 Deoarece clasa StyledWindow are responsabilitatea de a 'intre'tine starea obiectului, de a apela metoda virtual'a de procesare 'si de a notifica to'ti observatorii asigur'a corectitudinea proces'arii evenimentelor. Obiectele specifice de interfa't'a nu au responsabilitatea de a 'intre'tine o list'a de observatori sau de a procesa evenimentele 'intr-o anumit'a ordine.
-
-
 
 \subsection{Prezentatorul}
 
@@ -276,7 +264,14 @@ Prezentatorul are rolul de a prezenta un obiect de interfa't'a. Prezentatorul es
 
 Defini'tiile de stil 'in arhitectura \emph{Qt Style Sheets} 'si 'in limbajul CSS sunt 'imp'ar'tite 'in selector 'si declara'tie. Pentru simplitate, vom omite selectorul din arhitectura bibliotecii wxStyle. In schimb, vom oferi posibilitatea asocierii unui stil la o clas'a de obiecte de interfa't'a folosind o tabel'a separat'a. Astfel, defini'tiile de stil sunt individuale 'si reutilizabile. Stilurile vor fi reprezentate printr-o structur'a de date ce va re'tine toate specifica'tiile stilului. Aceast'a structur'a de date va putea fi \emph{combinat'a} cu o alt'a structur'a pentru a construi un stil din cele dou'a stiluri suprapuse. Stilurile vor putea fi 'inc'arcate dintr-un fi'sier de stil. Reprezentarea prin fi'sier de stil va folosi limbajul XML pentru simplitatea citirii 'si interpret'arii.
 
-\medskip
+\begin{center}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.8]{img/uml_class_stylesheet.pdf}
+    \label{fig0412}
+    \caption{Diagrama de clase UML pentru defini'tiile de stil}
+\end{figure}
+\end{center}
 
 O defini'tie de stil va fi compus'a din:
 \begin{enumerate}
@@ -319,7 +314,12 @@ Fiecare tip de obiect de interfa't'a va avea setat implicit un prezentator imple
 
 Instruc'tiunile de desenare sunt un mecanism versatil care combin'a puterea metodei de stilizare prin implementarea unui prezentator 'si simplitatea de utilizarea a fi'sierelor de stil. Instruc'tiunile de utilizare profit'a de observa'tia c'a o implementare tipic'a a unei metode de desenare prin implementarea unui prezentator este o simpl'a secven't'a de instruc'tiuni de desenare a formelor geometrice primitive, a imaginilor sau a textului. Aceste instruc'tiuni pot fi codificate in limbajul XML cu u'surin't'a, fapt demonstrat de formatul vectorial SVG. 
 
-\medskip
+\begin{figure}[h]
+    \centering
+    \includegraphics{img/uml_class_draw_instructions.pdf}
+    \label{fig0403}
+    \caption{Diagrama de clase a instruc'tiunilor de desenare}
+\end{figure}
 
 'In plus fat'a de instruc'tiuni de desenare, un prezentator scris 'in limbajul C++ mai are acces 'si la starea obiectului. El poate folosi instruc'tiuni condi'tionale pentru a schimba modul de prezentare al unui obiect de interfa't'a 'in func'tie de starea acestuia. Pentru a beneficia de aceste posibilit'a'ti 'in cadrul unui fi'sier de stil, avem nevoie de dou'a lucruri:
 
@@ -353,14 +353,3 @@ Marginile unei ferestre stilizabile vor fi reprezentate prin 8 panouri, c{\ia}te
 Bara de titlu este compus'a din icoana ferestrei, titlul ferestrei 'si butoanele de ac'tiune. O astfel de bar'a poate fi construit'a din obiecte de interfa't'a individuale pentru fiecare component'a. Aceste obiecte de interfa't'a sunt aliniate pe un panou 'si adaugate la con'tinutul ferestrei. Pentru un grad ridicat de customizare, putem permite schimbarea acestui panou cu un altul, specificat de utilizator. Astfel se pot construi ferestre al c'ror bar'a de titlu se potrive'ste perfect cu elementele sale de con'tinut.
 
 Butoanele de ac'tiune pot fi implementate u'sor, folosind ac'tiunile de manipulare ale ferestrei prezente deja 'in interfa'ta ferestrelor native wxWidgets.
-
-%\section{Prezentarea arhitecturii finale}
-
-
-%\section{Design patterns}
-%
-%\subsection{Observer}
-%
-%\subsection{Singleton}
-%
-%\subsection{Factory}
