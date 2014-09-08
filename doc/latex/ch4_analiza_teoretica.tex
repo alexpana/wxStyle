@@ -274,7 +274,7 @@ Prezentatorul are rolul de a prezenta un obiect de interfa't'a. Prezentatorul es
 
 \subsection{Defini'tiile de stil}
 
-Defini'tiile de stil 'in arhitectura \emph{Qt Style Sheets} 'si 'in limbajul CSS sunt 'imp'ar'tite 'in selector 'si declara'tie. Pentru simplitate, vom omite selectorul din arhitectura bibliotecii wxStyle. In schimb, vom oferi posibilitatea asocierii unui stil la o clas'a de obiecte de interfa't'a folosind o tabel'a separat'a. Astfel, defini'tiile de stil sunt individuale 'si reutilizabile. Stilurile vor fi reprezentate printr-o structur'a de date ce va re'tine toate specifica'tiile stilului. Aceast'a structur'a de date va putea fi \emph{combinat'a} cu o alt'a structur'a pentru a construi un stil din cele dou'a stiluri suprapuse. Stilurile vor putea fi 'inc'arcate dintr-un fi'sier de stil. Reprezentarea prin fi'sier de stil va folosi limbajul XML pentru simplitatea pars'arii.
+Defini'tiile de stil 'in arhitectura \emph{Qt Style Sheets} 'si 'in limbajul CSS sunt 'imp'ar'tite 'in selector 'si declara'tie. Pentru simplitate, vom omite selectorul din arhitectura bibliotecii wxStyle. In schimb, vom oferi posibilitatea asocierii unui stil la o clas'a de obiecte de interfa't'a folosind o tabel'a separat'a. Astfel, defini'tiile de stil sunt individuale 'si reutilizabile. Stilurile vor fi reprezentate printr-o structur'a de date ce va re'tine toate specifica'tiile stilului. Aceast'a structur'a de date va putea fi \emph{combinat'a} cu o alt'a structur'a pentru a construi un stil din cele dou'a stiluri suprapuse. Stilurile vor putea fi 'inc'arcate dintr-un fi'sier de stil. Reprezentarea prin fi'sier de stil va folosi limbajul XML pentru simplitatea citirii 'si interpret'arii.
 
 \medskip
 
@@ -285,7 +285,7 @@ O defini'tie de stil va fi compus'a din:
 \item O list'a de defini'tii de propriet'a'ti 'imp'ar'tite pe categorii. 'In acest mod putem specifica stiluri diferite pentru st'arile obiectelor: \emph{default}, \emph{hovered}, \emph{pressed}, \emph{disabled}.
 \end{enumerate}
 
-\subsection{Prezentatorul de stiluri 'si instructiunile de desenare}
+Structura de date responsabil'a pentru reprezentarea unei defini'tii de stil va trebui s'a poat'a con'tine defini'tii par'tiale, astfel 'inc{\ia}t doar un subset de propriet'a'ti s'a fie descrise. 'In acest mod putem folosi mecanismul de combinare 'si cel de mo'stenire.
 
 \subsubsection{Stilul implicit}
 Pentru a putea utiliza u'sor 'si sigur mecanismul de stilizare, avem nevoie de garan'tia c'a defini'tiile obligatorii ale unui stil exist'a. Defini'tiile obligatorii sunt acele defini'tii f'ar'a de care nu se poate construi o reprezentare a obiectului de interfa't'a. De exemplu: defini'tiile pentru font, culoarea planului prioritar (foreground), combina'tia de defini'tii care descriu opacitatea 'si modul de prezentare al fundalului. Aceste defini'tii, dac'a nu sunt explicit setate, trebuie s'a aibe o valoare predefinit'a. Aceast'a valoare predefinit'a provine de la stilul implicit al bibliotecii wxStyle. Prin mecanismul de mo'stenire al stilurilor, toate defini'tiile setate manual de utilizator se vor aplica deasupra stilului implicit. 
@@ -305,7 +305,54 @@ Metoda num'arul 1 implic'a stocarea 'in memorie a tuturor instan'telor de obiect
 
 Metoda num'arul 2 are avantajul c'a nu necesit'a men'tinerea unei structuri de date suplimentare pentru stocarea instan'telor obiectelor de interfa't'a. 'In schimb, aceast'a metoda presupune stocarea stilurilor, 'si delegarea opera'tiei de citire a stilurilor c'atre fiecare obiect de interfa't'a. In mod similar primei metode, aceast'a metod'a necesit'a augmentarea cu membrul suplimentar care s'a disting'a dintre stiluri si obiecte de prezentare setate de utilizator, si cele implicite. Doar obiectele ce nu au stiluri setate explicit vor apela la cele implicite. Accesul la stilurile si obiectele de interfa't'a implicite se poate face printr-o instan'ta global'a 'si unic'a a unei clase ce are singurul rol de a stoca aceast'a informa'tie. O alt'a metod'a este de a oferi tuturor obiectelor de interfa't'a o instan'ta a unei clase ce poate "produce" stiluri si obiecte de prezentare specializate pentru tipul obiectului de interfa't'a. Folosim verbul "produce", deoarece dorim ca instantele de stiluri sa poat'a varia 'in timpul rul'arii, deci nu putem trimite instan'te concrete. Mai degrab'a trimitem un obiect care poate construi instan'te variabile 'in timpul rul'arii.
 
+\subsection{Prezentatorul de stiluri 'si instructiunile de desenare}
+
+\subsubsection{Prezentatorul de stilur}
+
+Acest prezentator este un prezentator specializat care utilizeaz'a informa'tia de stil a unui obiect de interfa't'a pentru a genera reprezentarea vizual'a a acestuia. Deoarece obiectele de interfa't'a diferite reprezint'a modele de date diferite 'si interac'tioneaz'a cu utilizatorul 'in moduri diferite, ele vor necesita implement'ari diferite ale prezentatorului.
+
+\medskip
+
+Fiecare tip de obiect de interfa't'a va avea setat implicit un prezentator implementat de libr'arie care s'a fie sensibil la specifica'tiile stilului. 'In acest mod, toate obiectele de interfa't'a vor reac'tiona corect 'si 'in mod implicit la modific'arile de stil. Una din atribu'tiile comune tuturor prezentatorilor de acest fel, indiferent de tipul obiectului de interfa't'a pe care 'il prezint'a este desenarea fundalului. Deoarece toate stilurile pot specifica proprietatea de opacitate 'si instruc'tiuni de desenare a fundalului, este normal ca aceast'a opera'tie s'a fie implementat'a 'intr-un singur loc. Locul potrivit pentru aceasta este clasa p'arinte pentru toti prezentatorii de stil.
+
+\subsubsection{instructiunile de desenare}
+
+Instruc'tiunile de desenare sunt un mecanism versatil care combin'a puterea metodei de stilizare prin implementarea unui prezentator 'si simplitatea de utilizarea a fi'sierelor de stil. Instruc'tiunile de utilizare profit'a de observa'tia c'a o implementare tipic'a a unei metode de desenare prin implementarea unui prezentator este o simpl'a secven't'a de instruc'tiuni de desenare a formelor geometrice primitive, a imaginilor sau a textului. Aceste instruc'tiuni pot fi codificate in limbajul XML cu u'surin't'a, fapt demonstrat de formatul vectorial SVG. 
+
+\medskip
+
+'In plus fat'a de instruc'tiuni de desenare, un prezentator scris 'in limbajul C++ mai are acces 'si la starea obiectului. El poate folosi instruc'tiuni condi'tionale pentru a schimba modul de prezentare al unui obiect de interfa't'a 'in func'tie de starea acestuia. Pentru a beneficia de aceste posibilit'a'ti 'in cadrul unui fi'sier de stil, avem nevoie de dou'a lucruri:
+
+\begin{enumerate}
+\item Un mod de a acesa starea obiectului stilizat.
+\item Un mod de a condi'tiona setul de instruc'tiuni de desenare 'in func'tie de starea obiectului.
+\end{enumerate}
+
+Prima cerin't'a poate fi 'indeplinit'a prin introducerea unui mecanism de extragere a propriet'a'tilor cu nume a unui obiect. Aceste propriet'a'ti pot 'inlocui valori 'in cadrul instruc'tiunilor de desenare. Spre exemplu: pentru a desena textului unui label, vom utiliza o instruc'tiune de desenare \emph{DrawText} al c'arei parametru \emph{text} va fi egal cu proprietatea \emph{text} a obiectului de interfa't'a. Pentru a avea acces la propriet'a'tile obiectelor de interfa't'a, acestea trebuie s'a prezinte o map'a de tipul cheie: valoare, unde cheia este numele propriet'a'tii, iar valoarea este valoarea efectiv'a a acelei propriet'a'ti. Deoarece propriet'a'tile pot avea un numar diferit dar limitat de tipuri, este necesar'a utilizarea unui tip mai generic pentru reprezentarea valorilor.
+
+Cea de-a doua cerin't'a poate fi indeplinit'a prin introducerea unui singur element XML, acela de condi'tie. Atributele acestui element pot specifica o expresie care folose'ste propriet'a'tile unui obiect.
+
+\medskip
+
+Pentru simplitate, vom alege s'a implement'am doar ce-a de-a doua cerin't'a, f'ar'a a putea 'ins'a specifica expresii bazate pe starea obiectului. In schimb, 'in cadrul unui stil, vom avea mai multe sub-elemente XML pentru fiecare din st'arile elementare ale unui obiect: \emph{default}, \emph{pressed}, \emph{hovered}, \emph{disabled}. Propriet'a'tile definite 'in cadrul categoriei \emph{default} vor fi combinate cu cele definite 'in celelalte st'ari pentru a genera un stil final al obiectului 'in orice stare. Aceast'a implementare este mult mai simpl'a dec{\ia}t cele analizate mai devreme, dar este 'si mult mai u'sor de implementat. 'In ciuda simplit'a'tii sale, aceast'a metod'a este suficient de versatil'a pentru majoritatea cazurilor.
+
+\medskip
+
+Pe viitor se poate extinde limbajul de stilizare cu ad'augarea posibilit'at'ii de interogare a st'arii obiectului de interfa't'a stilizat 'si selec'tia instruc'tiunilor de desenare.
+
 \subsection{Ferestre}
+
+Stilizarea ferestrelor este o tr'as'atura specific'a bibliotecii wxStyle, ea neexist{\ia}nd 'in nici-o alt'a bibliotec'a sau arhitectur'a analizat'a. Prin stilizarea unei ferestre ne dorim s'a puntem specifica modul de prezentare al marginilor acesteia, al zonei de titlu 'si a butoanelor de ac'tiune. Sistemel de operare folosest marginea ferestrei pentru a oferi utilizatorului o zona asupra c'areia poate ac'tiona pentru a redimensiona fereastra. Pentru mi'scarea ferestrelor pe suprafa'ta desktop-ului, acestea sunt "trase" cu ajutorul dispozitivului mouse de bara de titlu. Ac'tiunile de minimizare, maximizare 'si inchidere a ferestrei sunt posibile utiliz{\ia}nd butoanele plasate 'in col'tul din st{\ia}nga sus al ferestrelor, la marginea b'arii de titlu. Pentru a putea stiliza aceste componente, este necesar'a implementarea unei ferestre utiliz{\ia}nd doar o fereastr'a nedecorat'a a sistemului de operare. Astfel, putem implementa componente specializate pentru marginea si bara de titlu a ferestrei.
+
+\subsubsection{Marginile}
+
+Marginile unei ferestre stilizabile vor fi reprezentate prin 8 panouri, c{\ia}te unul pentru fiecare sec'tiune a marginii. Aceste panouri pot varia in dimensiune pentru a schimba dimensiunile marginii. De asemenea ele pot varia 'in culoare pentru a oferi o prezentare deosebit'a unei ferestre. Marginile vor trebui s'a reac'tioneze la ac'tiunile mouse-ului prin redimensionarea ferestrei.
+
+\subsubsection{Bara de  titlu}
+
+Bara de titlu este compus'a din icoana ferestrei, titlul ferestrei 'si butoanele de ac'tiune. O astfel de bar'a poate fi construit'a din obiecte de interfa't'a individuale pentru fiecare component'a. Aceste obiecte de interfa't'a sunt aliniate pe un panou 'si adaugate la con'tinutul ferestrei. Pentru un grad ridicat de customizare, putem permite schimbarea acestui panou cu un altul, specificat de utilizator. Astfel se pot construi ferestre al c'ror bar'a de titlu se potrive'ste perfect cu elementele sale de con'tinut.
+
+Butoanele de ac'tiune pot fi implementate u'sor, folosind ac'tiunile de manipulare ale ferestrei prezente deja 'in interfa'ta ferestrelor native wxWidgets.
 
 %\section{Prezentarea arhitecturii finale}
 
