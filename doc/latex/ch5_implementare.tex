@@ -2,14 +2,24 @@
 \pagestyle{headings}
 
 \section{Considera'tii generale}
-Coding conventions, file and folder arangements, build system.
+
+Proiectul este dezvoltat pe platforma Windows 7, utiliz{\ia}nd editorul integrat Visual Studio 2012. Acesta dispune de un subset al standardului C++ pe care 'il putem folosi 'in dezvoltarea proiectului. Pentru a asigura portabilitatea proiectului, vom utiliza utilitarul \emph{Premake} pentru a descrie fisierele sursa utilizate de proiect 'si dependin'tele acestora. Utilitarul Premake va genera pe baza unui fi'sier descriptiv un proiect Visual Studio. 
+
+\medskip
+
+Proiectul este 'imp'ar'tit in urm'atoarele foldere: \emph{binaries} este folderul unde se va genera binarul executabil al proiectului, \emph{build} este folderul unde se afl'a fi'sierele necesare compil'arii proiectului, \emph{doc} este folderul unde se afl'a documenta'tia proiectului in format Latex, \emph{include} con'tine fi'sierele header ale bibliotecii, \emph{src} con'tine fi'sierele surs'a ale bibliotecii, \emph{demo} con'tine fi'sierele surs'a ale aplica'tiei demonstrative iar \emph{tests} con'tine fi'sierele surs'a ale proiectului de testare a bibliotecii.
+
+\medskip
+
+Proiectul este 'imp'ar'tit in 3 sub-proiecte: biblioteca wxStyle, aplica'tia demonstrativ'a 'si proiectul de testare a bibliotecii. Biblioteca poate fi compilat'a static sau dinamic. Aplica'tia demonstrativ'a 'si proiectul de testare se compileaz'a in fi'siere binare executabile. Biblioteca va utiliza namespace-ul \emph{wxstyle} pentru toate obiectele pe care le expune.
 
 \subsection{Pointer to Implementation (PIMPL)}
-Compilation time reducer, proper encapsulation, etc.
+
+Pentru a maximiza encapsularea componentelor din interiorul bibliotecii wxStyle 'si pentru a facilita un proces de dezvoltare mai rapid, proiectul folose'ste paradgima PIMPL, adic'a \emph{Pointer to Implementation}. Aceasta  presupune ca membrii (implementarea) unei clase s'a fie encapsula'ti 'intr-un obiect privat unit'a'tii de translatare, iar clasa respectiv'a s'a con'tina doar un pointer c'atre obiectul privat. 'In acest fel, schimb'arile in implementarea unei clase nu afecteaz'a interfa't'a acesteia vizibila 'in fi'sierele header, 'si nu modific'a dimensiunea sau reprezentarea binar'a a acesteia. Din acest motiv, timpii de compilare scad exponen'tial.
 
 \subsection{Managementul resurselor (RAII)}
 
-\section{Infrastructur'a}
+Limbajul de programare C++ garanteaz'a executarea metodelor de tip destructor 'in momentul 'in care obiectele i'si termin'a via'ta. Din acest motiv, destructorii sunt locul potrivit eliberarea resurselor precum memoria. Obiectele care procur'a resurse 'in cadrul constructorului 'si elibereaz'a aceste resurse 'in cadrul destructorului se numesc \emph{Resource Handlers}. Resursa principal'a administrat'a 'in acest mod este memoria, iar obiectele care administreaz'a memoria se numesc \emph{Smart Pointers}. Biblioteca wxStyle utilizeaz'a smart pointers pentru administrarea memoriei.
 
 % ==============================================================================
 %   Obiecte de interfata
@@ -139,7 +149,9 @@ Zona de titlu este reprezentat'a de o instan't'a a clasei FrameHeader. Aceast'a 
 \end{figure}
 \end{center}
 
+Obiectul de interfa't'a \emph{label} este utilizat pentru prezentarea unui text needitabil. Acesta are de cele mai multe ori rolul de a indica scopul unui alt obiect de interfa't'a, dar poate fi folosit 'si pentru a comunica mesaje / avertismente / erori utilizatorului. Un label con'tine un mesaj text 'si o icoan'a. Mesajul 'si icoana pot fi aliniate in toate cele 9 direc'tii ale dreptunghiului care le con'tine.
 
+[Interfa'ta unui label]
 
 % ==============================================================================
 %   Styled Button
@@ -147,11 +159,19 @@ Zona de titlu este reprezentat'a de o instan't'a a clasei FrameHeader. Aceast'a 
 
 \subsection{StyledButton}
 
+Un buton reprezint'a o ac'tiune 'si poate fi activat prin ap'asarea dispozitivului mouse pe suprafa't'a acestuia. 'In timpul ap'as'arii, butonul intr'a 'intr-o stare \emph{armat'a} atunci c{\ia}nd este ap'asat. 'In momentul ridic'arii butonului, acesta declan'seaz'a evenimentul de activare 'si notific'a to'ti observatorii de producerea acestui eveniment. Implementarea butonului presupune procesarea evenimentelor generate de dispozitivul mouse pentru a detecta ap'asarea 'si eliberarea butonului. 
+
+[Interfata unui buton, Interfata unu observator]
+
 % ==============================================================================
 %   Styled Checkbox
 % ==============================================================================
 
 \subsection{StyledCheckBox}
+
+Obiectul de interfa't'a checkbox reprezint'a o valoarea logic'a. Acesta poate fi activat sau nu, fapt indicat prin bifarea sau cur'a'tarea unei c'asu'te. Obiectele checkbox au ata'sate un mesaj text care indic'a scopul valorii reprezentate. Textul este de cele mai multe ori aliniat la dreapta fa't'a de c'asu'ta indicatoare. Pentru implementarea unui obiect checkbox, trebuie s'a memor'am valoarea pe care o de'tine, 'si sa reac'tion'am la evenimentele dispozitivului mouse de ap'asare 'si eliberare pentru a schimba valoarea obiectului. Unui obiect checkbox i se poate ata'sa un observator care s'a fie notificat 'in momentul schimb'arii valorii obiectului.
+
+[Interfa'ta unui checkbox, interfa't'a unui observator.]
 
 % ==============================================================================
 %   Styled TextBox
@@ -243,6 +263,30 @@ Obiectul de interfa't'a StyledTextBox implementeaz'a majoritatea tr'as'aturilor 
 % ==============================================================================
 
 \section{Infrastructur'a}
+
+\subsection{Definitiile de stil}
+
+Defini'tiile de stil sunt structuri de date care memoreaz'a asocierea dintre o proprietate a unui obiect de interfa't'a 'si valoarea aceasteia. Pentru a facilita construc'tia de defini'tii par'tiale, vom folosi biblioteca \emph{Boost Optional} care ne permite s'a re'tinem fie o valoare concret'a, fie o valoare goal'a. 'In acest fel putem construi o metod'a care s'a compun'a doua defini'tii de stil verific{\ia}nd care propriet'a'ti sunt setate 'si care nu.
+
+[class diagram]
+
+\subsection{Instructiunile de desenare}
+
+Instruc'tiunile de desenare au rolul de a encapsula o metod'a de desenare 'si parametrii acesteia. Instruc'tiunile de desenare sunt simple clase care agreg'a valorile parametrilor instruc'tiunii 'si implementeaz'a o metod'a de desenare 'in cadrul c'areia se apeleaza instruc'tiunea propriu-zis'a.
+
+[class diagram]
+
+\subsection{Dimensiuni Uniforme}
+
+
+
+\subsection{Procesoare de mi'scare 'si redimensionare a ferestrelor}
+
+Procesoarele de mi'scare 'si redimensionare sunt folosite 'in implementarea ferestrelor pentru a procesa evenimentele produse de dispozitivul mouse 'si de a le '
+
+\subsection{Mecanismul de identificare al tipurilor de obiecte (RTTI)}
+
+\subsection{Cititorul de fi'siere de stil}
 
 % ==============================================================================
 %   Prezentare si desenare
